@@ -1,0 +1,165 @@
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="container mt-4">
+    <h2 class="mb-4">Admin Dashboard</h2>
+
+    <!-- Stats Cards -->
+    <div class="row text-center mb-4">
+        <div class="col-md-2">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5>Total</h5>
+                    <h3>@ViewBag.TotalRegs</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card shadow-sm bg-light">
+                <div class="card-body">
+                    <h5>Drafts</h5>
+                    <h3>@ViewBag.Drafts</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card shadow-sm bg-info text-white">
+                <div class="card-body">
+                    <h5>Submitted</h5>
+                    <h3>@ViewBag.Submitted</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card shadow-sm bg-success text-white">
+                <div class="card-body">
+                    <h5>Approved</h5>
+                    <h3>@ViewBag.Approved</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card shadow-sm bg-danger text-white">
+                <div class="card-body">
+                    <h5>Rejected</h5>
+                    <h3>@ViewBag.Rejected</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <canvas id="pieChart"></canvas>
+        </div>
+        <div class="col-md-6">
+            <canvas id="lineChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Pending & Notifications -->
+    <div class="row">
+        <div class="col-md-6">
+            <h4>Pending Registrations</h4>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Institution</th>
+                        <th>License</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var reg in ViewBag.PendingRegs)
+                    {
+                        <tr>
+                            <td>@reg.Id</td>
+                            <td>@reg.InstitutionName</td>
+                            <td>@reg.LicenseNumber</td>
+                            <td>@reg.Status</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-md-6">
+            <h4>Notifications</h4>
+            <ul class="list-group">
+                @foreach (var note in ViewBag.Notifications)
+                {
+                    <li class="list-group-item">
+                        <strong>@note.EventType</strong> - @note.Message <br />
+                        <small>@note.CreatedOnUtc</small>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+
+    <!-- Audit Logs -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <h4>Recent Audit Logs</h4>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Entity</th>
+                        <th>Action</th>
+                        <th>User</th>
+                        <th>Date</th>
+                        <th>Comment</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var log in ViewBag.Audits)
+                    {
+                        <tr>
+                            <td>@log.EntityName</td>
+                            <td>@log.Action</td>
+                            <td>@log.ChangedByUserId</td>
+                            <td>@log.ChangedOnUtc</td>
+                            <td>@log.Comment</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Pie Chart
+    const pieCtx = document.getElementById('pieChart');
+    new Chart(pieCtx, {
+        type: 'pie',
+        data: {
+            labels: ['Drafts', 'Submitted', 'Approved', 'Rejected'],
+            datasets: [{
+                data: [@ViewBag.Drafts, @ViewBag.Submitted, @ViewBag.Approved, @ViewBag.Rejected],
+                backgroundColor: ['#d3d3d3', '#0dcaf0', '#198754', '#dc3545']
+            }]
+        }
+    });
+
+    // Line Chart (dummy trend for now)
+    const lineCtx = document.getElementById('lineChart');
+    new Chart(lineCtx, {
+        type: 'line',
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            datasets: [{
+                label: 'Registrations',
+                data: [5, 10, 6, 12, 8, @ViewBag.TotalRegs],
+                borderColor: '#0d6efd',
+                fill: false
+            }]
+        }
+    });
+</script>

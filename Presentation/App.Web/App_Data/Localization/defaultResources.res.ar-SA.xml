@@ -1,0 +1,119 @@
+<Language>
+  <LocaleResource Name="Account.Login">
+    <Value>تسجيل الدخول</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.Logout">
+    <Value>تسجيل الخروج</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.Register">
+    <Value>إنشاء حساب</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.Profile">
+    <Value>الملف الشخصي</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.ChangePassword">
+    <Value>تغيير كلمة المرور</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.ResetPassword">
+    <Value>إعادة تعيين كلمة المرور</Value>
+  </LocaleResource>
+  <LocaleResource Name="Common.Save">
+    <Value>حفظ</Value>
+  </LocaleResource>
+  <LocaleResource Name="Common.Cancel">
+    <Value>إلغاء</Value>
+  </LocaleResource>
+  <LocaleResource Name="Common.Edit">
+    <Value>تعديل</Value>
+  </LocaleResource>
+  <LocaleResource Name="Common.Delete">
+    <Value>حذف</Value>
+  </LocaleResource>
+  <LocaleResource Name="Common.Back">
+    <Value>رجوع</Value>
+  </LocaleResource>
+  <LocaleResource Name="Common.Next">
+    <Value>التالي</Value>
+  </LocaleResource>
+  <LocaleResource Name="Common.Previous">
+    <Value>السابق</Value>
+  </LocaleResource>
+  <LocaleResource Name="Common.Search">
+    <Value>بحث</Value>
+  </LocaleResource>
+  <LocaleResource Name="Common.Filter">
+    <Value>تصفية</Value>
+  </LocaleResource>
+  <LocaleResource Name="Common.Download">
+    <Value>تحميل</Value>
+  </LocaleResource>
+  <LocaleResource Name="Common.Upload">
+    <Value>رفع</Value>
+  </LocaleResource>
+  <LocaleResource Name="Notification.Success">
+    <Value>تمت العملية بنجاح</Value>
+  </LocaleResource>
+  <LocaleResource Name="Notification.Error">
+    <Value>حدث خطأ</Value>
+  </LocaleResource>
+  <LocaleResource Name="Notification.Warning">
+    <Value>تحذير</Value>
+  </LocaleResource>
+  <LocaleResource Name="Notification.Info">
+    <Value>معلومة</Value>
+  </LocaleResource>
+  <LocaleResource Name="Notification.ConfirmDelete">
+    <Value>هل أنت متأكد أنك تريد حذف هذا العنصر؟</Value>
+  </LocaleResource>
+  <LocaleResource Name="Validation.Required">
+    <Value>هذا الحقل مطلوب.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Validation.InvalidEmail">
+    <Value>البريد الإلكتروني غير صالح.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Validation.PasswordMismatch">
+    <Value>كلمات المرور غير متطابقة.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Validation.MinLength">
+    <Value>الطول الأدنى غير محقق.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Validation.MaxLength">
+    <Value>تم تجاوز الطول الأقصى.</Value>
+  </LocaleResource>
+  <LocaleResource Name="System.PageNotFound">
+    <Value>الصفحة غير موجودة.</Value>
+  </LocaleResource>
+  <LocaleResource Name="System.AccessDenied">
+    <Value>تم رفض الوصول.</Value>
+  </LocaleResource>
+  <LocaleResource Name="System.Unauthorized">
+    <Value>غير مصرح.</Value>
+  </LocaleResource>
+  <LocaleResource Name="System.InternalServerError">
+    <Value>خطأ داخلي في الخادم.</Value>
+  </LocaleResource>
+  <LocaleResource Name="UI.Dashboard">
+    <Value>لوحة التحكم</Value>
+  </LocaleResource>
+  <LocaleResource Name="UI.Settings">
+    <Value>الإعدادات</Value>
+  </LocaleResource>
+  <LocaleResource Name="UI.Users">
+    <Value>المستخدمون</Value>
+  </LocaleResource>
+  <LocaleResource Name="UI.Roles">
+    <Value>الأدوار</Value>
+  </LocaleResource>
+  <LocaleResource Name="UI.Reports">
+    <Value>التقارير</Value>
+  </LocaleResource>
+  <LocaleResource Name="UI.Help">
+    <Value>مساعدة</Value>
+  </LocaleResource>
+  <LocaleResource Name="UI.Language">
+    <Value>اللغة</Value>
+  </LocaleResource>
+  <LocaleResource Name="UI.Country">
+    <Value>الدولة</Value>
+  </LocaleResource>
+</Language>

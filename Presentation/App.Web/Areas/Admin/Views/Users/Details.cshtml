@@ -1,0 +1,152 @@
+﻿@model UserDetailsModel
+
+@{
+    ViewData["Title"] = "User Details";
+}
+
+<h2>User Details</h2>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Username</dt>
+            <dd class="col-sm-9">@Model.User.UserName</dd>
+
+            <dt class="col-sm-3">Email</dt>
+            <dd class="col-sm-9">@Model.User.Email</dd>
+
+            <dt class="col-sm-3">Active</dt>
+            <dd class="col-sm-9">@(Model.User.Active ? "Yes" : "No")</dd>
+
+            <dt class="col-sm-3">Locked Out</dt>
+            <dd class="col-sm-9">@(Model.User.IsLockedOut ? "Yes" : "No")</dd>
+
+            <dt class="col-sm-3">Failed Attempts</dt>
+            <dd class="col-sm-9">@Model.User.FailedLoginAttempts</dd>
+
+            <dt class="col-sm-3">Last Login</dt>
+            <dd class="col-sm-9">@Model.User.LastLoginDateUtc?.ToString("yyyy-MM-dd HH:mm")</dd>
+
+            <dt class="col-sm-3">Created On</dt>
+            <dd class="col-sm-9">@Model.User.CreatedOnUtc</dd>
+
+            <dt class="col-sm-3">Updated On</dt>
+            <dd class="col-sm-9">@Model.User.UpdatedOnUtc</dd>
+        </dl>
+    </div>
+</div>
+
+<!-- User Roles -->
+<div class="card mb-4">
+    <div class="card-header">Assigned Roles</div>
+    <div class="card-body">
+        @if (Model.User.Roles != null && Model.User.Roles.Any())
+        {
+            <ul class="list-group">
+                @foreach (var role in Model.User.Roles)
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        @role.Name
+                        <form asp-action="RemoveRole" method="post" class="d-inline">
+                            <input type="hidden" name="userId" value="@Model.User.Id" />
+                            <input type="hidden" name="roleId" value="@role.Id" />
+                            <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+                        </form>
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p>No roles assigned.</p>
+        }
+    </div>
+</div>
+<!-- User Organization Info -->
+<div class="card mb-4">
+    <div class="card-header">Organization Assignment</div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Sector</dt>
+            <dd class="col-sm-9">
+                @(Model.User.DepartmentId.HasValue
+                                ? Model.Departments.FirstOrDefault(d => d.Id == Model.User.DepartmentId)?.Name
+                                : "Not Assigned")
+            </dd>
+
+            <dt class="col-sm-3">Department</dt>
+            <dd class="col-sm-9">
+                @(Model.User.UnitId.HasValue
+                                ? Model.Units.FirstOrDefault(u => u.Id == Model.User.UnitId)?.Name
+                                : "Not Assigned")
+            </dd>
+
+            <dt class="col-sm-3">Unit</dt>
+            <dd class="col-sm-9">
+                @(Model.User.SubUnitId.HasValue
+                                ? Model.SubUnits.FirstOrDefault(su => su.Id == Model.User.SubUnitId)?.Name
+                                : "Not Assigned")
+            </dd>
+        </dl>
+    </div>
+</div>
+
+<!-- Assign new Role -->
+<div class="card mb-4">
+    <div class="card-header">Assign New Role</div>
+    <div class="card-body">
+        <form asp-action="AssignRole" method="post">
+            <input type="hidden" name="userId" value="@Model.User.Id" />
+
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">Role</label>
+                    <select name="roleId" class="form-select">
+                        <option value="0">-- None --</option>
+                        @foreach (var r in Model.AllRoles)
+                        {
+                            <option value="@r.Id">@r.Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Sectors</label>
+                    <select name="departmentId" class="form-select">
+                        <option value="">-- None --</option>
+                        @foreach (var d in Model.Departments)
+                        {
+                            <option value="@d.Id">@d.Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Departments</label>
+                    <select name="unitId" class="form-select">
+                        <option value="">-- None --</option>
+                        @foreach (var u in Model.Units)
+                        {
+                            <option value="@u.Id">@u.Name</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">Units</label>
+                    <select name="subUnitId" class="form-select">
+                        <option value="">-- None --</option>
+                        @foreach (var su in Model.SubUnits)
+                        {
+                            <option value="@su.Id">@su.Name</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Assign</button>
+        </form>
+    </div>
+</div>
+
+<a class="btn btn-secondary" asp-action="Index">Back to List</a>

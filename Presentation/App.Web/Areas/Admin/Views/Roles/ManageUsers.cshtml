@@ -1,0 +1,19 @@
+@model App.Web.Areas.Admin.Models.EditUserRolesModel
+@{
+    Layout = "/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<h3>Manage Users for role: @Model.RoleName</h3>
+<form method="post">
+  <input type="hidden" asp-for="RoleId"/>
+  <div class="mb-3">
+    @foreach (var u in Model.AllUsers) {
+      var selected = Model.UserIds.Contains(u.Id);
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="UserIds" value="@u.Id" @(selected? "checked": "") />
+        <label class="form-check-label">@u.Username (@u.Email)</label>
+      </div>
+    }
+  </div>
+  <button class="btn btn-primary" type="submit">Save</button>
+  <a class="btn btn-light" href="/Admin/Roles">Cancel</a>
+</form>

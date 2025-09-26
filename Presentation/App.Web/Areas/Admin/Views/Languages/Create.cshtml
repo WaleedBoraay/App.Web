@@ -1,0 +1,56 @@
+﻿@model App.Web.Areas.Admin.Models.LanguageModel
+
+@{
+    ViewData["Title"] = await Html.T("Language.AddNew.Language");
+}
+
+<h2>@await Html.T("Language.Create")</h2>
+
+<form asp-action="Create" method="post">
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="LanguageCulture" class="form-label"></label>
+        <input asp-for="LanguageCulture" class="form-control" />
+        <span asp-validation-for="LanguageCulture" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="UniqueSeoCode" class="form-label"></label>
+        <input asp-for="UniqueSeoCode" class="form-control" />
+        <span asp-validation-for="UniqueSeoCode" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="FlagImageFileName" class="form-label"></label>
+        <input asp-for="FlagImageFileName" class="form-control" />
+        <span asp-validation-for="FlagImageFileName" class="text-danger"></span>
+    </div>
+
+    <div class="form-check mb-3">
+        <input asp-for="Rtl" class="form-check-input" type="checkbox" />
+        <label asp-for="Rtl" class="form-check-label"></label>
+    </div>
+
+    <div class="form-check mb-3">
+        <input asp-for="Published" class="form-check-input" type="checkbox" />
+        <label asp-for="Published" class="form-check-label"></label>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="DisplayOrder" class="form-label"></label>
+        <input asp-for="DisplayOrder" class="form-control" type="number" />
+        <span asp-validation-for="DisplayOrder" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">@await Html.T("Common.Save")</button>
+    <a asp-action="Index" class="btn btn-secondary">@await Html.T("Common.Cancel")</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

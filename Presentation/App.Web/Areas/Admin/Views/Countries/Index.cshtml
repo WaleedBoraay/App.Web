@@ -1,0 +1,34 @@
+﻿@model List<App.Web.Areas.Admin.Models.CountryModel>
+@{
+    ViewBag.Title = "قائمة الدول";
+}
+
+<h2>قائمة الدول</h2>
+
+<a asp-action="Create" class="btn btn-success mb-3">إضافة دولة جديدة</a>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>الاسم</th>
+            <th>الرمز</th>
+            <th>إجراءات</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var country in Model)
+        {
+            <tr>
+                <td>@country.Name</td>
+                <td>@country.TwoLetterIsoCode</td>
+                <td>@country.Published</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@country.Id" class="btn btn-primary ">تعديل</a>
+                    <form asp-action="Delete" asp-route-id="@country.Id" method="post" style="display:inline">
+                        <button type="submit" class="btn btn-danger " onclick="return confirm('هل أنت متأكد من حذف الدولة؟');">حذف</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

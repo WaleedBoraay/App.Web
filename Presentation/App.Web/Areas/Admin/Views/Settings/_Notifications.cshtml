@@ -1,0 +1,22 @@
+﻿@model NotificationSettingsModel
+
+<h2>Notification Settings</h2>
+
+<form asp-action="Notifications" method="post">
+    <div class="form-check">
+        <input asp-for="EnableEmail" class="form-check-input" />
+        <label asp-for="EnableEmail" class="form-check-label">Enable Email Notifications</label>
+    </div>
+
+    <div class="form-check mt-2">
+        <input asp-for="EnableSms" class="form-check-input" />
+        <label asp-for="EnableSms" class="form-check-label">Enable SMS Notifications</label>
+    </div>
+
+    <div class="form-check mt-2">
+        <input asp-for="EnableInApp" class="form-check-input" />
+        <label asp-for="EnableInApp" class="form-check-label">Enable In-App Notifications</label>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Save</button>
+</form>

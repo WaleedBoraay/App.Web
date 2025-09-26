@@ -1,0 +1,65 @@
+﻿@model IEnumerable<App.Core.Domain.Localization.LocaleStringResource>
+@{
+    ViewData["Title"] = "قائمة الموارد";
+    var currentLangId = (int)ViewBag.LanguageId;
+    var query = ViewBag.Query as string;
+    var languages = await Context.RequestServices.GetService<ILanguageService>().GetAllAsync();
+}
+
+<h2>قائمة الموارد</h2>
+
+<form asp-action="Index" method="get" class="row mb-3">
+    <div class="col-md-3">
+        <select name="languageId" class="form-select" onchange="this.form.submit()">
+            @foreach (var lang in languages)
+            {
+                <option value="@lang.Id" selected="@(lang.Id == currentLangId ? "selected" : null)">
+                    @lang.Name (@lang.UniqueSeoCode)
+                </option>
+            }
+        </select>
+    </div>
+    <div class="col-md-6">
+        <input type="text" name="q" value="@query" class="form-control" placeholder="بحث..." />
+    </div>
+    <div class="col-md-3">
+        <button type="submit" class="btn btn-primary">بحث</button>
+        <a asp-action="Create" asp-route-languageId="@currentLangId" class="btn btn-success">إضافة مورد جديد</a>
+    </div>
+</form>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>المفتاح</th>
+            <th>القيمة</th>
+            <th>إجراءات</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ResourceName</td>
+                    <td>@item.ResourceValue</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">تعديل</a>
+                        <form asp-action="Delete" method="post" class="d-inline">
+                            <input type="hidden" name="languageId" value="@currentLangId" />
+                            <input type="hidden" name="id" value="@item.Id" />
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('هل أنت متأكد من الحذف؟')">حذف</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="3" class="text-center">لا توجد بيانات</td>
+            </tr>
+        }
+    </tbody>
+</table>

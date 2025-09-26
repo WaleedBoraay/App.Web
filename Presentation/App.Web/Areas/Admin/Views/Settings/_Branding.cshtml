@@ -1,0 +1,31 @@
+﻿@model App.Web.Areas.Admin.Models.Settings.BrandingSettingsModel
+
+<h2>Branding</h2>
+<form asp-action="SaveBranding" method="post" enctype="multipart/form-data">
+    <div>
+        <label>Current Logo</label><br />
+        <img id="logoPreview" src="@Model.LogoUrl" alt="Logo" style="max-height:120px;" />
+    </div>
+    <div class="mt-3">
+        <label>Upload new logo</label>
+        <input type="file" name="logo" id="logoInput" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary mt-3">Save Logo</button>
+</form>
+
+@section Scripts {
+    <script>
+        document.getElementById("logoInput").addEventListener("change", function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById("logoPreview").setAttribute("src", e.target.result);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+}
+
+

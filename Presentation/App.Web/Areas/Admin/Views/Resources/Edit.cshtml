@@ -1,0 +1,27 @@
+﻿@model App.Web.Areas.Admin.Models.Localization.ResourceEditModel
+
+<h2>Edit Resource</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="mb-3">
+        <label asp-for="LanguageId" class="form-label"></label>
+        <select asp-for="LanguageId" asp-items="@(new SelectList(Model.Languages, "Id", "Name", Model.LanguageId))" class="form-select"></select>
+        <span asp-validation-for="LanguageId" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ResourceName" class="form-label"></label>
+        <input asp-for="ResourceName" class="form-control" />
+        <span asp-validation-for="ResourceName" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ResourceValue" class="form-label"></label>
+        <input asp-for="ResourceValue" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update</button>
+    <a asp-action="Index" asp-route-languageId="@Model.LanguageId" class="btn btn-secondary">Cancel</a>
+</form>

@@ -1,0 +1,33 @@
+﻿@model List<App.Web.Areas.Admin.Models.LicenseSectorModel>
+@{
+    ViewBag.Title = "قائمة القطاعات";
+}
+
+<h2>قائمة القطاعات</h2>
+
+<a asp-action="Create" class="btn btn-success mb-3">إضافة قطاع جديد</a>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>الاسم</th>
+            <th>الرمز</th>
+            <th>إجراءات</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var sector in Model)
+        {
+            <tr>
+                <td>@sector.DisplayName</td>
+                <td>@sector.Code</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@sector.LicenseSectorId" class="btn btn-primary ">تعديل</a>
+                    <form asp-action="Delete" asp-route-id="@sector.LicenseSectorId" method="post" style="display:inline">
+                        <button type="submit" class="btn btn-danger " onclick="return confirm('هل أنت متأكد من حذف القطاع؟');">حذف</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

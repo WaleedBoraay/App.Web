@@ -1,0 +1,65 @@
+﻿@using App.Core.Domain.Registrations
+@using App.Services
+@model App.Web.Areas.Admin.Models.Registrations.ContactModel
+
+<h3>Edit Contact</h3>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="RegistrationId" />
+
+    <div class="mb-3">
+        <label asp-for="ContactTypeId" class="form-label"></label>
+        <select asp-for="ContactTypeId"
+                asp-items="Html.GetEnumSelectList<ContactType>()"
+                class="form-select"></select>
+        <span asp-validation-for="ContactTypeId" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="JobTitle" class="form-label"></label>
+        <input asp-for="JobTitle" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="FirstName" class="form-label"></label>
+        <input asp-for="FirstName" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="MiddleName" class="form-label"></label>
+        <input asp-for="MiddleName" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="LastName" class="form-label"></label>
+        <input asp-for="LastName" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ContactPhone" class="form-label"></label>
+        <input asp-for="ContactPhone" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="BusinessPhone" class="form-label"></label>
+        <input asp-for="BusinessPhone" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label"></label>
+        <input asp-for="Email" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="NationalityCountryId" class="form-label"></label>
+        <select asp-for="NationalityCountryId" class="form-select"
+                asp-items="@(new SelectList(Model.countries, "Id", "Name"))">
+            <option value="">Select Country</option>
+        </select>
+        <span asp-validation-for="NationalityCountryId" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update</button>
+    <a asp-controller="Registrations" asp-action="Details" asp-route-id="@Model.RegistrationId" class="btn btn-secondary">Cancel</a>
+</form>

@@ -1,0 +1,13 @@
+﻿@model App.Web.Areas.Admin.Models.Institutes.InstituteEditModel
+
+<h2>Delete Institute</h2>
+
+<div class="alert alert-danger">
+    Are you sure you want to delete <strong>@Model.Name</strong> (License: @Model.LicenseNumber)?
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

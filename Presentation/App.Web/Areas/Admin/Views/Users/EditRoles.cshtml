@@ -1,0 +1,40 @@
+﻿@model App.Web.Areas.Admin.Models.EditUserRolesModel
+@{
+    ViewBag.Title = "تعديل أدوار المستخدم";
+}
+
+<h2>تعديل أدوار المستخدم</h2>
+
+<div class="mb-4">
+    <strong>اسم المستخدم:</strong> @Model.UserName <br />
+    <strong>البريد الإلكتروني:</strong> @Model.Email
+</div>
+
+<form asp-action="EditRoles" method="post">
+    <input type="hidden" asp-for="UserId" />
+
+    <div class="mb-3">
+        <label class="form-label">الأدوار المتاحة:</label>
+        <div class="row">
+            @for (int i = 0; i < Model.Roles.Count; i++)
+            {
+                <div class="col-md-4 mb-2">
+                    <div class="form-check">
+                        <input asp-for="Roles[i].IsAssigned" class="form-check-input" />
+                        <input type="hidden" asp-for="Roles[i].RoleId" />
+                        <label class="form-check-label" asp-for="Roles[i].IsAssigned">
+                            @Model.Roles[i].RoleName
+                        </label>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">حفظ التغييرات</button>
+    <a asp-action="Index" class="btn btn-secondary">إلغاء</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

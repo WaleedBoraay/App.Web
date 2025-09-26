@@ -1,0 +1,40 @@
+﻿@model IEnumerable<App.Web.Areas.Admin.Models.Notifications.NotificationModel>
+
+<h2>Inbox</h2>
+
+<div class="mb-3">
+    <a asp-action="Index" asp-route-onlyUnread="false" class="btn btn-outline-primary ">All</a>
+    <a asp-action="Index" asp-route-onlyUnread="true" class="btn btn-outline-secondary ">Unread Only</a>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Message</th>
+            <th>Created On</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="@(item.IsRead ? "" : "fw-bold")">
+                <td>@item.Message</td>
+                <td>@item.CreatedOnUtc.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@(item.IsRead ? "Read" : "Unread")</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.TargetUrl))
+                    {
+                        <a class="btn  btn-primary" href="@item.TargetUrl">View</a>
+                    }
+
+                    <form asp-action="MarkAsRead" method="post" class="d-inline">
+                        <input type="hidden" name="id" value="@item.Id" />
+                        <button type="submit" class="btn  btn-success">Mark as Read</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,119 @@
+@model App.Web.Areas.Admin.Models.Audit.AuditTrailSearchModel
+
+<h2>Audit Trail</h2>
+
+<form method="get" asp-action="Index" class="row mb-3">
+    <input type="hidden" name="pageIndex" value="1" />
+    <div class="col-md-2">
+        <input type="text" name="entityName" value="@Model.EntityName"
+               class="form-control" placeholder="Entity Name" />
+    </div>
+    <div class="col-md-2">
+        <input type="number" name="userId" value="@Model.UserId"
+               class="form-control" placeholder="User Id" />
+    </div>
+    <div class="col-md-2">
+        <input type="date" name="fromDate" value="@(Model.FromDate?.ToString("yyyy-MM-dd"))" class="form-control" />
+    </div>
+    <div class="col-md-2">
+        <input type="date" name="toDate" value="@(Model.ToDate?.ToString("yyyy-MM-dd"))" class="form-control" />
+    </div>
+    <div class="col-md-2">
+        <select name="pageSize" class="form-select" onchange="this.form.submit()">
+            <option value="10" selected="@(Model.PageSize == 10)">10</option>
+            <option value="20" selected="@(Model.PageSize == 20)">20</option>
+            <option value="50" selected="@(Model.PageSize == 50)">50</option>
+            <option value="100" selected="@(Model.PageSize == 100)">100</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-primary">Filter</button>
+        <a asp-action="Index" class="btn btn-secondary">Reset</a>
+    </div>
+</form>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Entity</th>
+            <th>EntityId</th>
+            <th>Field</th>
+            <th>Old Value</th>
+            <th>New Value</th>
+            <th>Changed By</th>
+            <th>Changed On (UTC)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var log in Model.Results)
+        {
+            <tr>
+                <td>@log.EntityName</td>
+                <td>@log.EntityId</td>
+                <td>@log.FieldName</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(log.OldValue))
+                    {
+                        <span class="badge bg-secondary">@log.OldValue</span>
+                    }
+                </td>
+                <td>
+                    @if (!string.IsNullOrEmpty(log.NewValue))
+                    {
+                        if (log.NewValue.Contains("Denied") || log.NewValue.Contains("Revoked"))
+                        {
+                            <span class="badge bg-danger">@log.NewValue</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-success">@log.NewValue</span>
+                        }
+                    }
+                </td>
+                <td>@($"{log.ChangedByUsername} (Id: {log.ChangedByUserId})")</td>
+                <td>@log.ChangedOnUtc.ToString("yyyy-MM-dd HH:mm:ss")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@{
+    var totalPages = (int)Math.Ceiling((double)Model.TotalCount / Model.PageSize);
+}
+
+@if (totalPages > 1)
+{
+    <nav>
+        <ul class="pagination">
+            <li class="page-item @(Model.PageIndex == 1 ? "disabled" : "")">
+                <a class="page-link" asp-action="Index" asp-route-pageIndex="@(Model.PageIndex - 1)"
+                   asp-route-pageSize="@Model.PageSize"
+                   asp-route-entityName="@Model.EntityName"
+                   asp-route-userId="@Model.UserId"
+                   asp-route-fromDate="@(Model.FromDate?.ToString("yyyy-MM-dd"))"
+                   asp-route-toDate="@(Model.ToDate?.ToString("yyyy-MM-dd"))">Previous</a>
+            </li>
+
+            @for (var i = 1; i <= totalPages; i++)
+            {
+                <li class="page-item @(i == Model.PageIndex ? "active" : "")">
+                    <a class="page-link" asp-action="Index" asp-route-pageIndex="@i"
+                       asp-route-pageSize="@Model.PageSize"
+                       asp-route-entityName="@Model.EntityName"
+                       asp-route-userId="@Model.UserId"
+                       asp-route-fromDate="@(Model.FromDate?.ToString("yyyy-MM-dd"))"
+                       asp-route-toDate="@(Model.ToDate?.ToString("yyyy-MM-dd"))">@i</a>
+                </li>
+            }
+
+            <li class="page-item @(Model.PageIndex == totalPages ? "disabled" : "")">
+                <a class="page-link" asp-action="Index" asp-route-pageIndex="@(Model.PageIndex + 1)"
+                   asp-route-pageSize="@Model.PageSize"
+                   asp-route-entityName="@Model.EntityName"
+                   asp-route-userId="@Model.UserId"
+                   asp-route-fromDate="@(Model.FromDate?.ToString("yyyy-MM-dd"))"
+                   asp-route-toDate="@(Model.ToDate?.ToString("yyyy-MM-dd"))">Next</a>
+            </li>
+        </ul>
+    </nav>
+}

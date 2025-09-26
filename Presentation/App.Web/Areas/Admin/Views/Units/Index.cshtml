@@ -1,0 +1,30 @@
+﻿@model IEnumerable<App.Core.Domain.Organization.Unit>
+
+<h2>Units</h2>
+<a asp-action="Create" asp-route-departmentId="@ViewBag.DepartmentId" class="btn btn-primary mb-3">+ Add Unit</a>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Name</th>
+            <th style="width:200px">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a>
+                    <form asp-action="Delete" asp-route-id="@item.Id" asp-route-departmentId="@ViewBag.DepartmentId" method="post" style="display:inline">
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                    <a asp-controller="SubUnits" asp-action="Index" asp-route-unitId="@item.Id" class="btn btn-sm btn-info">SubUnits</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-controller="Departments" asp-action="Index" class="btn btn-secondary">Back to Departments</a>

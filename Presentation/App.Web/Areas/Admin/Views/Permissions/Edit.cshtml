@@ -1,0 +1,21 @@
+﻿@model App.Web.Areas.Admin.Models.Security.RolePermissionMappingModel
+
+<h2>Manage Permissions for Role: @Model.RoleName</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="RoleId" />
+
+    <div class="form-group">
+        @foreach (var perm in Model.AllPermissions)
+        {
+            <div class="form-check">
+                <input type="checkbox" name="selectedPermissions" value="@perm.SystemName"
+                       @(Model.GrantedPermissions.Contains(perm.SystemName) ? "checked" : "") class="form-check-input" />
+                <label class="form-check-label">@perm.Name (@perm.SystemName)</label>
+            </div>
+        }
+    </div>
+
+    <button type="submit" class="btn btn-success">Save</button>
+    <a asp-controller="Roles" asp-action="Index" class="btn btn-secondary">Back</a>
+</form>

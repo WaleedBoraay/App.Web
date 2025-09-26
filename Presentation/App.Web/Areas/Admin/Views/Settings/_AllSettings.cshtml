@@ -1,0 +1,81 @@
+﻿@model SettingSearchModel
+
+<h2>All Settings (Advanced)</h2>
+
+<form method="get" asp-action="AllSettings" class="form-inline mb-3">
+    <div class="form-group mr-2">
+        <input type="text" asp-for="Name" class="form-control" placeholder="Key name" />
+    </div>
+    <div class="form-group mr-2">
+        <input type="text" asp-for="Value" class="form-control" placeholder="Value" />
+    </div>
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th style="width:40%">Name</th>
+            <th style="width:40%">Value</th>
+            <th style="width:20%">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Results != null && Model.Results.Any())
+        {
+            foreach (var item in Model.Results)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>
+                        <input type="text" class="form-control setting-value" data-key="@item.Name" value="@item.Value" />
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-success save-setting" data-key="@item.Name">Save</button>
+                        <button type="button" class="btn btn-danger delete-setting" data-key="@item.Name">Delete</button>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr><td colspan="3">No settings found</td></tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Save
+            $(".save-setting").click(function () {
+                var key = $(this).data("key");
+                var value = $("input[data-key='" + key + "']").val();
+
+                $.post('@Url.Action("EditSetting")',
+                    { name: key, value: value },
+                    function (res) {
+                        if (res.success) {
+                            alert("Setting updated successfully");
+                        }
+                    });
+            });
+
+            // Delete
+            $(".delete-setting").click(function () {
+                var key = $(this).data("key");
+
+                if (!confirm("Are you sure you want to delete this setting?")) return;
+
+                $.post('@Url.Action("DeleteSetting")',
+                    { name: key },
+                    function (res) {
+                        if (res.success) {
+                            alert("Setting deleted successfully");
+                            location.reload();
+                        }
+                    });
+            });
+        });
+    </script>
+}

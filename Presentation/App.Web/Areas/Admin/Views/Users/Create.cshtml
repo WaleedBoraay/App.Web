@@ -1,0 +1,61 @@
+@model App.Web.Areas.Admin.Models.UserModel
+
+<h2>Create User</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group mb-3">
+        <label asp-for="UserName" class="form-label"></label>
+        <input asp-for="UserName" class="form-control" />
+        <span asp-validation-for="UserName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="Email" class="form-label"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="Password" class="form-label"></label>
+        <input asp-for="Password" type="password" class="form-control" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="ConfirmPassword" class="form-label"></label>
+        <input asp-for="ConfirmPassword" type="password" class="form-control" />
+        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+    </div>
+
+    <div class="form-check mb-3">
+        <input asp-for="Active" class="form-check-input" type="checkbox" />
+        <label asp-for="Active" class="form-check-label"></label>
+    </div>
+
+    <!-- Organization Assignment -->
+    <h4 class="mt-4">Organization Assignment</h4>
+
+    <div class="form-group mb-3">
+        <label asp-for="DepartmentId" class="form-label"></label>
+        <select asp-for="DepartmentId" asp-items="Model.Departments" class="form-select">
+            <option value="">-- None --</option>
+        </select>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="UnitId" class="form-label"></label>
+        <select asp-for="UnitId" asp-items="Model.Units" class="form-select">
+            <option value="">-- None --</option>
+        </select>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="SubUnitId" class="form-label"></label>
+        <select asp-for="SubUnitId" asp-items="Model.SubUnits" class="form-select">
+            <option value="">-- None --</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-success mt-3">Save</button>
+    <a asp-action="Index" class="btn btn-secondary mt-3">Cancel</a>
+</form>

@@ -1,0 +1,124 @@
+@model IEnumerable<App.Web.Areas.Admin.Models.UserModel>
+
+@{
+    ViewData["Title"] = "Users";
+}
+
+<h2>Users</h2>
+
+<p>
+    <a class="btn btn-primary" asp-action="Create">Create New User</a>
+</p>
+
+<table class="table table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Active</th>
+            <th>Locked Out</th>
+            <th>Last Login</th>
+            <th>Roles</th>
+            <th>Organization</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.UserName</td>
+                <td>@user.Email</td>
+                <td>@(user.Active ? "Yes" : "No")</td>
+                <td>@(user.IsLockedOut ? "Yes" : "No")</td>
+                <td>@user.LastLoginDateUtc?.ToString("yyyy-MM-dd HH:mm")</td>
+
+                <!-- Roles -->
+                <td>
+                    @if (user.Roles != null && user.Roles.Any())
+                    {
+                        @foreach (var role in user.Roles)
+                        {
+                            <span class="badge bg-info me-1">@role.Name</span>
+                        }
+                    }
+                    else
+                    {
+                        <span class="text-muted">No Roles</span>
+                    }
+                </td>
+
+                <!-- Organization -->
+                <td>
+                    @if (user.DepartmentId.HasValue)
+                    {
+                        <span class="badge bg-secondary">Sector: @user.DepartmentName</span>
+                    }
+                    @if (user.UnitId.HasValue)
+                    {
+                        <span class="badge bg-primary">Dept: @user.UnitName</span>
+                    }
+                    @if (user.SubUnitId.HasValue)
+                    {
+                        <span class="badge bg-dark">Unit: @user.SubUnitName</span>
+                    }
+                    @if (!user.DepartmentId.HasValue && !user.UnitId.HasValue && !user.SubUnitId.HasValue)
+                    {
+                        <span class="text-muted">Not Assigned</span>
+                    }
+                </td>
+
+                <!-- Actions -->
+                <td>
+                    <a class="btn btn-sm btn-info" asp-action="Details" asp-route-id="@user.Id">Details</a>
+                    <a class="btn btn-sm btn-warning" asp-action="Edit" asp-route-id="@user.Id">Edit</a>
+
+                    <button type="button"
+                            class="btn btn-sm btn-danger"
+                            data-bs-toggle="modal"
+                            data-bs-target="#deleteModal"
+                            data-userid="@user.Id"
+                            data-username="@user.UserName">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" asp-action="DeleteConfirmed">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="deleteUserId" name="Id" />
+                    <p>Are you sure you want to delete user <strong id="deleteUserName"></strong>?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var deleteModal = document.getElementById('deleteModal');
+        deleteModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var userId = button.getAttribute('data-userid');
+            var username = button.getAttribute('data-username');
+
+            document.getElementById('deleteUserId').value = userId;
+            document.getElementById('deleteUserName').textContent = username;
+        });
+    </script>
+}

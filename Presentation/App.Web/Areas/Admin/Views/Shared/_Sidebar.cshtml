@@ -1,0 +1,201 @@
+﻿@using App.Services
+@using App.Core.Security
+@using App.Services.Settings
+@inject IWorkContext _workContext
+@inject IAccessControlService _acl
+@inject ILocalizationService _localizationService
+@inject ISettingService _settingService
+
+
+@{
+    var currentUser = await _workContext.GetCurrentUserAsync();
+
+    var logoUrl = await _settingService.GetAsync("Branding.LogoUrl", "/images/logo.png");
+
+    // Pages
+    bool canDashboard = await _acl.CanDoAsync(currentUser.Id, AppPermissions.System_Admin);
+    bool canRegistrations = await _acl.CanDoAsync(currentUser.Id, AppPermissions.Registration_Read);
+    bool canInstitutes = await _acl.CanDoAsync(currentUser.Id, AppPermissions.Institution_Read);
+    bool canUsers = await _acl.CanDoAsync(currentUser.Id, AppPermissions.User_Read);
+
+    bool canOrganization = await _acl.CanDoAsync(currentUser.Id, "Organization.Read");
+    bool canDepartments = await _acl.CanDoAsync(currentUser.Id, "Department.Read");
+    bool canUnits = await _acl.CanDoAsync(currentUser.Id, "Unit.Read");
+    bool canSubUnits = await _acl.CanDoAsync(currentUser.Id, "SubUnit.Read");
+
+    // Users & Access Control
+    bool canRoles = await _acl.CanDoAsync(currentUser.Id, AppPermissions.Role_Manage);
+    bool canPermissions = await _acl.CanDoAsync(currentUser.Id, AppPermissions.Permission_Manage);
+    bool canUserRoles = await _acl.CanDoAsync(currentUser.Id, "UserRoles.Manage");
+    bool canUserPermissionOverrides = await _acl.CanDoAsync(currentUser.Id, "UserPermissionOverride.Manage");
+
+    // Configurations
+    bool canLogs = await _acl.CanDoAsync(currentUser.Id, AppPermissions.System_Admin);
+    bool canSettings = await _acl.CanDoAsync(currentUser.Id, "Settings.Manage");
+    bool canLanguages = await _acl.CanDoAsync(currentUser.Id, "Localization.Language.Manage");
+    bool canResources = await _acl.CanDoAsync(currentUser.Id, "Localization.Resource.Manage");
+}
+
+<nav id="sidebar" class="sidebar js-sidebar">
+    <div class="sidebar-content js-simplebar">
+        <a class="sidebar-brand" href="/Admin">
+            <img src="@logoUrl" alt="Logo" style="width: 100%" />
+        </a>
+
+        <ul class="sidebar-nav">
+
+            <li class="sidebar-header">Pages</li>
+
+            @if (canDashboard)
+            {
+                <li class="sidebar-item active">
+                    <a class="sidebar-link" href="/admin">
+                        <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
+                    </a>
+                </li>
+            }
+
+            @if (canRegistrations)
+            {
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="/Admin/Registrations">
+                        <i class="align-middle" data-feather="user"></i> <span class="align-middle">Registrations</span>
+                    </a>
+                </li>
+            }
+
+            @if (canInstitutes)
+            {
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="/Admin/Institutes">
+                        <i class="align-middle" data-feather="user"></i> <span class="align-middle">Institutes</span>
+                    </a>
+                </li>
+            }
+
+            @if (canUsers)
+            {
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="/Admin/Users">
+                        <i class="align-middle" data-feather="user"></i> <span class="align-middle">Admin Users</span>
+                    </a>
+                </li>
+            }
+
+            <li class="sidebar-header">Organization</li>
+
+            @if (canOrganization)
+            {
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="/Admin/Organization/">
+                        <i class="align-middle" data-feather="square"></i> <span class="align-middle">Organization</span>
+                    </a>
+                </li>
+            }
+
+            @if (canDepartments)
+            {
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="/Admin/Departments/">
+                        <i class="align-middle" data-feather="square"></i> <span class="align-middle">Bank sector</span>
+                    </a>
+                </li>
+            }
+
+            @if (canUnits)
+            {
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="/Admin/Units/">
+                        <i class="align-middle" data-feather="square"></i> <span class="align-middle">Departments</span>
+                    </a>
+                </li>
+            }
+
+            @if (canSubUnits)
+            {
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="/Admin/SubUnits/">
+                        <i class="align-middle" data-feather="square"></i> <span class="align-middle">Units</span>
+                    </a>
+                </li>
+            }
+
+            <li class="sidebar-header">Users & Access Control</li>
+
+            @if (canRoles)
+            {
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="/Admin/Roles/">
+                        <i class="align-middle" data-feather="square"></i> <span class="align-middle">Roles</span>
+                    </a>
+                </li>
+            }
+
+            @if (canPermissions)
+            {
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="/Admin/Permissions/">
+                        <i class="align-middle" data-feather="check-square"></i> <span class="align-middle">Permissions</span>
+                    </a>
+                </li>
+            }
+
+            @if (canUserRoles)
+            {
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="/Admin/UserRoles/">
+                        <i class="align-middle" data-feather="grid"></i> <span class="align-middle">User Roles</span>
+                    </a>
+                </li>
+            }
+
+            @if (canUserPermissionOverrides)
+            {
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="/Admin/UserPermissionOverrides">
+                        <i class="align-middle" data-feather="align-left"></i> <span class="align-middle">User Permission Overrides</span>
+                    </a>
+                </li>
+            }
+
+            <li class="sidebar-header">Configurations</li>
+
+            @if (canLogs)
+            {
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="/Admin/AuditTrail">
+                        <i class="align-middle" data-feather="bar-chart-2"></i> <span class="align-middle">Logs</span>
+                    </a>
+                </li>
+            }
+
+            @if (canSettings)
+            {
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="/Admin/Settings/">
+                        <i class="align-middle" data-feather="map"></i> <span class="align-middle">Setting</span>
+                    </a>
+                </li>
+            }
+
+            @if (canLanguages)
+            {
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="/Admin/Languages/">
+                        <i class="align-middle" data-feather="map"></i> <span class="align-middle">@await Html.T("UI.Language")</span>
+                    </a>
+                </li>
+            }
+
+            @if (canResources)
+            {
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="/Admin/Resources/">
+                        <i class="align-middle" data-feather="map"></i> <span class="align-middle">Resources</span>
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+</nav>

@@ -1,0 +1,36 @@
+@model UserPreferenceModel
+
+<h2>User Preferences</h2>
+
+<form asp-action="UserPreferences" method="post">
+    <input type="hidden" asp-for="UserId" />
+
+    <div class="form-group">
+        <label asp-for="LanguageId" class="form-label">Language</label>
+        <select asp-for="LanguageId"
+                class="form-control"
+                asp-items="@(new SelectList(Model.AvailableLanguages, "Id", "Name", Model.LanguageId))">
+        </select>
+    </div>
+
+    <div class="form-check mt-2">
+        <input asp-for="EnableMfa" class="form-check-input" />
+        <label asp-for="EnableMfa" class="form-check-label">Enable MFA</label>
+    </div>
+
+    <h4 class="mt-3">Notification Preferences</h4>
+    <div class="form-check">
+        <input asp-for="NotifyByEmail" class="form-check-input" />
+        <label asp-for="NotifyByEmail" class="form-check-label">Email</label>
+    </div>
+    <div class="form-check">
+        <input asp-for="NotifyBySms" class="form-check-input" />
+        <label asp-for="NotifyBySms" class="form-check-label">SMS</label>
+    </div>
+    <div class="form-check">
+        <input asp-for="NotifyInApp" class="form-check-input" />
+        <label asp-for="NotifyInApp" class="form-check-label">In-App</label>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Save</button>
+</form>

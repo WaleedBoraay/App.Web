@@ -1,0 +1,86 @@
+﻿@model IEnumerable<App.Web.Areas.Admin.Models.Security.UserPermissionOverrideModel>
+
+<h2>User Permission Overrides</h2>
+
+<div class="accordion" id="userOverridesAccordion">
+    @{
+        var index = 0;
+    }
+    @foreach (var user in Model)
+    {
+        var collapseId = $"collapse{index}";
+        var headingId = $"heading{index}";
+        index++;
+
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="@headingId">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#@collapseId" aria-expanded="false" aria-controls="@collapseId">
+                    @user.Username
+                </button>
+            </h2>
+            <div id="@collapseId" class="accordion-collapse collapse" aria-labelledby="@headingId" data-bs-parent="#userOverridesAccordion">
+                <div class="accordion-body">
+                    <p>
+                        <strong>Granted:</strong> @string.Join(", ", user.Granted)
+                        <br />
+                        <strong>Denied:</strong> @string.Join(", ", user.Denied)
+                    </p>
+
+                    <div class="d-flex flex-wrap gap-2">
+                        <!-- Grant -->
+                        <form asp-action="Grant" method="post" class="d-inline">
+                            <input type="hidden" name="userId" value="@user.UserId" />
+                            <select name="permissionSystemName" class="form-select form-select-sm d-inline w-auto">
+                                @foreach (var group in user.AllPermissions.GroupBy(p => p.Category).OrderBy(g => g.Key))
+                                {
+                                    <optgroup label="@group.Key">
+                                        @foreach (var perm in group)
+                                        {
+                                            <option value="@perm.SystemName">@perm.Name</option>
+                                        }
+                                    </optgroup>
+                                }
+                            </select>
+                            <button type="submit" class="btn btn-success">Grant</button>
+                        </form>
+
+                        <!-- Deny -->
+                        <form asp-action="Deny" method="post" class="d-inline">
+                            <input type="hidden" name="userId" value="@user.UserId" />
+                            <select name="permissionSystemName" class="form-select form-select-sm d-inline w-auto">
+                                @foreach (var group in user.AllPermissions.GroupBy(p => p.Category).OrderBy(g => g.Key))
+                                {
+                                    <optgroup label="@group.Key">
+                                        @foreach (var perm in group)
+                                        {
+                                            <option value="@perm.SystemName">@perm.Name</option>
+                                        }
+                                    </optgroup>
+                                }
+                            </select>
+                            <button type="submit" class="btn btn-warning">Deny</button>
+                        </form>
+
+                        <!-- Remove -->
+                        <form asp-action="Remove" method="post" class="d-inline">
+                            <input type="hidden" name="userId" value="@user.UserId" />
+                            <select name="permissionSystemName" class="form-select form-select-sm d-inline w-auto">
+                                @foreach (var group in user.AllPermissions.GroupBy(p => p.Category).OrderBy(g => g.Key))
+                                {
+                                    <optgroup label="@group.Key">
+                                        @foreach (var perm in group)
+                                        {
+                                            <option value="@perm.SystemName">@perm.Name</option>
+                                        }
+                                    </optgroup>
+                                }
+                            </select>
+                            <button type="submit" class="btn btn-danger">Remove</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

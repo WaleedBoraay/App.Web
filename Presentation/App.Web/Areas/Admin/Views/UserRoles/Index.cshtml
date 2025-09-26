@@ -1,0 +1,54 @@
+﻿@model IEnumerable<App.Web.Areas.Admin.Models.Security.UserRoleModel>
+@{
+    var allRoles = ViewData["AllRoles"] as IEnumerable<App.Core.Domain.Security.Role>;
+}
+
+<h2>User Roles</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Roles</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Username</td>
+                <td>@string.Join(", ", user.Roles)</td>
+                <td>
+                    <!-- Assign Role -->
+                    <form asp-action="Assign" method="post" style="display:inline-block">
+                        <input type="hidden" name="UserId" value="@user.UserId" />
+                        <select name="RoleId" class="form-select form-select-sm">
+                            @foreach (var role in allRoles)
+                            {
+                                <option value="@role.Id">@role.Name</option>
+                            }
+                        </select>
+                        <button type="submit" class="btn btn-primary">Add</button>
+                    </form>
+
+                    <!-- Remove Role -->
+                    <form asp-action="Remove" method="post" style="display:inline-block">
+                        <input type="hidden" name="UserId" value="@user.UserId" />
+                        <select name="RoleId" class="form-select form-select-sm">
+                            @foreach (var roleName in user.Roles)
+                            {
+                                var role = allRoles.FirstOrDefault(r => r.Name == roleName);
+                                if (role != null)
+                                {
+                                    <option value="@role.Id">@role.Name</option>
+                                }
+                            }
+                        </select>
+                        <button type="submit" class="btn btn-danger">Remove</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

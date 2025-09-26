@@ -1,0 +1,37 @@
+﻿@model IEnumerable<App.Web.Areas.Admin.Models.Notifications.NotificationModel>
+
+<li class="nav-item dropdown">
+    <a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown" data-bs-toggle="dropdown">
+        <div class="position-relative">
+            <i class="align-middle" data-feather="bell"></i>
+            @if (Model.Any(n => !n.IsRead))
+            {
+                <span class="indicator bg-danger">@Model.Count(n => !n.IsRead)</span>
+            }
+        </div>
+    </a>
+    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="alertsDropdown">
+        <div class="dropdown-menu-header">
+            You have @Model.Count() notifications
+        </div>
+        <div class="list-group">
+            @foreach (var n in Model)
+            {
+                <a href="@n.TargetUrl" class="list-group-item">
+                    <div class="row g-0 align-items-center">
+                        <div class="col-2">
+                            <i class="@(n.IsRead ? "text-secondary" : "text-primary")" data-feather="alert-circle"></i>
+                        </div>
+                        <div class="col-10">
+                            <div class="text-dark">@n.Message</div>
+                            <div class="text-muted small mt-1">@n.CreatedOnUtc.ToString("g")</div>
+                        </div>
+                    </div>
+                </a>
+            }
+        </div>
+        <div class="dropdown-menu-footer text-center">
+            <a href="/Admin/Inbox/Index">View all</a>
+        </div>
+    </div>
+</li>

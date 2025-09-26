@@ -1,0 +1,120 @@
+﻿@model IEnumerable<App.Web.Areas.Admin.Models.Institutes.InstituteListModel>
+
+<h2>Institutes</h2>
+
+<a asp-action="Create" class="btn btn-success mb-3">+ New Institution</a>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Institute Name</th>
+            <th>License</th>
+            <th>Phone Number</th>
+            <th>Email</th>
+            <th>Country</th>
+            <th>Status</th>
+            <th>Registration</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var inst in Model)
+        {
+            var collapseId = $"branches_{inst.InstituteId}";
+            <tr>
+                <td>@inst.InstituteName</td>
+                <td>@inst.LicenseNumber</td>
+                <td>@inst.BusinessPhoneNumber</td>
+                <td>@inst.Email</td>
+                <td>@inst.CountryName</td>
+                <td>
+                    <span class="badge @(inst.IsActive ? "bg-success" : "bg-danger")">
+                        @(inst.IsActive ? "Active" : "Inactive")
+                    </span>
+                </td>
+                <td>
+                    @if (inst.Registration != null)
+                    {
+                        <span class="badge bg-info">Reg#: @inst.Registration.LicenseNumber</span>
+
+                        <br />
+                        <span>Status: @inst.Registration.Status</span>
+                    }
+                    else
+                    {
+                        <em>No registration</em>
+                    }
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@inst.InstituteId" class="btn btn-info btn-sm">Details</a>
+                    <a asp-action="Edit" asp-route-id="@inst.InstituteId" class="btn btn-warning btn-sm">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@inst.InstituteId" class="btn btn-danger btn-sm">Delete</a>
+
+                    @if (inst.Registration == null)
+                    {
+                        <a asp-controller="Registrations" asp-action="Create" asp-route-institutionId="@inst.InstituteId"
+                           class="btn btn-primary btn-sm">+ Create Registration</a>
+                    }
+                    else
+                    {
+                        if (inst.IsActive != false)
+                        {
+                            <a asp-action="CreateBranch" asp-route-institutionId="@inst.Registration.InstitutionId" class="btn btn-success btn-sm">+ Add Branch</a>
+
+                        }
+                        <button class="btn btn-outline-secondary btn-sm" type="button"
+                                data-bs-toggle="collapse" data-bs-target="#@collapseId"
+                                aria-expanded="false" aria-controls="@collapseId">
+                            View Branches
+                        </button>
+                    }
+                </td>
+            </tr>
+
+            @if (inst.Registration != null)
+            {
+                <tr class="collapse" id="@collapseId">
+                    <td colspan="6">
+                        @if (inst.Branches.Any())
+                        {
+                            <table class="table table-sm table-bordered">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Address</th>
+                                        <th>Phone</th>
+                                        <th>Email</th>
+                                        <th>Country</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var branch in inst.Branches)
+                                    {
+                                        <tr>
+                                            <td>@branch.Name</td>
+                                            <td>@branch.Address</td>
+                                            <td>@branch.Phone</td>
+                                            <td>@branch.Email</td>
+                                            <td>@branch.CountryName</td>
+                                            <td>
+                                                <a asp-action="EditBranch" asp-route-id="@branch.BranchId" class="btn btn-warning btn-sm">Edit</a>
+                                                <form asp-action="DeleteBranch" asp-route-id="@branch.BranchId" method="post" style="display:inline">
+                                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                        else
+                        {
+                            <p><em>No branches found.</em></p>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

@@ -1,0 +1,115 @@
+﻿@model App.Web.Areas.Admin.Models.Registrations.RegistrationModel
+
+@{
+    var user = await _workContext.GetCurrentUserAsync();
+    var roles = await _roleService.GetRolesByUserIdAsync(user.Id);
+
+    bool isMaker = roles.Any(r => r.Name == "Maker" || r.SystemName == "Maker");
+    bool isChecker = roles.Any(r => r.Name.Contains("Checker") || r.Name.Contains("Validator"));
+    bool isRegulator = roles.Any(r => r.Name.Contains("Regulator"));
+    bool isInspector = roles.Any(r => r.Name.Contains("Inspector"));
+}
+
+<h2>Registration Details</h2>
+
+<div class="card mb-3">
+    <div class="card-header bg-primary text-white">Institution Info</div>
+    <div class="card-body">
+        <p><strong>Name:</strong> @Model.InstitutionName</p>
+        <p><strong>License:</strong> @Model.LicenseNumber</p>
+        <p><strong>Sector:</strong> @Model.LicenseSectorId</p>
+        <p><strong>Country:</strong> @Model.CountryName</p>
+        <p><strong>Status:</strong> @Model.Status</p>
+        <p><strong>Created By:</strong> @Model.CreatedByUserName</p>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header bg-secondary text-white">Contacts</div>
+    <div class="card-body">
+        @await Html.PartialAsync("~/Areas/Admin/Views/Contacts/_ContactsTable.cshtml", Model.Contacts,
+        new ViewDataDictionary(ViewData) { { "RegistrationId", Model.Id } })
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header bg-secondary text-white">Documents</div>
+    <div class="card-body">
+        @await Html.PartialAsync("~/Areas/Admin/Views/Documents/_DocumentsTable.cshtml", Model.Documents,
+                new ViewDataDictionary(ViewData) { { "RegistrationId", Model.Id } })
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header bg-secondary text-white">Status History</div>
+    <div class="card-body">
+        @if (Model.StatusLogs.Any())
+        {
+            <table class="table">
+                <thead>
+                    <tr><th>Status</th><th>By</th><th>Date</th><th>Remarks</th></tr>
+                </thead>
+                <tbody>
+                    @foreach (var h in Model.StatusLogs)
+                    {
+                        <tr>
+                            <td>@h.RegistrationStatus</td>
+                            <td>@h.PerformedBy</td>
+                            <td>@h.ActionDateUtc</td>
+                            <td>@h.Remarks</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>No history available.</p>
+        }
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header bg-secondary text-white">Actions</div>
+    <div class="card-body">
+        @* Maker Actions *@
+        @if (isMaker && Model.StatusId == (int)RegistrationStatus.Draft)
+        {
+            <form asp-action="Submit" asp-route-id="@Model.Id" method="post" style="display:inline">
+                <button type="submit" class="btn btn-success">Submit</button>
+            </form>
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+        }
+
+        @* Checker/Validator Actions *@
+        @if (isChecker && Model.StatusId == (int)RegistrationStatus.Submitted)
+        {
+            <form asp-action="Validate" asp-route-id="@Model.Id" method="post" style="display:inline">
+                <button type="submit" class="btn btn-success">Validate</button>
+            </form>
+            <form asp-action="ReturnForEdit" asp-route-id="@Model.Id" method="post" style="display:inline">
+                <button type="submit" class="btn btn-danger">Return</button>
+            </form>
+        }
+
+        @* Regulator Actions *@
+        @if (isRegulator && Model.StatusId == (int)RegistrationStatus.UnderReview)
+        {
+            <form asp-action="Approve" asp-route-id="@Model.Id" method="post" style="display:inline">
+                <button type="submit" class="btn btn-success">Approve</button>
+            </form>
+            <form asp-action="Reject" asp-route-id="@Model.Id" method="post" style="display:inline">
+                <button type="submit" class="btn btn-danger">Reject</button>
+            </form>
+            <form asp-action="ReturnForEdit" asp-route-id="@Model.Id" method="post" style="display:inline">
+                <button type="submit" class="btn btn-warning">Return</button>
+            </form>
+        }
+
+        @* Inspector Actions *@
+        @if (isInspector && Model.StatusId == (int)RegistrationStatus.Approved)
+        {
+            <span class="badge bg-success">Read-Only</span>
+        }
+    </div>
+</div>

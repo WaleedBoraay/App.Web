@@ -1,0 +1,119 @@
+<Language>
+  <LocaleResource Name="Account.Login">
+    <Value>Login</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.Logout">
+    <Value>Logout</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.Register">
+    <Value>Register</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.Profile">
+    <Value>Profile</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.ChangePassword">
+    <Value>Change Password</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.ResetPassword">
+    <Value>Reset Password</Value>
+  </LocaleResource>
+  <LocaleResource Name="Common.Save">
+    <Value>Save</Value>
+  </LocaleResource>
+  <LocaleResource Name="Common.Cancel">
+    <Value>Cancel</Value>
+  </LocaleResource>
+  <LocaleResource Name="Common.Edit">
+    <Value>Edit</Value>
+  </LocaleResource>
+  <LocaleResource Name="Common.Delete">
+    <Value>Delete</Value>
+  </LocaleResource>
+  <LocaleResource Name="Common.Back">
+    <Value>Back</Value>
+  </LocaleResource>
+  <LocaleResource Name="Common.Next">
+    <Value>Next</Value>
+  </LocaleResource>
+  <LocaleResource Name="Common.Previous">
+    <Value>Previous</Value>
+  </LocaleResource>
+  <LocaleResource Name="Common.Search">
+    <Value>Search</Value>
+  </LocaleResource>
+  <LocaleResource Name="Common.Filter">
+    <Value>Filter</Value>
+  </LocaleResource>
+  <LocaleResource Name="Common.Download">
+    <Value>Download</Value>
+  </LocaleResource>
+  <LocaleResource Name="Common.Upload">
+    <Value>Upload</Value>
+  </LocaleResource>
+  <LocaleResource Name="Notification.Success">
+    <Value>Operation completed successfully.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Notification.Error">
+    <Value>An error occurred.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Notification.Warning">
+    <Value>Warning</Value>
+  </LocaleResource>
+  <LocaleResource Name="Notification.Info">
+    <Value>Information</Value>
+  </LocaleResource>
+  <LocaleResource Name="Notification.ConfirmDelete">
+    <Value>Are you sure you want to delete this item?</Value>
+  </LocaleResource>
+  <LocaleResource Name="Validation.Required">
+    <Value>This field is required.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Validation.InvalidEmail">
+    <Value>Invalid email address.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Validation.PasswordMismatch">
+    <Value>Passwords do not match.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Validation.MinLength">
+    <Value>Minimum length not met.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Validation.MaxLength">
+    <Value>Maximum length exceeded.</Value>
+  </LocaleResource>
+  <LocaleResource Name="System.PageNotFound">
+    <Value>Page not found.</Value>
+  </LocaleResource>
+  <LocaleResource Name="System.AccessDenied">
+    <Value>Access denied.</Value>
+  </LocaleResource>
+  <LocaleResource Name="System.Unauthorized">
+    <Value>Unauthorized.</Value>
+  </LocaleResource>
+  <LocaleResource Name="System.InternalServerError">
+    <Value>Internal server error.</Value>
+  </LocaleResource>
+  <LocaleResource Name="UI.Dashboard">
+    <Value>Dashboard</Value>
+  </LocaleResource>
+  <LocaleResource Name="UI.Settings">
+    <Value>Settings</Value>
+  </LocaleResource>
+  <LocaleResource Name="UI.Users">
+    <Value>Users</Value>
+  </LocaleResource>
+  <LocaleResource Name="UI.Roles">
+    <Value>Roles</Value>
+  </LocaleResource>
+  <LocaleResource Name="UI.Reports">
+    <Value>Reports</Value>
+  </LocaleResource>
+  <LocaleResource Name="UI.Help">
+    <Value>Help</Value>
+  </LocaleResource>
+  <LocaleResource Name="UI.Language">
+    <Value>Language</Value>
+  </LocaleResource>
+  <LocaleResource Name="UI.Country">
+    <Value>Country</Value>
+  </LocaleResource>
+</Language>

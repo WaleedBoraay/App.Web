@@ -1,0 +1,119 @@
+<Language>
+  <LocaleResource Name="Account.Login">
+    <Value>سجّل دخول</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.Logout">
+    <Value>اخرج</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.Register">
+    <Value>اعمل حساب</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.Profile">
+    <Value>الملف بتاعك</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.ChangePassword">
+    <Value>غيّر الباسورد</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.ResetPassword">
+    <Value>اعمل باسورد جديد</Value>
+  </LocaleResource>
+  <LocaleResource Name="Common.Save">
+    <Value>احفظ</Value>
+  </LocaleResource>
+  <LocaleResource Name="Common.Cancel">
+    <Value>إلغي</Value>
+  </LocaleResource>
+  <LocaleResource Name="Common.Edit">
+    <Value>عدّل</Value>
+  </LocaleResource>
+  <LocaleResource Name="Common.Delete">
+    <Value>امسح</Value>
+  </LocaleResource>
+  <LocaleResource Name="Common.Back">
+    <Value>إرجع</Value>
+  </LocaleResource>
+  <LocaleResource Name="Common.Next">
+    <Value>اللي بعده</Value>
+  </LocaleResource>
+  <LocaleResource Name="Common.Previous">
+    <Value>اللي قبل</Value>
+  </LocaleResource>
+  <LocaleResource Name="Common.Search">
+    <Value>دور</Value>
+  </LocaleResource>
+  <LocaleResource Name="Common.Filter">
+    <Value>فلتر</Value>
+  </LocaleResource>
+  <LocaleResource Name="Common.Download">
+    <Value>نزّل</Value>
+  </LocaleResource>
+  <LocaleResource Name="Common.Upload">
+    <Value>ارفع</Value>
+  </LocaleResource>
+  <LocaleResource Name="Notification.Success">
+    <Value>العملية نجحت</Value>
+  </LocaleResource>
+  <LocaleResource Name="Notification.Error">
+    <Value>فيه مشكلة حصلت</Value>
+  </LocaleResource>
+  <LocaleResource Name="Notification.Warning">
+    <Value>خلي بالك</Value>
+  </LocaleResource>
+  <LocaleResource Name="Notification.Info">
+    <Value>معلومة</Value>
+  </LocaleResource>
+  <LocaleResource Name="Notification.ConfirmDelete">
+    <Value>متأكد إنك عايز تمسح ده؟</Value>
+  </LocaleResource>
+  <LocaleResource Name="Validation.Required">
+    <Value>لازم تملاه</Value>
+  </LocaleResource>
+  <LocaleResource Name="Validation.InvalidEmail">
+    <Value>الإيميل مش صح</Value>
+  </LocaleResource>
+  <LocaleResource Name="Validation.PasswordMismatch">
+    <Value>الباسوردات مش زي بعض</Value>
+  </LocaleResource>
+  <LocaleResource Name="Validation.MinLength">
+    <Value>قصير أوي</Value>
+  </LocaleResource>
+  <LocaleResource Name="Validation.MaxLength">
+    <Value>طويل أوي</Value>
+  </LocaleResource>
+  <LocaleResource Name="System.PageNotFound">
+    <Value>الصفحة مش موجودة</Value>
+  </LocaleResource>
+  <LocaleResource Name="System.AccessDenied">
+    <Value>ممنوع تدخُل</Value>
+  </LocaleResource>
+  <LocaleResource Name="System.Unauthorized">
+    <Value>مش مسموح</Value>
+  </LocaleResource>
+  <LocaleResource Name="System.InternalServerError">
+    <Value>مشكلة في السيرفر</Value>
+  </LocaleResource>
+  <LocaleResource Name="UI.Dashboard">
+    <Value>اللوحة</Value>
+  </LocaleResource>
+  <LocaleResource Name="UI.Settings">
+    <Value>الإعدادات</Value>
+  </LocaleResource>
+  <LocaleResource Name="UI.Users">
+    <Value>المستخدمين</Value>
+  </LocaleResource>
+  <LocaleResource Name="UI.Roles">
+    <Value>الأدوار</Value>
+  </LocaleResource>
+  <LocaleResource Name="UI.Reports">
+    <Value>التقارير</Value>
+  </LocaleResource>
+  <LocaleResource Name="UI.Help">
+    <Value>مساعدة</Value>
+  </LocaleResource>
+  <LocaleResource Name="UI.Language">
+    <Value>اللغة</Value>
+  </LocaleResource>
+  <LocaleResource Name="UI.Country">
+    <Value>البلد</Value>
+  </LocaleResource>
+</Language>

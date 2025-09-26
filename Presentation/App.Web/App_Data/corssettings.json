@@ -1,0 +1,10 @@
+{
+  "AllowedOrigins": [
+    "http://localhost:3000",
+    "https://localhost:3000",
+    "http://20.57.218.145",
+    "https://20.57.218.145",
+    "http://suptech.online",
+    "https://suptech.online"
+  ]
+}

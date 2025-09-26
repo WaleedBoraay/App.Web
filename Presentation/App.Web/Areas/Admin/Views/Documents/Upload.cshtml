@@ -1,0 +1,19 @@
+﻿@model App.Web.Areas.Admin.Models.Registrations.DocumentModel
+
+<h3>Upload Document</h3>
+<form asp-action="Upload" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="RegistrationId" />
+
+    <div class="mb-3">
+        <label asp-for="DocumentType" class="form-label"></label>
+        <select asp-for="DocumentType" class="form-select"></select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">File</label>
+        <input type="file" name="file" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-success">Upload</button>
+    <a asp-controller="Registrations" asp-action="Details" asp-route-id="@Model.RegistrationId" class="btn btn-secondary">Cancel</a>
+</form>

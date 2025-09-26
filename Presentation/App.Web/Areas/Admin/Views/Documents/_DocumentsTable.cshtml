@@ -1,0 +1,27 @@
+﻿@model List<App.Web.Areas.Admin.Models.Registrations.DocumentModel>
+
+<div class="d-flex justify-content-between align-items-center mb-2">
+    <h4>Documents</h4>
+    <a asp-controller="Documents" asp-action="Upload" asp-route-registrationId="@ViewData["RegistrationId"]" class="btn btn-success ">
+        + Upload Document
+    </a>
+</div>
+
+@if (Model != null && Model.Any())
+{
+    <ul class="list-group">
+        @foreach (var d in Model)
+        {
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <span><strong>@d.DocumentType:</strong> @d.FilePath</span>
+                <form asp-controller="Documents" asp-action="Delete" method="post" asp-route-id="@d.Id" asp-route-registrationId="@ViewData["RegistrationId"]" style="display:inline;">
+                    <button type="submit" class="btn btn-danger ">Delete</button>
+                </form>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>No documents uploaded.</p>
+}

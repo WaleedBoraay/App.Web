@@ -1,0 +1,118 @@
+﻿@model IEnumerable<App.Web.Areas.Admin.Models.Registrations.RegistrationModel>
+
+@{
+    ViewData["Title"] = "Registrations";
+
+    var user = await _workContext.GetCurrentUserAsync();
+    var roles = await _roleService.GetRolesByUserIdAsync(user.Id);
+
+    bool isMaker = roles.Any(r => r.Name == "Maker" || r.SystemName == "Maker");
+    bool isChecker = roles.Any(r => r.Name.Contains("Checker") || r.Name.Contains("Validator"));
+    bool isRegulator = roles.Any(r => r.Name.Contains("Regulator"));
+    bool isInspector = roles.Any(r => r.Name.Contains("Inspector"));
+
+    var statusBadges = new Dictionary<RegistrationStatus, (string Text, string BadgeClass)>
+    {
+        { RegistrationStatus.Draft, ("Draft", "bg-secondary") },
+        { RegistrationStatus.Submitted, ("Submitted", "bg-info") },
+        { RegistrationStatus.UnderReview, ("Under Review", "bg-warning text-dark") },
+        { RegistrationStatus.Approved, ("Approved", "bg-success") },
+        { RegistrationStatus.Rejected, ("Rejected", "bg-danger") },
+        { RegistrationStatus.ReturnedForEdit, ("ReturnedForEdit", "bg-dark") }
+    };
+
+}
+
+<h2>Registrations</h2>
+
+<table class="table table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Institution</th>
+            <th>License</th>
+            <th>Status</th>
+            <th>Created On</th>
+            <th>Created By</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            var statusEnum = (RegistrationStatus)item.StatusId;
+
+            // Define visibility rules
+            bool showRow =
+            (isMaker && statusEnum == RegistrationStatus.Draft) ||
+            (isChecker && statusEnum == RegistrationStatus.Submitted) ||
+            (isRegulator && statusEnum == RegistrationStatus.UnderReview) ||
+            (isInspector && statusEnum == RegistrationStatus.Approved);
+
+            if (showRow)
+            {
+                <tr>
+                    <td>@item.InstitutionName</td>
+                    <td>@item.LicenseNumber</td>
+                    <td>
+                        @{
+                            var badge = statusBadges.ContainsKey(statusEnum)
+                            ? statusBadges[statusEnum]
+                            : ("Unknown", "bg-light text-dark");
+                        }
+                        <span class="badge @(badge.Item2)">@badge.Item1</span>
+                    </td>
+                    <td>@item.CreatedOnUtc.ToShortDateString()</td>
+                    <td>@item.CreatedByUserName</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">Details</a>
+
+                        @* Maker actions *@
+                        @if (isMaker && statusEnum == RegistrationStatus.Draft)
+                        {
+                            <form asp-action="Submit" asp-route-id="@item.Id" method="post" style="display:inline">
+                                <button type="submit" class="btn btn-success">Submit</button>
+                            </form>
+                            <a asp-controller="Institutes" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a>
+                        }
+
+                        @* Checker/Validator actions *@
+                        @if (isChecker && statusEnum == RegistrationStatus.Submitted)
+                        {
+                            <form asp-action="Validate" asp-route-id="@item.Id" method="post" style="display:inline">
+                                <button type="submit" class="btn btn-success">Validate</button>
+                            </form>
+                            <form asp-action="ReturnForEdit" asp-route-id="@item.Id" method="post" style="display:inline">
+                                <button type="submit" class="btn btn-danger">Return</button>
+                            </form>
+                        }
+
+                        @* Regulator actions *@
+                        @if (isRegulator && statusEnum == RegistrationStatus.UnderReview)
+                        {
+                            <form asp-action="Approve" asp-route-id="@item.Id" method="post" style="display:inline">
+                                <button type="submit" class="btn btn-success">Approve</button>
+                            </form>
+                            <form asp-action="Reject" asp-route-id="@item.Id" method="post" style="display:inline">
+                                <button type="submit" class="btn btn-danger">Reject</button>
+                            </form>
+                            <form asp-action="ReturnForEdit" asp-route-id="@item.Id" method="post" style="display:inline">
+                                <button type="submit" class="btn btn-warning">Return</button>
+                            </form>
+                        }
+
+                        @* Inspector actions (read-only) *@
+                        @if (isInspector && statusEnum == RegistrationStatus.Approved)
+                        {
+                            <span class="badge bg-success">Read-Only</span>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+@if (isMaker)
+{
+    <a asp-action="Create" asp-controller="Registrations" class="btn btn-success">+ New Registration</a>
+}

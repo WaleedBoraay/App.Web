@@ -1,0 +1,55 @@
+﻿@model App.Web.Areas.Admin.Models.Security.RolePermissionMappingModel
+
+<h2>Manage Permissions for Role: @Model.RoleName</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="RoleId" />
+
+    @{
+        var grouped = Model.AllPermissions.GroupBy(p => p.Category).OrderBy(g => g.Key);
+        var index = 0;
+    }
+
+    <div class="accordion" id="rolePermissionsAccordion">
+        @foreach (var group in grouped)
+        {
+            var collapseId = $"collapse{index}";
+            var headingId = $"heading{index}";
+            index++;
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="@headingId">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#@collapseId" aria-expanded="false" aria-controls="@collapseId">
+                        @group.Key
+                    </button>
+                </h2>
+                <div id="@collapseId" class="accordion-collapse collapse"
+                     aria-labelledby="@headingId" data-bs-parent="#rolePermissionsAccordion">
+                    <div class="accordion-body">
+                        <div class="row">
+                            @foreach (var perm in group)
+                            {
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input type="checkbox"
+                                               name="selectedPermissions"
+                                               value="@perm.SystemName"
+                                               @(Model.GrantedPermissions.Contains(perm.SystemName) ? "checked" : "")
+                                               class="form-check-input" />
+                                        <label class="form-check-label">
+                                            @perm.Name (@perm.SystemName)
+                                        </label>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <button type="submit" class="btn btn-success mt-3">Save</button>
+    <a asp-controller="Roles" asp-action="Index" class="btn btn-secondary mt-3">Back</a>
+</form>

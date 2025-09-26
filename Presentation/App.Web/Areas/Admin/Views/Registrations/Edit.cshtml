@@ -1,0 +1,77 @@
+﻿@model App.Web.Areas.Admin.Models.Registrations.RegistrationModel
+
+@{
+    // Determine if fields should be readonly
+    var isEditable = User.IsInRole("Maker") && Model.Status == App.Core.Domain.Registrations.RegistrationStatus.Draft;
+    var readonlyAttr = isEditable ? null : "readonly";
+}
+
+<h2>Edit Registration</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <ul class="nav nav-tabs" id="regTabs" role="tablist">
+        <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#general">General</a></li>
+        <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#contacts">Contacts</a></li>
+        <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#documents">Documents</a></li>
+    </ul>
+
+    <div class="tab-content mt-3">
+        <div class="tab-pane fade show active" id="general">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="InstitutionName" class="form-label"></label>
+                    <input asp-for="InstitutionName" class="form-control" readonly="@readonlyAttr" />
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="LicenseNumber" class="form-label"></label>
+                    <input asp-for="LicenseNumber" class="form-control" readonly="@readonlyAttr" />
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="LicenseSectorId" class="form-label"></label>
+                    <input asp-for="LicenseSectorId" class="form-control" readonly="@readonlyAttr" />
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="CountryName" class="form-label"></label>
+                    <input asp-for="CountryName" class="form-control" readonly />
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="contacts">
+            @* Checker ممكن يعدل Contacts *@
+            @if (User.IsInRole("Maker") || User.IsInRole("Checker"))
+            {
+                @await Html.PartialAsync("~/Areas/Admin/Views/Contacts/_ContactsTable.cshtml", Model.Contacts,
+                new ViewDataDictionary(ViewData) { { "RegistrationId", Model.Id } })
+                        }
+            else
+            {
+                <p class="text-muted">Read-only</p>
+            }
+        </div>
+
+        <div class="tab-pane fade" id="documents">
+            @* Maker بس يرفع مستندات في مرحلة Draft *@
+            @if (User.IsInRole("Maker") && Model.Status == App.Core.Domain.Registrations.RegistrationStatus.Draft)
+            {
+                @await Html.PartialAsync("~/Areas/Admin/Views/Documents/_DocumentsTable.cshtml", Model.Documents,
+                new ViewDataDictionary(ViewData) { { "RegistrationId", Model.Id } })
+                        }
+            else
+            {
+                <p class="text-muted">Documents are read-only at this stage.</p>
+            }
+        </div>
+    </div>
+
+    @* زرار Update يظهر فقط لو Maker (Draft) أو Checker *@
+    @if ((User.IsInRole("Maker") && Model.Status == App.Core.Domain.Registrations.RegistrationStatus.Draft)
+        || User.IsInRole("Checker"))
+    {
+        <button type="submit" class="btn btn-primary mt-3">Update</button>
+    }
+
+    <a asp-action="Index" class="btn btn-secondary mt-3">Cancel</a>
+</form>

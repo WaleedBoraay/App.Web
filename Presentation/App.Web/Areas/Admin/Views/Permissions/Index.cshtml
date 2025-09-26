@@ -1,0 +1,57 @@
+@model IEnumerable<App.Web.Areas.Admin.Models.Security.PermissionModel>
+
+<h2>Permissions</h2>
+
+<form asp-action="Sync" method="post" style="margin-bottom:20px;">
+    <button type="submit" class="btn btn-primary">
+        <i class="bi bi-arrow-repeat"></i> Sync Permissions
+    </button>
+</form>
+
+@{
+    var grouped = Model.GroupBy(p => p.Category).OrderBy(g => g.Key);
+    var index = 0;
+}
+
+<div class="accordion" id="permissionsAccordion">
+    @foreach (var group in grouped)
+    {
+        var collapseId = $"collapse{index}";
+        var headingId = $"heading{index}";
+        index++;
+
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="@headingId">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#@collapseId" aria-expanded="false" aria-controls="@collapseId">
+                    @group.Key
+                </button>
+            </h2>
+            <div id="@collapseId" class="accordion-collapse collapse" aria-labelledby="@headingId" data-bs-parent="#permissionsAccordion">
+                <div class="accordion-body">
+                    <table class="table table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Name</th>
+                                <th>System Name</th>
+                                <th>Description</th>
+                                <th>Active</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var perm in group)
+                            {
+                                <tr>
+                                    <td>@perm.Name</td>
+                                    <td>@perm.SystemName</td>
+                                    <td>@perm.Description</td>
+                                    <td>@perm.IsActive</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+</div>

@@ -1,0 +1,60 @@
+﻿@model App.Web.Areas.Admin.Models.Institutes.InstituteEditModel
+
+<h2>Edit Institute</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label"></label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="BusinessPhoneNumber" class="form-label"></label>
+        <input asp-for="BusinessPhoneNumber" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label"></label>
+        <input asp-for="Email" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="LicenseNumber" class="form-label"></label>
+        <input asp-for="LicenseNumber" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="LicenseSectorId" class="form-label"></label>
+        <select asp-for="LicenseSectorId" asp-items="Model.AvailableLicenseSectors" class="form-select"></select>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="FinancialDomainId" class="form-label"></label>
+        <select asp-for="FinancialDomainId" asp-items="Model.AvailableFinancialDomains" class="form-select"></select>
+    </div>
+    <div class="mb-3">
+        <label asp-for="LicenseIssueDate" class="form-label"></label>
+        <input asp-for="LicenseIssueDate" type="date" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="LicenseExpiryDate" class="form-label"></label>
+        <input asp-for="LicenseExpiryDate" type="date" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="CountryId" class="form-label"></label>
+        <select asp-for="CountryId" asp-items="Model.AvailableCountries" class="form-select"></select>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Address" class="form-label"></label>
+        <input asp-for="Address" class="form-control" />
+    </div>
+    <div class="form-check mb-3">
+        <input asp-for="IsActive" class="form-check-input" />
+        <label asp-for="IsActive" class="form-check-label"></label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+<form asp-action="UploadInstituteDocument" asp-route-instituteId="@Model.Id" method="post" enctype="multipart/form-data">
+    <input type="file" name="file" class="form-control" />
+    <button type="submit" class="btn btn-primary">Upload Document</button>
+</form>

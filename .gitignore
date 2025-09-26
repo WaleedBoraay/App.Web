@@ -1,0 +1,16 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/Libraries/App.Core/bin
+/Libraries/App.Core/obj
+/Libraries/App.Data/bin
+/Libraries/App.Data/obj
+/Libraries/App.Services/bin
+/Libraries/App.Services/obj
+/Presentation/App.Web/.config
+/Presentation/App.Web/.vs
+/.vs
+/Presentation/App.Web/bin
+/Presentation/App.Web/obj
+/Presentation/App.Web/Properties

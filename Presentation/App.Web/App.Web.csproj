@@ -1,0 +1,83 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<OutDir>$(OutputPath)</OutDir>
+	</PropertyGroup>
+
+	<!-- Project References -->
+	<ItemGroup>
+		<ProjectReference Include="..\..\Libraries\App.Core\App.Core.csproj" />
+		<ProjectReference Include="..\..\Libraries\App.Data\App.Data.csproj" />
+		<ProjectReference Include="..\..\Libraries\App.Services\App.Services.csproj" />
+	</ItemGroup>
+
+	<!-- NuGet Packages -->
+	<ItemGroup>
+		<PackageReference Include="coverlet.collector" Version="6.0.4">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+		<PackageReference Include="Scrutor.AspNetCore" Version="3.3.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+		<PackageReference Include="xunit" Version="2.9.3" />
+	</ItemGroup>
+
+	<!-- Static & Content Files -->
+	<ItemGroup>
+		<Content Update="Views\**\*.*">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+
+		<Content Include="App_Data\**" CopyToPublishDirectory="PreserveNewest" Exclude="App_Data\*.json" />
+
+		<Content Update="wwwroot\**\*.*">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+	</ItemGroup>
+
+	<!-- View Files -->
+	<ItemGroup>
+		<!-- Public Views -->
+		<PublicViews Include="$(ProjectDir)\Views\**\*.cshtml" />
+		<!-- Area Views (Admin and others) -->
+		<AreaViews Include="$(ProjectDir)\Areas\**\*.cshtml" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Content Update="Areas\Admin\Views\Contacts\Create.cshtml">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Update="Areas\Admin\Views\Contacts\Edit.cshtml">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Update="Areas\Admin\Views\Contacts\_ContactsTable.cshtml">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Update="Areas\Admin\Views\Documents\Upload.cshtml">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Update="Areas\Admin\Views\Documents\_DocumentsTable.cshtml">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Update="Areas\Admin\Views\RolePermissionMapping\Edit.cshtml">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Update="Areas\Admin\Views\Shared\_CoulmnOne.cshtml">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	</ItemGroup>
+
+	<!-- Copy Views After Publish -->
+	<Target Name="CopyViewFilesAfterPublish" AfterTargets="Publish">
+		<!-- Copy Public Views -->
+		<Copy SourceFiles="@(PublicViews)" DestinationFolder="$(PublishDir)\Views\%(PublicViews.RecursiveDir)" SkipUnchangedFiles="true" />
+		<!-- Copy Area Views -->
+		<Copy SourceFiles="@(AreaViews)" DestinationFolder="$(PublishDir)\Areas\%(AreaViews.RecursiveDir)" SkipUnchangedFiles="true" />
+	</Target>
+
+</Project>

@@ -1,0 +1,244 @@
+﻿@model App.Web.Areas.Admin.Models.Organization.OrganizationPageViewModel
+@using App.Web.Areas.Admin.Models.Organization
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Bank sector</h2>
+    <form asp-action="CreateDepartment" method="post" class="d-flex">
+        <input type="text" name="name" class="form-control me-2" placeholder="New Bank sector Name" />
+        <button type="submit" class="btn btn-primary">+ Create</button>
+    </form>
+</div>
+
+<div class="accordion" id="departmentAccordion">
+    @foreach (var dept in Model.Departments)
+    {
+        <div class="accordion-item mb-2">
+            <h2 class="accordion-header" id="heading-@dept.DepartmentId">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapse-@dept.DepartmentId" aria-expanded="false"
+                        aria-controls="collapse-@dept.DepartmentId">
+                    <strong>@dept.DepartmentName</strong>
+                    <span class="badge bg-secondary ms-2">@dept.Units.Count Units</span>
+                </button>
+            </h2>
+
+            <div id="collapse-@dept.DepartmentId" class="accordion-collapse collapse"
+                 aria-labelledby="heading-@dept.DepartmentId"
+                 data-bs-parent="#departmentAccordion">
+                <div class="accordion-body">
+
+                    <!-- Department Users -->
+                    @if (dept.DepartmentUsers.Any())
+                    {
+                        <div class="mb-2">
+                            <b>Users in Department:</b>
+                            <div>
+                                @foreach (var user in dept.DepartmentUsers)
+                                {
+                                    <div class="mb-1">
+                                        <span class="badge bg-light text-dark border me-1">@user.UserName</span>
+
+                                        <!-- عرض الرولز -->
+                                        @if (user.Roles.Any())
+                                        {
+                                            <ul class="list-unstyled ms-3">
+                                                @foreach (var role in user.Roles)
+                                                {
+                                                    <li>
+                                                        <span class="badge bg-info">@role.Name</span>
+                                                        <form asp-action="RemoveUserRole" method="post" class="d-inline">
+                                                            <input type="hidden" name="userId" value="@user.Id" />
+                                                            <input type="hidden" name="roleId" value="@role.Id" />
+                                                            <input type="hidden" name="departmentId" value="@dept.DepartmentId" />
+                                                            <button type="submit" class="btn btn-sm btn-outline-danger">x</button>
+                                                        </form>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Assign User to Department -->
+                    <assign-user-button level="Department" entity-id="@dept.DepartmentId"></assign-user-button>
+
+                    <!-- Add Unit -->
+                    <form asp-action="CreateUnit" method="post" class="d-flex mt-2 mb-3">
+                        <input type="hidden" name="departmentId" value="@dept.DepartmentId" />
+                        <input type="text" name="name" class="form-control me-2" placeholder="New departments Name" />
+                        <button type="submit" class="btn btn-outline-primary btn-sm">+ Add departments</button>
+                    </form>
+
+                    <!-- Units -->
+                    @if (dept.Units.Any())
+                    {
+                        @foreach (var unit in dept.Units)
+                        {
+                            <div class="card mb-2 ms-3">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <span class="fw-bold">@unit.UnitName</span>
+                                            <span class="badge bg-info ms-2">@unit.SubUnits.Count departments</span>
+                                        </div>
+                                        <div>
+                                            <assign-user-button level="Unit" entity-id="@unit.UnitId"></assign-user-button>
+                                            <form asp-action="DeleteUnit" asp-route-id="@unit.UnitId" method="post" class="d-inline">
+                                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                    <!-- Unit Users -->
+                                    @if (unit.UnitUsers.Any())
+                                    {
+                                        <div class="mt-2">
+                                            <b>Users in Unit:</b>
+                                            <div>
+                                                @foreach (var user in unit.UnitUsers)
+                                                {
+                                                    <div class="mb-1">
+                                                        <span class="badge bg-light text-dark border me-1">@user.UserName</span>
+
+                                                        <!-- رولز -->
+                                                        @if (user.Roles.Any())
+                                                        {
+                                                            <ul class="list-unstyled ms-3">
+                                                                @foreach (var role in user.Roles)
+                                                                {
+                                                                    <li>
+                                                                        <span class="badge bg-info">@role.Name</span>
+                                                                        <form asp-action="RemoveUserRole" method="post" class="d-inline">
+                                                                            <input type="hidden" name="userId" value="@user.Id" />
+                                                                            <input type="hidden" name="roleId" value="@role.Id" />
+                                                                            <input type="hidden" name="unitId" value="@unit.UnitId" />
+                                                                            <button type="submit" class="btn btn-sm btn-outline-danger">x</button>
+                                                                        </form>
+                                                                    </li>
+                                                                }
+                                                            </ul>
+                                                        }
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+
+                                    <!-- Add SubUnit -->
+                                    <form asp-action="CreateSubUnit" method="post" class="d-flex mt-3 mb-2">
+                                        <input type="hidden" name="unitId" value="@unit.UnitId" />
+                                        <input type="text" name="name" class="form-control me-2" placeholder="New Unit Name" />
+                                        <button type="submit" class="btn btn-outline-info btn-sm">+ Add Unit</button>
+                                    </form>
+
+                                    <!-- SubUnits -->
+                                    @if (unit.SubUnits.Any())
+                                    {
+                                        <div class="mt-2 ms-3">
+                                            @foreach (var sub in unit.SubUnits)
+                                            {
+                                                <div class="mb-2">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <span class="badge bg-secondary">@sub.SubUnitName</span>
+                                                        <div>
+                                                            <assign-user-button level="SubUnit" entity-id="@sub.SubUnitId"></assign-user-button>
+                                                            <form asp-action="DeleteSubUnit" asp-route-id="@sub.SubUnitId" method="post" class="d-inline">
+                                                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- SubUnit Users -->
+                                                    @if (sub.SubUnitUsers.Any())
+                                                    {
+                                                        <div class="mt-1">
+                                                            <b>Users in SubUnit:</b>
+                                                            <div>
+                                                                @foreach (var user in sub.SubUnitUsers)
+                                                                {
+                                                                    <div class="mb-1">
+                                                                        <span class="badge bg-light text-dark border me-1">@user.UserName</span>
+                                                                        @if (user.Roles.Any())
+                                                                        {
+                                                                            <ul class="list-unstyled ms-3">
+                                                                                @foreach (var role in user.Roles)
+                                                                                {
+                                                                                    <li>
+                                                                                        <span class="badge bg-info">@role.Name</span>
+                                                                                        <form asp-action="RemoveUserRole" method="post" class="d-inline">
+                                                                                            <input type="hidden" name="userId" value="@user.Id" />
+                                                                                            <input type="hidden" name="roleId" value="@role.Id" />
+                                                                                            <input type="hidden" name="subUnitId" value="@sub.SubUnitId" />
+                                                                                            <button type="submit" class="btn btn-sm btn-outline-danger">x</button>
+                                                                                        </form>
+                                                                                    </li>
+                                                                                }
+                                                                            </ul>
+                                                                        }
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            }
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Modal for Assign User -->
+<div class="modal fade" id="assignUserModal" tabindex="-1" aria-labelledby="assignUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-action="AssignUser" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="assignUserModalLabel">Assign User & Role</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- hidden context -->
+                    <input type="hidden" name="departmentId" id="modalDepartmentId" />
+                    <input type="hidden" name="unitId" id="modalUnitId" />
+                    <input type="hidden" name="subUnitId" id="modalSubUnitId" />
+
+                    <!-- Users -->
+                    <div class="mb-3">
+                        <label for="userId" class="form-label">Select User</label>
+                        <select name="userId" id="userId" class="form-select">
+                            @foreach (var u in Model.AllUsers)
+                            {
+                                <option value="@u.Id">@u.UserName (@u.Email)</option>
+                            }
+                        </select>
+                    </div>
+
+                    <!-- Roles -->
+                    <div class="mb-3">
+                        <label for="roleId" class="form-label">Select Role</label>
+                        <select name="roleId" id="roleId" class="form-select">
+                            @foreach (var r in Model.AllRoles)
+                            {
+                                <option value="@r.Id">@r.Name</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Assign</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

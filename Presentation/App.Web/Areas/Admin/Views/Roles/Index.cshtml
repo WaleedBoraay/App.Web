@@ -1,0 +1,32 @@
+@model IEnumerable<App.Web.Areas.Admin.Models.Security.RoleModel>
+
+<h2>Roles</h2>
+<a asp-action="Create" class="btn btn-primary">Create New Role</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>System Name</th>
+            <th>Description</th>
+            <th>Active</th>
+            <th>System Role</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var role in Model)
+        {
+            <tr>
+                <td>@role.Name</td>
+                <td>@role.SystemName</td>
+                <td>@role.Description</td>
+                <td>@role.IsActive</td>
+                <td>@role.IsSystemRole</td>
+                <td>
+                    <a asp-controller="RolePermissionMapping" asp-action="Edit" asp-route-roleId="@role.Id" class="btn btn-info">Permissions</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

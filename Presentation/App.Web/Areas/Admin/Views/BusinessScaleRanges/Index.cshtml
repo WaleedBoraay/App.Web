@@ -1,0 +1,33 @@
+﻿@model IEnumerable<BusinessScaleRangeModel>
+@{
+    Layout = "/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml"; ViewData["Title"] = "حجم الأعمال (نطاق)";
+    var ok = TempData["Success"] as string;
+}
+<div class="d-flex justify-content-between align-items-center my-3" dir="rtl">
+    <h3>حجم الأعمال (نطاق)</h3>
+    <a class="btn btn-primary" href="@Url.Action("Create")">+ إضافة</a>
+</div>
+@if (!string.IsNullOrWhiteSpace(ok))
+{
+    <div class="alert alert-success">@ok</div>
+}
+<table class="table table-striped" dir="rtl">
+    <thead><tr><th>الاسم</th><th>من</th><th>إلى</th><th></th></tr></thead>
+    <tbody>
+        @foreach (var x in Model)
+        {
+            <tr>
+                <td>@x.RangeLabel</td>
+                <td>@x.MinValue</td>
+                <td>@x.MaxValue</td>
+                <td class="text-nowrap">
+                    <a class="btn btn-outline-secondary" href="@Url.Action("Edit", new { id = x.BusinessScaleRangeId })">تعديل</a>
+                    <form method="post" asp-action="Delete" asp-route-id="@x.BusinessScaleRangeId" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <button class="btn btn-danger" onclick="return confirm('حذف؟');">حذف</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

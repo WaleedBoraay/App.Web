@@ -1,0 +1,78 @@
+﻿@model SettingsPageModel
+
+<div class="accordion" id="settingsAccordion">
+
+    <!-- All Settings -->
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingAll">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAll" aria-expanded="true" aria-controls="collapseAll">
+                All Settings
+            </button>
+        </h2>
+        <div id="collapseAll" class="accordion-collapse collapse show" aria-labelledby="headingAll" data-bs-parent="#settingsAccordion">
+            <div class="accordion-body">
+                @await Html.PartialAsync("_AllSettings", Model.AllSettings)
+            </div>
+        </div>
+    </div>
+
+    <!-- User Preferences -->
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingUserPref">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseUserPref" aria-expanded="false" aria-controls="collapseUserPref">
+                User Preferences
+            </button>
+        </h2>
+        <div id="collapseUserPref" class="accordion-collapse collapse" aria-labelledby="headingUserPref" data-bs-parent="#settingsAccordion">
+            <div class="accordion-body">
+                @await Html.PartialAsync("_UserPreferences",Model.UserPreferences,new ViewDataDictionary(ViewData)
+                {
+                    { "AvailableLanguages", Model.AvailableLanguages ?? new List<LanguageModel>() }
+                })
+            </div>
+        </div>
+    </div>
+
+    <!-- Branding -->
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingBranding">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseBranding" aria-expanded="false" aria-controls="collapseBranding">
+                Branding
+            </button>
+        </h2>
+        <div id="collapseBranding" class="accordion-collapse collapse" aria-labelledby="headingBranding" data-bs-parent="#settingsAccordion">
+            <div class="accordion-body">
+                @await Html.PartialAsync("_Branding", Model.BrandingSettings)
+            </div>
+        </div>
+    </div>
+
+    <!-- System Settings -->
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingSystem">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSystem" aria-expanded="false" aria-controls="collapseSystem">
+                System Settings
+            </button>
+        </h2>
+        <div id="collapseSystem" class="accordion-collapse collapse" aria-labelledby="headingSystem" data-bs-parent="#settingsAccordion">
+            <div class="accordion-body">
+                @await Html.PartialAsync("_System", Model.SystemSettings)
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Settings -->
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingNotify">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNotify" aria-expanded="false" aria-controls="collapseNotify">
+                Notification Settings
+            </button>
+        </h2>
+        <div id="collapseNotify" class="accordion-collapse collapse" aria-labelledby="headingNotify" data-bs-parent="#settingsAccordion">
+            <div class="accordion-body">
+                @await Html.PartialAsync("_Notifications", Model.NotificationSettings)
+            </div>
+        </div>
+    </div>
+
+</div>

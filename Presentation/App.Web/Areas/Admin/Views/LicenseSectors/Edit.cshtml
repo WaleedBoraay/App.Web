@@ -1,0 +1,29 @@
+﻿@model App.Web.Areas.Admin.Models.LicenseSectorModel
+@{
+    ViewBag.Title = "تعديل القطاع";
+}
+
+<h2>تعديل القطاع</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="LicenseSectorId" />
+
+    <div class="mb-3">
+        <label asp-for="DisplayName" class="form-label"></label>
+        <input asp-for="DisplayName" class="form-control" />
+        <span asp-validation-for="DisplayName" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Code" class="form-label"></label>
+        <input asp-for="Code" class="form-control" />
+        <span asp-validation-for="Code" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">حفظ التغييرات</button>
+    <a asp-action="Index" class="btn btn-secondary">إلغاء</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -9,6 +9,7 @@ namespace App.Services.Registrations
     {
         Task<IList<FIDocument>> GetAllAsync();
         Task<FIDocument> GetByIdAsync(int id);
+        Task<IList<FIDocument>> GetDocumentsByIdsAsync(int id);
         Task<FIDocument> InsertAsync(FIDocument document);
         Task<FIDocument> UpdateAsync(FIDocument document);
         Task DeleteAsync(int id);
@@ -26,6 +27,8 @@ namespace App.Services.Registrations
         Task<InstituteDocument> InsertAsync(InstituteDocument document);
         Task<InstituteDocument> UpdateAsync(InstituteDocument document);
         Task DeleteInstituteDocumentAsync(int id);
+
+        
 
         Task AddDocumentToInstituteAsync(int instituteId, FIDocument document);
         Task AddDocumentToRegistrationAsync(int registrationId, FIDocument document);

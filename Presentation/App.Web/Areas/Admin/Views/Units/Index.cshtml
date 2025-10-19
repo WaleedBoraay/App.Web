@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<App.Core.Domain.Organization.Unit>
 
-<h2>Units</h2>
-<a asp-action="Create" asp-route-departmentId="@ViewBag.DepartmentId" class="btn btn-primary mb-3">+ Add Unit</a>
+<h2>Departments</h2>
+<a asp-action="Create" asp-route-departmentId="@ViewBag.DepartmentId" class="btn btn-primary mb-3">+ Add Department</a>
 
 <table class="table table-bordered table-striped">
     <thead class="table-dark">
@@ -20,11 +20,11 @@
                     <form asp-action="Delete" asp-route-id="@item.Id" asp-route-departmentId="@ViewBag.DepartmentId" method="post" style="display:inline">
                         <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                     </form>
-                    <a asp-controller="SubUnits" asp-action="Index" asp-route-unitId="@item.Id" class="btn btn-sm btn-info">SubUnits</a>
+                    <a asp-controller="SubUnits" asp-action="Index" asp-route-unitId="@item.Id" class="btn btn-sm btn-info">Units</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
 
-<a asp-controller="Departments" asp-action="Index" class="btn btn-secondary">Back to Departments</a>
+<a asp-controller="Departments" asp-action="Index" class="btn btn-secondary">Back to Sectors</a>

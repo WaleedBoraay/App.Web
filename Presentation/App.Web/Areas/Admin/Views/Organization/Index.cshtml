@@ -10,20 +10,20 @@
 </div>
 
 <div class="accordion" id="departmentAccordion">
-    @foreach (var dept in Model.Departments)
+    @foreach (var dept in Model.Sectors)
     {
         <div class="accordion-item mb-2">
-            <h2 class="accordion-header" id="heading-@dept.DepartmentId">
+            <h2 class="accordion-header" id="heading-@dept.SectorId">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#collapse-@dept.DepartmentId" aria-expanded="false"
-                        aria-controls="collapse-@dept.DepartmentId">
-                    <strong>@dept.DepartmentName</strong>
-                    <span class="badge bg-secondary ms-2">@dept.Units.Count Units</span>
+                        data-bs-target="#collapse-@dept.SectorId" aria-expanded="false"
+                        aria-controls="collapse-@dept.SectorId">
+                    <strong>@dept.SectorName</strong>
+                    <span class="badge bg-secondary ms-2">@dept.Departments.Count Departments</span>
                 </button>
             </h2>
 
-            <div id="collapse-@dept.DepartmentId" class="accordion-collapse collapse"
-                 aria-labelledby="heading-@dept.DepartmentId"
+            <div id="collapse-@dept.SectorId" class="accordion-collapse collapse"
+                 aria-labelledby="heading-@dept.SectorId"
                  data-bs-parent="#departmentAccordion">
                 <div class="accordion-body">
 
@@ -49,7 +49,7 @@
                                                         <form asp-action="RemoveUserRole" method="post" class="d-inline">
                                                             <input type="hidden" name="userId" value="@user.Id" />
                                                             <input type="hidden" name="roleId" value="@role.Id" />
-                                                            <input type="hidden" name="departmentId" value="@dept.DepartmentId" />
+                                                            <input type="hidden" name="SectorId" value="@dept.SectorId" />
                                                             <button type="submit" class="btn btn-sm btn-outline-danger">x</button>
                                                         </form>
                                                     </li>
@@ -63,30 +63,30 @@
                     }
 
                     <!-- Assign User to Department -->
-                    <assign-user-button level="Department" entity-id="@dept.DepartmentId"></assign-user-button>
+                    <assign-user-button level="Department" entity-id="@dept.SectorId"></assign-user-button>
 
                     <!-- Add Unit -->
                     <form asp-action="CreateUnit" method="post" class="d-flex mt-2 mb-3">
-                        <input type="hidden" name="departmentId" value="@dept.DepartmentId" />
+                        <input type="hidden" name="SectorId" value="@dept.SectorId" />
                         <input type="text" name="name" class="form-control me-2" placeholder="New departments Name" />
                         <button type="submit" class="btn btn-outline-primary btn-sm">+ Add departments</button>
                     </form>
 
                     <!-- Units -->
-                    @if (dept.Units.Any())
+                    @if (dept.Departments.Any())
                     {
-                        @foreach (var unit in dept.Units)
+                        @foreach (var unit in dept.Departments)
                         {
                             <div class="card mb-2 ms-3">
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div>
-                                            <span class="fw-bold">@unit.UnitName</span>
-                                            <span class="badge bg-info ms-2">@unit.SubUnits.Count departments</span>
+                                            <span class="fw-bold">@unit.DepartmentName</span>
+                                            <span class="badge bg-info ms-2">@unit.Units.Count departments</span>
                                         </div>
                                         <div>
-                                            <assign-user-button level="Unit" entity-id="@unit.UnitId"></assign-user-button>
-                                            <form asp-action="DeleteUnit" asp-route-id="@unit.UnitId" method="post" class="d-inline">
+                                            <assign-user-button level="Unit" entity-id="@unit.DepartmentId"></assign-user-button>
+                                            <form asp-action="DeleteUnit" asp-route-id="@unit.DepartmentId" method="post" class="d-inline">
                                                 <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                                             </form>
                                         </div>
@@ -114,7 +114,7 @@
                                                                         <form asp-action="RemoveUserRole" method="post" class="d-inline">
                                                                             <input type="hidden" name="userId" value="@user.Id" />
                                                                             <input type="hidden" name="roleId" value="@role.Id" />
-                                                                            <input type="hidden" name="unitId" value="@unit.UnitId" />
+                                                                            <input type="hidden" name="unitId" value="@unit.DepartmentId" />
                                                                             <button type="submit" class="btn btn-sm btn-outline-danger">x</button>
                                                                         </form>
                                                                     </li>
@@ -129,35 +129,35 @@
 
                                     <!-- Add SubUnit -->
                                     <form asp-action="CreateSubUnit" method="post" class="d-flex mt-3 mb-2">
-                                        <input type="hidden" name="unitId" value="@unit.UnitId" />
+                                        <input type="hidden" name="unitId" value="@unit.DepartmentId" />
                                         <input type="text" name="name" class="form-control me-2" placeholder="New Unit Name" />
                                         <button type="submit" class="btn btn-outline-info btn-sm">+ Add Unit</button>
                                     </form>
 
                                     <!-- SubUnits -->
-                                    @if (unit.SubUnits.Any())
+                                    @if (unit.Units.Any())
                                     {
                                         <div class="mt-2 ms-3">
-                                            @foreach (var sub in unit.SubUnits)
+                                            @foreach (var sub in unit.Units)
                                             {
                                                 <div class="mb-2">
                                                     <div class="d-flex justify-content-between align-items-center">
-                                                        <span class="badge bg-secondary">@sub.SubUnitName</span>
+                                                        <span class="badge bg-secondary">@sub.UnitName</span>
                                                         <div>
-                                                            <assign-user-button level="SubUnit" entity-id="@sub.SubUnitId"></assign-user-button>
-                                                            <form asp-action="DeleteSubUnit" asp-route-id="@sub.SubUnitId" method="post" class="d-inline">
+                                                            <assign-user-button level="SubUnit" entity-id="@sub.UnitId"></assign-user-button>
+                                                            <form asp-action="DeleteSubUnit" asp-route-id="@sub.UnitId" method="post" class="d-inline">
                                                                 <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                                                             </form>
                                                         </div>
                                                     </div>
 
                                                     <!-- SubUnit Users -->
-                                                    @if (sub.SubUnitUsers.Any())
+                                                    @if (sub.UnitUsers.Any())
                                                     {
                                                         <div class="mt-1">
                                                             <b>Users in SubUnit:</b>
                                                             <div>
-                                                                @foreach (var user in sub.SubUnitUsers)
+                                                                @foreach (var user in sub.UnitUsers)
                                                                 {
                                                                     <div class="mb-1">
                                                                         <span class="badge bg-light text-dark border me-1">@user.UserName</span>
@@ -171,7 +171,7 @@
                                                                                         <form asp-action="RemoveUserRole" method="post" class="d-inline">
                                                                                             <input type="hidden" name="userId" value="@user.Id" />
                                                                                             <input type="hidden" name="roleId" value="@role.Id" />
-                                                                                            <input type="hidden" name="subUnitId" value="@sub.SubUnitId" />
+                                                                                            <input type="hidden" name="subUnitId" value="@sub.UnitId" />
                                                                                             <button type="submit" class="btn btn-sm btn-outline-danger">x</button>
                                                                                         </form>
                                                                                     </li>

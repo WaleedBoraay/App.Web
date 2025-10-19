@@ -39,14 +39,14 @@ namespace App.Core.Domain.Users
         public int? RegistrationId { get; set; }
 
         // Organization Hierarchy (new)
+        public int? SectorId { get; set; }
+        public virtual Sector Sector { get; set; }
+
         public int? DepartmentId { get; set; }
         public virtual Department Department { get; set; }
 
         public int? UnitId { get; set; }
         public virtual Unit Unit { get; set; }
-
-        public int? SubUnitId { get; set; }
-        public virtual SubUnit SubUnit { get; set; }
 
         // Recovery / MFA
         public string PasswordResetToken { get; set; }

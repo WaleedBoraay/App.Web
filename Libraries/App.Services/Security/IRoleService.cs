@@ -17,5 +17,8 @@ namespace App.Services.Security
         Task<IList<Role>> GetRolesByUserIdAsync(int userId);
         Task AddUserToRoleAsync(int userId, int roleId);
         Task RemoveUserFromRoleAsync(int userId, int roleId);
+        Task ClearRolesAsync(int userId);
+
+
     }
 }

@@ -83,8 +83,8 @@
 
             <dt class="col-sm-3">Unit</dt>
             <dd class="col-sm-9">
-                @(Model.User.SubUnitId.HasValue
-                                ? Model.SubUnits.FirstOrDefault(su => su.Id == Model.User.SubUnitId)?.Name
+                @(Model.User.UnitId.HasValue
+                                ? Model.Units.FirstOrDefault(su => su.Id == Model.User.UnitId)?.Name
                                 : "Not Assigned")
             </dd>
         </dl>
@@ -136,7 +136,7 @@
                     <label class="form-label">Units</label>
                     <select name="subUnitId" class="form-select">
                         <option value="">-- None --</option>
-                        @foreach (var su in Model.SubUnits)
+                        @foreach (var su in Model.Units)
                         {
                             <option value="@su.Id">@su.Name</option>
                         }

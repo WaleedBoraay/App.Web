@@ -27,7 +27,7 @@ namespace App.Web.Areas.Admin.Controllers
 
         // POST: Create
         [HttpPost]
-        public async Task<IActionResult> Create(Department model)
+        public async Task<IActionResult> Create(Sector model)
         {
             if (!ModelState.IsValid) return View(model);
             await _organizationsServices.CreateDepartmentAsync(model);
@@ -45,7 +45,7 @@ namespace App.Web.Areas.Admin.Controllers
 
         // POST: Edit
         [HttpPost]
-        public async Task<IActionResult> Edit(Department model)
+        public async Task<IActionResult> Edit(Sector model)
         {
             if (!ModelState.IsValid) return View(model);
             await _organizationsServices.UpdateDepartmentAsync(model);

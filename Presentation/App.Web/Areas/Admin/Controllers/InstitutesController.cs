@@ -35,44 +35,39 @@ namespace App.Web.Areas.Admin.Controllers
             _documentService = documentService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchName, string licenseNumber, int? countryId)
         {
-            IList<Institution>? institutes = await _institutionService.GetAllInstitutionsWithRegistrationAndBranchesAsync();
             var countries = await _countryService.GetAllAsync();
-            var regs = await _registrationService.GetAllAsync();
-            var branches = await _branchService.GetAllAsync();
 
+            var searchResult = await _institutionService.SearchAsync(
+                name: searchName,
+                licenseNumber: licenseNumber,
+                countryId: countryId,
+                pageIndex: 0,
+                pageSize: 50
+            );
 
-            var model = institutes.Select(i => new InstituteListModel
+            var model = new InstituteSearchModel
             {
-                InstituteId = i.Id,
-                InstituteName = i.Name,
-                BusinessPhoneNumber = i.BusinessPhoneNumber,
-                Email = i.Email,
-                LicenseNumber = i.LicenseNumber,
-                CountryName = countries.FirstOrDefault(c => c.Id == i.CountryId)?.Name,
-                IsActive = i.IsActive,
-
-                Registration = regs.FirstOrDefault(r => r.InstitutionId == i.Id) == null ? null : new RegistrationModel
+                SearchName = searchName,
+                LicenseNumber = licenseNumber,
+                CountryId = countryId,
+                AvailableCountries = countries.Select(c => new CountryModel
                 {
-                    InstitutionId = regs.First(r => r.InstitutionId == i.Id).Id,
-                    LicenseNumber = regs.First(r => r.InstitutionId == i.Id).LicenseNumber,
-                    Status = regs.First(r => r.InstitutionId == i.Id).Status,
-                    IssueDate = regs.First(r => r.InstitutionId == i.Id).IssueDate,
-                    ExpiryDate = regs.First(r => r.InstitutionId == i.Id).ExpiryDate
-                },
-
-                Branches = branches
-                .Where(b => b.InstitutionId == i.Id)
-                .Select(b => new BranchModel
+                    Id = c.Id,
+                    Name = c.Name
+                }).ToList(),
+                Results = searchResult.Items.Select(i => new InstituteListModel
                 {
-                    Name = b.Name,
-                    Address = b.Address,
-                    Phone = b.Phone,
-                    Email = b.Email,
-                    CountryName = countries.FirstOrDefault(c => c.Id == b.CountryId)?.Name
+                    InstituteId = i.Id,
+                    InstituteName = i.Name,
+                    LicenseNumber = i.LicenseNumber,
+                    BusinessPhoneNumber = i.BusinessPhoneNumber,
+                    Email = i.Email,
+                    CountryName = countries.FirstOrDefault(c => c.Id == i.CountryId)?.Name,
+                    IsActive = i.IsActive
                 }).ToList()
-            }).ToList();
+            };
 
             return View(model);
         }

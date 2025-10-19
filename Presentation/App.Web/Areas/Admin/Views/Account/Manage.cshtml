@@ -38,7 +38,6 @@
     </div>
 
     <p><strong>Status:</strong> @(Model.Active ? "Active" : "Inactive")</p>
-    <p><strong>Last Login:</strong> @Model.LastLoginDateUtc?.ToString("yyyy-MM-dd HH:mm")</p>
 
     <button type="submit" class="btn btn-success mt-3">Save Changes</button>
     <a asp-action="Index" asp-controller="Home" class="btn btn-secondary mt-3">@await Html.T("Common.Back")</a>

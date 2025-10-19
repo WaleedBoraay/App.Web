@@ -41,16 +41,7 @@ namespace App.Services.Registrations
                 case "Checker":
                     if (registration.Status == RegistrationStatus.Submitted)
                     {
-                        actions.Add(RegistrationAction.Validate);
-                        actions.Add(RegistrationAction.ReturnForEdit);
-                    }
-                    break;
-
-                case "Regulator":
-                    if (registration.Status == RegistrationStatus.UnderReview)
-                    {
                         actions.Add(RegistrationAction.Approve);
-                        actions.Add(RegistrationAction.Reject);
                         actions.Add(RegistrationAction.ReturnForEdit);
                     }
                     break;
@@ -85,14 +76,7 @@ namespace App.Services.Registrations
                 statuses.Add(RegistrationStatus.Submitted);
 
             if (currentUserRole == "Checker" && currentStatus == RegistrationStatus.Submitted)
-                statuses.Add(RegistrationStatus.UnderReview);
-
-            if (currentUserRole == "Regulator" && currentStatus == RegistrationStatus.UnderReview)
-            {
                 statuses.Add(RegistrationStatus.Approved);
-                statuses.Add(RegistrationStatus.Rejected);
-                statuses.Add(RegistrationStatus.ReturnedForEdit);
-            }
 
             if (currentUserRole == "Admin")
             {

@@ -1,0 +1,27 @@
+﻿@using App.Web.Areas.Admin.Models.Registrations
+@model IEnumerable<DocumentModel>
+
+<h5>Documents</h5>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Type</th>
+            <th>Uploaded On</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var d in Model)
+        {
+            <tr>
+                <td>@d.DocumentType</td>
+                <td>@d.UploadedOnUtc.ToString("g")</td>
+                <td>
+                    <a class="btn btn-sm btn-secondary"
+                       asp-action="DownloadDocument"
+                       asp-route-documentId="@d.DocumentTypeId">Download</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

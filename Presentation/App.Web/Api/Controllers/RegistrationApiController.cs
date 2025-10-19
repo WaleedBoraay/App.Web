@@ -25,8 +25,7 @@ using System.Threading.Tasks;
 
 namespace App.Web.Controllers;
 
-[ApiController]
-[Route("api/[controller]")]
+
 public class RegistrationApiController : ControllerBase
 {
 
@@ -223,8 +222,6 @@ public class RegistrationApiController : ControllerBase
             {
                 message = await _localizationService.GetResourceAsync("Invalid.password")
             });
-        var institution = await _institutionService.GetByIdAsync(user.InstitutionId ?? 0);
-        var documents = await _documentService.GetDocumentsByInstituteIdAsync(user.InstitutionId ?? 0);
 
         return Ok(new
         {
@@ -232,8 +229,6 @@ public class RegistrationApiController : ControllerBase
             username = user.Username,
             email = user.Email,
             isActive = user.IsActive,
-            Institution = institution,
-            Documents = documents
         });
     }
 
@@ -243,7 +238,6 @@ public class RegistrationApiController : ControllerBase
         return status switch
         {
             RegistrationStatus.Submitted => NotificationEvent.RegistrationSubmitted,
-            RegistrationStatus.UnderReview => NotificationEvent.RegistrationValidated,
             RegistrationStatus.Approved => NotificationEvent.RegistrationApproved,
             RegistrationStatus.Rejected => NotificationEvent.RegistrationRejected,
             RegistrationStatus.ReturnedForEdit => NotificationEvent.RegistrationReturnedForEdit,
@@ -265,15 +259,15 @@ public class RegistrationApiController : ControllerBase
 
         var user = await _userService.GetByIdAsync(reg.CreatedByUserId);
 
-        var currentUser = await _workContext.GetCurrentUserAsync(); // ← هنا
+        var currentUser = await _workContext.GetCurrentUserAsync();
 
         var eventType = MapStatusToEvent((RegistrationStatus)newStatusId);
 
         await _notificationService.SendAsync(
             registrationId: reg.Id,
             eventType: eventType,
-            triggeredByUserId: currentUser.Id,   // ← الأدمن اللي عمل الحركة
-            recipientUserId: user.Id,            // ← اليوزر اللي هيتبعتله
+            triggeredByUserId: currentUser.Id,
+            recipientUserId: user.Id,
             channel: NotificationChannel.InApp,
             tokens: new Dictionary<string, string>
             {

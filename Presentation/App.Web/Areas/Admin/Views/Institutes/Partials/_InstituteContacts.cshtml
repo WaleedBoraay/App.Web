@@ -1,0 +1,29 @@
+﻿@using App.Web.Areas.Admin.Models.Registrations
+@model IEnumerable<ContactModel>
+
+<div class="d-flex justify-content-between mb-2">
+    <h5>Contacts</h5>
+    <a class="btn btn-sm btn-primary" asp-action="CreateContact" asp-route-instituteId="@ViewBag.InstituteId">+ Add Contact</a>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Job Title</th>
+            <th>Email</th>
+            <th>Phone</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var c in Model)
+        {
+            <tr>
+                <td>@($"{c.FirstName} {c.LastName}")</td>
+                <td>@c.JobTitle</td>
+                <td>@c.Email</td>
+                <td>@c.ContactPhone</td>
+            </tr>
+        }
+    </tbody>
+</table>

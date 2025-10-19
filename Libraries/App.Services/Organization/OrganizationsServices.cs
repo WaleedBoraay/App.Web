@@ -10,14 +10,14 @@ namespace App.Services.Organization
 {
     public class OrganizationsServices : IOrganizationsServices
     {
-        private readonly IRepository<Department> _departments;
-        private readonly IRepository<Unit> _units;
-        private readonly IRepository<SubUnit> _subUnits;
+        private readonly IRepository<Sector> _departments;
+        private readonly IRepository<Department> _units;
+        private readonly IRepository<Unit> _subUnits;
         private readonly IUserService _userService;
         public OrganizationsServices(
-            IRepository<Department> departments,
-            IRepository<Unit> units,
-            IRepository<SubUnit> subUnits,
+            IRepository<Sector> departments,
+            IRepository<Department> units,
+            IRepository<Unit> subUnits,
             IUserService userService)
         {
             _departments = departments;
@@ -26,70 +26,70 @@ namespace App.Services.Organization
             _userService = userService;
         }
 
-        public async Task<Department> CreateDepartmentAsync(Department department)
+        public async Task<Sector> CreateDepartmentAsync(Sector department)
         {
             await _departments.InsertAsync(department);
             return department;
         }
 
-        public async Task<SubUnit> CreateSubUnitAsync(SubUnit subUnit)
+        public async Task<Unit> CreateSubUnitAsync(Unit subUnit)
         {
             await _subUnits.InsertAsync(subUnit);
             return subUnit;
         }
 
-        public async Task<Unit> CreateUnitAsync(Unit unit)
+        public async Task<Department> CreateUnitAsync(Department unit)
         {
             await _units.InsertAsync(unit);
             return unit;
         }
 
-        public async Task DeleteDepartmentAsync(Department department)
+        public async Task DeleteDepartmentAsync(Sector department)
         {
             await _departments.DeleteAsync(department);
 
         }
 
-        public async Task DeleteSubUnitAsync(SubUnit subUnit)
+        public async Task DeleteSubUnitAsync(Unit subUnit)
         {
             await _subUnits.DeleteAsync(subUnit);
         }
 
-        public async Task DeleteUnitAsync(Unit unit)
+        public async Task DeleteUnitAsync(Department unit)
         {
             await _units.DeleteAsync(unit);
         }
 
-        public async Task<IList<Department>> GetAllDepartmentsAsync()
+        public async Task<IList<Sector>> GetAllDepartmentsAsync()
         {
             return await _departments.GetAllAsync(query =>
             query.OrderBy(d => d.Name));
         }
 
-        public async Task<IList<Department>> GetAllDepartmentsWithUsersAsync()
+        public async Task<IList<Sector>> GetAllDepartmentsWithUsersAsync()
         {
             return await _departments.GetAllAsync(query =>
             query.OrderBy(d => d.Name));
         }
 
-        public async Task<IList<SubUnit>> GetAllSubUnitsAsync()
+        public async Task<IList<Unit>> GetAllSubUnitsAsync()
         {
             return await _subUnits.GetAllAsync(query
                 => query.OrderBy(sb => sb.Name));
         }
 
-        public Task<IList<Unit>> GetAllUnitsAsync()
+        public Task<IList<Department>> GetAllUnitsAsync()
         {
             return _units.GetAllAsync(query
                 => query.OrderBy(u => u.Name));
         }
 
-        public async Task<Department> GetDepartmentByIdAsync(int id)
+        public async Task<Sector> GetDepartmentByIdAsync(int id)
         {
             return await _departments.GetByIdAsync(id);
         }
 
-        public async Task<Department> GetDepartmentWithUsersByIdAsync(int id)
+        public async Task<Sector> GetDepartmentWithUsersByIdAsync(int id)
         {
             var user = await _userService.GetByIdAsync(id);
             var department = await _departments.GetByIdAsync(user.DepartmentId ?? 0);
@@ -97,87 +97,87 @@ namespace App.Services.Organization
 
         }
 
-        public Task<SubUnit> GetSubUnitByIdAsync(int id)
+        public Task<Unit> GetSubUnitByIdAsync(int id)
         {
             return _subUnits.GetByIdAsync(id);
         }
 
-        public async Task<IList<SubUnit>> GetSubUnitsByDepartmentIdAsync(int departmentId)
+        public async Task<IList<Unit>> GetSubUnitsByDepartmentIdAsync(int departmentId)
         {
             var department = await _departments.GetByIdAsync(departmentId);
             return await _subUnits.GetAllAsync(query
-                => query.Where(su => su.Unit.DepartmentId == departmentId)
+                => query.Where(su => su.Department.SectorId == departmentId)
                 .OrderBy(su => su.Name));
         }
 
-        public async Task<IList<SubUnit>> GetSubUnitsByUnitIdAsync(int unitId)
+        public async Task<IList<Unit>> GetSubUnitsByUnitIdAsync(int unitId)
         {
             var unit = await _units.GetByIdAsync(unitId);
             return await _subUnits.GetAllAsync(query
-                => query.Where(su => su.UnitId == unitId)
+                => query.Where(su => su.DepartmentId == unitId)
                 .OrderBy(su => su.Name));
         }
 
-        public async Task<IList<SubUnit>> GetSubUnitsWithUsersByDepartmentIdAsync(int departmentId)
+        public async Task<IList<Unit>> GetSubUnitsWithUsersByDepartmentIdAsync(int departmentId)
         {
             var department = await _departments.GetByIdAsync(departmentId);
             return await _subUnits.GetAllAsync(query
-                => query.Where(su => su.Unit.DepartmentId == departmentId)
+                => query.Where(su => su.Department.SectorId == departmentId)
                 .OrderBy(su => su.Name));
         }
 
-        public async Task<IList<SubUnit>> GetSubUnitsWithUsersByUnitIdAsync(int unitId)
+        public async Task<IList<Unit>> GetSubUnitsWithUsersByUnitIdAsync(int unitId)
         {
             var unit = await _units.GetByIdAsync(unitId);
             return await _subUnits.GetAllAsync(query
-                => query.Where(su => su.UnitId == unitId)
+                => query.Where(su => su.DepartmentId == unitId)
                 .OrderBy(su => su.Name));
         }
 
-        public async Task<SubUnit> GetSubUnitWithUsersByIdAsync(int id)
+        public async Task<Unit> GetSubUnitWithUsersByIdAsync(int id)
         {
             var user = await _userService.GetByIdAsync(id);
-            return await _subUnits.GetByIdAsync(user.SubUnitId ?? 0);
+            return await _subUnits.GetByIdAsync(user.UnitId ?? 0);
         }
 
-        public async Task<Unit> GetUnitByIdAsync(int id)
+        public async Task<Department> GetUnitByIdAsync(int id)
         {
             return await _units.GetByIdAsync(id);
         }
 
-        public async Task<IList<Unit>> GetUnitsByDepartmentIdAsync(int departmentId)
+        public async Task<IList<Department>> GetUnitsByDepartmentIdAsync(int departmentId)
         {
             var department = await _departments.GetByIdAsync(departmentId);
             return await _units.GetAllAsync(query
-                => query.Where(u => u.DepartmentId == departmentId)
+                => query.Where(u => u.SectorId == departmentId)
                 .OrderBy(u => u.Name));
         }
 
-        public async Task<IList<Unit>> GetUnitsWithUsersByDepartmentIdAsync(int departmentId)
+        public async Task<IList<Department>> GetUnitsWithUsersByDepartmentIdAsync(int departmentId)
         {
             var department = await _departments.GetByIdAsync(departmentId);
             return await _units.GetAllAsync(query
-                => query.Where(u => u.DepartmentId == departmentId)
+                => query.Where(u => u.SectorId == departmentId)
                 .OrderBy(u => u.Name));
         }
 
-        public async Task<Unit> GetUnitWithUsersByIdAsync(int id)
+        public async Task<Department> GetUnitWithUsersByIdAsync(int id)
         {
             var user = await _userService.GetByIdAsync(id);
             return await _units.GetByIdAsync(user.UnitId ?? 0);
         }
 
-        public async Task UpdateDepartmentAsync(Department department)
+        public async Task UpdateDepartmentAsync(Sector department)
         {
             await _departments.UpdateAsync(department);
         }
 
-        public async Task UpdateSubUnitAsync(SubUnit subUnit)
+        public async Task UpdateSubUnitAsync(Unit subUnit)
         {
             await _subUnits.UpdateAsync(subUnit);
         }
 
-        public async Task UpdateUnitAsync(Unit unit)
+        public async Task UpdateUnitAsync(Department unit)
         {
             await _units.UpdateAsync(unit);
         }

@@ -7,11 +7,10 @@ namespace App.Core.Domain.Registrations
     {
         Draft = 0,
         Submitted = 1,
-        UnderReview = 2,
-        Approved = 3,
-        Rejected = 4,
-        ReturnedForEdit = 5,
-        Archived = 6,
-        FinalSubmission = 7
+        Approved = 2,
+        Rejected = 3,
+        ReturnedForEdit = 4,
+        Archived = 5,
+        FinalSubmission = 6
     }
 }

@@ -7,14 +7,14 @@ namespace App.Data.Mapping.Builders.Organization;
 /// <summary>
 /// Represents a Unit entity builder
 /// </summary>
-public partial class UnitBuilder : EntityBuilder<Unit>
+public partial class UnitBuilder : EntityBuilder<Department>
 {
     public override void MapEntity(CreateTableExpressionBuilder table)
     {
         table
-            .WithColumn(nameof(Unit.Id)).AsInt32().PrimaryKey().Identity()
-            .WithColumn(nameof(Unit.Name)).AsString(256).Nullable()
-            .WithColumn(nameof(Unit.DepartmentId)).AsInt32().Nullable()
-                .ForeignKey(nameof(Department), nameof(Department.Id));
+            .WithColumn(nameof(Department.Id)).AsInt32().PrimaryKey().Identity()
+            .WithColumn(nameof(Department.Name)).AsString(256).Nullable()
+            .WithColumn(nameof(Department.SectorId)).AsInt32().Nullable()
+                .ForeignKey(nameof(Sector), nameof(Sector.Id));
     }
 }

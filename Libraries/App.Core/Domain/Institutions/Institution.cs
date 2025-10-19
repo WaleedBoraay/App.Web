@@ -39,12 +39,12 @@ namespace App.Core.Domain.Institutions
         /// <summary>
         /// License issue date
         /// </summary>
-        public DateTime LicenseIssueDate { get; set; }
+        public DateTime? LicenseIssueDate { get; set; }
 
         /// <summary>
         /// License expiry date
         /// </summary>
-        public DateTime LicenseExpiryDate { get; set; }
+        public DateTime? LicenseExpiryDate { get; set; }
 
         /// <summary>
         /// Country reference
@@ -65,7 +65,7 @@ namespace App.Core.Domain.Institutions
         public DateTime? UpdatedOnUtc { get; set; }
 
         // Navigation
-        public virtual ICollection<Department> Departments { get; set; }
+        public virtual ICollection<Sector> Departments { get; set; }
         public virtual ICollection<Job> Jobs { get; set; }
         public virtual ICollection<Contract> Contracts { get; set; }
         public virtual ICollection<Duty> Duties { get; set; }

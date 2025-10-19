@@ -3,6 +3,7 @@ using App.Core.Domain.Registrations;
 using App.Services;
 using App.Services.Audit;
 using App.Services.Directory;
+using App.Services.Notifications;
 using App.Services.Registrations;
 using App.Web.Areas.Admin.Models;
 using App.Web.Areas.Admin.Models.Registrations;
@@ -21,19 +22,30 @@ namespace App.Web.Areas.Admin.Controllers
         private readonly IWorkContext _workContext;
         private readonly IContactService _contactService;
         private readonly ICountryService _countryService;
+        private readonly IEmailService _emailService;
 
-        public ContactsController(
+		public ContactsController(
             IRegistrationService registrationService,
             IAuditTrailService auditService,
             IWorkContext workContext,
             IContactService contactService,
-            ICountryService countryService)
+            ICountryService countryService,
+            IEmailService emailService)
         {
             _registrationService = registrationService;
             _auditService = auditService;
             _workContext = workContext;
             _contactService = contactService;
             _countryService = countryService;
+            _emailService = emailService;
+		}
+
+        public async Task SendEmail(string to)
+        {
+            var subject = "Test Email";
+            var body = "This is a test email sent from ContactsController.";
+
+			await _emailService.SendEmailAsync(to, subject, body);
         }
 
         public async Task<IActionResult> Create(int registrationId)
@@ -57,7 +69,7 @@ namespace App.Web.Areas.Admin.Controllers
         public async Task<IActionResult> Create(ContactModel model)
         {
             if (!ModelState.IsValid) return View(model);
-
+            var currentUser = await _workContext.GetCurrentUserAsync();
             var entity = new FIContact
             {
                 RegistrationId = model.RegistrationId,
@@ -74,7 +86,7 @@ namespace App.Web.Areas.Admin.Controllers
             };
 
             await _registrationService.AddContactAsync(model.RegistrationId, entity);
-            await _auditService.LogCreateAsync("FIContact", entity.Id, 0, "Contact created");
+            await _auditService.LogCreateAsync("FIContact", entity.Id, currentUser.Id, "Contact created");
 
             return RedirectToAction("Details", "Registrations", new { id = model.RegistrationId });
         }

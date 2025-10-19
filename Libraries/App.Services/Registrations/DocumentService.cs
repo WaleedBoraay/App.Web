@@ -207,5 +207,11 @@ namespace App.Services.Registrations
             };
             await _registrationDocumentRepository.InsertAsync(regDoc);
         }
+
+        public async Task<IList<FIDocument>> GetDocumentsByIdsAsync(int id)
+        {
+            return await _documentRepository.GetAllAsync(q => q.Where(d => d.Id == id) );
+
+		}
     }
 }

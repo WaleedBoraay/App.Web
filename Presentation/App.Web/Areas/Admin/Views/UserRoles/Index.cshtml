@@ -1,54 +1,43 @@
-﻿@model IEnumerable<App.Web.Areas.Admin.Models.Security.UserRoleModel>
-@{
-    var allRoles = ViewData["AllRoles"] as IEnumerable<App.Core.Domain.Security.Role>;
-}
+﻿@model App.Web.Areas.Admin.Models.Security.UserRolesIndexModel
 
 <h2>User Roles</h2>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Username</th>
-            <th>Roles</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var user in Model)
-        {
+<form asp-action="UpdateRoles" method="post">
+    <table class="table">
+        <thead>
             <tr>
-                <td>@user.Username</td>
-                <td>@string.Join(", ", user.Roles)</td>
-                <td>
-                    <!-- Assign Role -->
-                    <form asp-action="Assign" method="post" style="display:inline-block">
-                        <input type="hidden" name="UserId" value="@user.UserId" />
-                        <select name="RoleId" class="form-select form-select-sm">
-                            @foreach (var role in allRoles)
-                            {
-                                <option value="@role.Id">@role.Name</option>
-                            }
-                        </select>
-                        <button type="submit" class="btn btn-primary">Add</button>
-                    </form>
-
-                    <!-- Remove Role -->
-                    <form asp-action="Remove" method="post" style="display:inline-block">
-                        <input type="hidden" name="UserId" value="@user.UserId" />
-                        <select name="RoleId" class="form-select form-select-sm">
-                            @foreach (var roleName in user.Roles)
-                            {
-                                var role = allRoles.FirstOrDefault(r => r.Name == roleName);
-                                if (role != null)
-                                {
-                                    <option value="@role.Id">@role.Name</option>
-                                }
-                            }
-                        </select>
-                        <button type="submit" class="btn btn-danger">Remove</button>
-                    </form>
-                </td>
+                <th>Username</th>
+                <th>Roles</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Users.Count; i++)
+            {
+                var user = Model.Users[i];
+
+                <tr>
+                    <td>@user.Username</td>
+                    <td>
+                        @foreach (var role in Model.AllRoles)
+                        {
+                            var hasRole = user.Roles.Contains(role.Name);
+
+                            <div class="form-check form-check-inline">
+                                <input type="checkbox"
+                                       class="form-check-input"
+                                       name="UserRoles[@i].SelectedRoleIds"
+                                       value="@role.Id"
+                                       @(hasRole ? "checked" : "") />
+                                <label class="form-check-label">@role.Name</label>
+                            </div>
+                        }
+
+                        <input type="hidden" name="UserRoles[@i].UserId" value="@user.UserId" />
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <button type="submit" class="btn btn-success">Save Changes</button>
+</form>

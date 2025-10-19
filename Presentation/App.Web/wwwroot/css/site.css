@@ -1,7 +1,35 @@
 /* Basic layout styling */
-body.layout.has-sidebar { min-height: 100vh; }
-.sidebar { min-height: calc(100vh - 56px); background: #f8f9fa; }
-.sidebar .nav-link.active { background: #0d6efd; color: #fff !important; }
-.topbar .navbar-brand { font-weight: 600; }
-[dir="rtl"] .sidebar { border-left: 1px solid rgba(0,0,0,.125); border-right: none; }
-[dir="rtl"] .breadcrumb { direction: ltr; } /* keeps crumb order visually correct */
+body.layout.has-sidebar {
+    min-height: 100vh;
+}
+
+.sidebar {
+    min-height: calc(100vh - 56px);
+    background: #f8f9fa;
+}
+
+    .sidebar .nav-link.active {
+        background: #0d6efd;
+        color: #fff !important;
+    }
+
+.topbar .navbar-brand {
+    font-weight: 600;
+}
+
+[dir="rtl"] .sidebar {
+    border-left: 1px solid rgba(0,0,0,.125);
+    border-right: none;
+}
+
+[dir="rtl"] .breadcrumb {
+    direction: ltr;
+}
+/* keeps crumb order visually correct */
+.a {
+    color: black !important;
+}
+
+.nav-link .a {
+    color: black !important;
+}

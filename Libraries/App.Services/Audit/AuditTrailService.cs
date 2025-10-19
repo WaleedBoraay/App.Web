@@ -1,9 +1,10 @@
-using System;
-using System.Threading.Tasks;
-using App.Core.Domain.Audit;
+﻿using App.Core.Domain.Audit;
 using App.Core.RepositoryServices;
 using App.Services.Common;
 using App.Services.Localization;
+using Microsoft.AspNetCore.Http;
+using System;
+using System.Threading.Tasks;
 
 namespace App.Services.Audit
 {
@@ -12,12 +13,15 @@ namespace App.Services.Audit
         private readonly IRepository<AuditTrail> _auditRepository;
         private readonly IRepository<UserAuditTrail> _userAuditRepository;
         private readonly ILocalizationService _localizationService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AuditTrailService(IRepository<AuditTrail> auditRepository, ILocalizationService localizationService, IRepository<UserAuditTrail> userAuditRepository)
+        public AuditTrailService(IRepository<AuditTrail> auditRepository, ILocalizationService localizationService, IRepository<UserAuditTrail> userAuditRepository,
+            IHttpContextAccessor httpContext)
         {
             _auditRepository = auditRepository;
             _localizationService = localizationService;
             _userAuditRepository = userAuditRepository;
+            _httpContextAccessor = httpContext;
 
         }
         public async Task<IList<AuditTrail>> GetAllAsync()
@@ -46,6 +50,7 @@ namespace App.Services.Audit
                 Action = AuditActionType.Create,
                 ActionId = (int)AuditActionType.Create,
                 ChangedOnUtc = DateTime.UtcNow,
+
                 Comment = comment
             };
 
@@ -67,20 +72,35 @@ namespace App.Services.Audit
 
         public async Task LogUpdateAsync(string entityName, int entityId, int userId, string field = null, string oldValue = null, string newValue = null, string comment = null)
         {
-            var entry = new AuditTrail
-            {
-                EntityName = entityName,
-                EntityId = entityId,
-                Action = AuditActionType.Update,
-                ActionId = (int)AuditActionType.Update,
-                ChangedOnUtc = DateTime.UtcNow,
-                FieldName = field,
-                OldValue = oldValue,
-                NewValue = newValue,
-                Comment = comment
-            };
+            // Get user IP address
+            var httpContext = _httpContextAccessor.HttpContext;
 
-            await LogAsync(entry);
+            var userIp = httpContext?.Request?.Headers["X-Forwarded-For"].FirstOrDefault();
+
+            // fallback للـ RemoteIpAddress
+            if (string.IsNullOrEmpty(userIp))
+                userIp = httpContext?.Connection?.RemoteIpAddress?.ToString(); var existingEntry = _auditRepository.Table.Where(x => x.EntityName == entityName
+                && x.EntityId == entityId && x.FieldName == field && x.ActionId == (int)AuditActionType.Update);
+
+            if (existingEntry != null)
+            {
+                var entry = new AuditTrail
+                {
+                    EntityName = entityName,
+                    EntityId = entityId,
+                    Action = AuditActionType.Update,
+                    ActionId = (int)AuditActionType.Update,
+                    ChangedOnUtc = DateTime.UtcNow,
+                    FieldName = field,
+                    OldValue = oldValue,
+                    NewValue = newValue,
+                    Comment = comment,
+                    ClientIp = userIp
+                };
+                await _auditRepository.UpdateAsync(entry);
+            }
+
+
         }
 
         public async Task LogDeleteAsync(string entityName, int entityId, int userId, string comment = null)

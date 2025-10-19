@@ -1,0 +1,30 @@
+﻿@model IEnumerable<App.Web.Areas.Admin.Models.Institutes.BranchModel>
+
+<div class="d-flex justify-content-between mb-2">
+    <h5>Branches</h5>
+    <a class="btn btn-sm btn-primary" asp-action="CreateBranch" asp-route-institutionId="@ViewBag.InstituteId">+ Add Branch</a>
+</div>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Country</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var b in Model)
+        {
+            <tr>
+                <td>@b.Name</td>
+                <td>@b.Address</td>
+                <td>@b.Email</td>
+                <td>@b.Phone</td>
+                <td>@b.CountryName</td>
+            </tr>
+        }
+    </tbody>
+</table>

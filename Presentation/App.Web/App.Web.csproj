@@ -20,6 +20,7 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
+		<PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="9.0.9" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
 		<PackageReference Include="Scrutor.AspNetCore" Version="3.3.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
@@ -47,6 +48,9 @@
 		<PublicViews Include="$(ProjectDir)\Views\**\*.cshtml" />
 		<!-- Area Views (Admin and others) -->
 		<AreaViews Include="$(ProjectDir)\Areas\**\*.cshtml" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Compile Remove="Api\Controllers\RegistrationApiController.cs" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Content Update="Areas\Admin\Views\Contacts\Create.cshtml">

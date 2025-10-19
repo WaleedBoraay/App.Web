@@ -1,4 +1,5 @@
-﻿using App.Core.Domain.Registrations;
+﻿using App.Core.Domain.Ref;
+using App.Core.Domain.Registrations;
 using App.Web.Infrastructure.Mapper.BaseModel;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
@@ -12,19 +13,20 @@ namespace App.Web.Areas.Admin.Models.Registrations
     /// </summary>
     public record class RegistrationModel : BaseAppEntityModel
     {
+
         public int Id { get; set; }
 
-        public int RegistrationId { get; set; }
+        public int? RegistrationId { get; set; }
 
-        // Institution Snapshot
+
         [Display(Name = "Institution")]
-        public int InstitutionId { get; set; }
+        public int? InstitutionId { get; set; }
         public string? InstitutionName { get; set; }
 
         // License Data
         [Required]
         [Display(Name = "License Number")]
-        public string LicenseNumber { get; set; }
+        public string? LicenseNumber { get; set; }
 
         [Display(Name = "License Sector")]
         public int LicenseSectorId { get; set; }
@@ -41,17 +43,17 @@ namespace App.Web.Areas.Admin.Models.Registrations
 
         // Workflow & Status
         [Display(Name = "Registration Status")]
-        public int StatusId { get; set; }
+        public int? StatusId { get; set; }
         public RegistrationStatus Status { get; set; }
 
         [Display(Name = "Approval Status")]
-        public ApprovalStatus ApprovalStatus { get; set; }
+        public ApprovalStatus? ApprovalStatus { get; set; }
 
         [Display(Name = "Validation Status")]
-        public ValidationStatus ValidationStatus { get; set; }
+        public ValidationStatus? ValidationStatus { get; set; }
 
         // System Info
-        public DateTime CreatedOnUtc { get; set; }
+        public DateTime? CreatedOnUtc { get; set; }
         public string? CreatedByUserName { get; set; }
         public string? UpdatedByUserName { get; set; }
 
@@ -67,5 +69,22 @@ namespace App.Web.Areas.Admin.Models.Registrations
 
         public IEnumerable<SelectListItem> AvailableInstitutions { get; set; } = new List<SelectListItem>();
         public IEnumerable<SelectListItem> AvailableCountries { get; set; } = new List<SelectListItem>();
+        public string? Address { get; set; }
+
+        public IEnumerable<SelectListItem> AvailableLicenseSectors
+        {
+            get
+            {
+                foreach (LicenseSector sector in Enum.GetValues(typeof(LicenseSector)))
+                {
+                    yield return new SelectListItem
+                    {
+                        Text = sector.ToString(),
+                        Value = ((int)sector).ToString()
+                    };
+                }
+            }
+        }
+
     }
 }

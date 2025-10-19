@@ -103,6 +103,88 @@ namespace App.Services.Registrations
 
         #region Workflow
 
+        public async Task ApproveRegistrationAsync(int registrationId, int approvedByUserId)
+        {
+            var registration = await _registrationRepository.GetByIdAsync(registrationId);
+
+            var documents = await _documentService.GetRegistrationDocumentsByRegistrationIdAsync(registrationId);
+            if (registration == null)
+                throw new KeyNotFoundException($"Registration {registrationId} not found");
+
+            if (registration.StatusId != (int)RegistrationStatus.Submitted)
+                throw new InvalidOperationException("Only submitted registrations can be approved.");
+
+            // 1) تحديث حالة الـ Registration
+
+            registration.StatusId = (int)RegistrationStatus.Approved;
+            registration.Status = RegistrationStatus.Approved;
+            registration.ApprovedDateUtc = DateTime.UtcNow;
+            registration.UpdatedByUserId = approvedByUserId;
+            await _registrationRepository.UpdateAsync(registration);
+
+            // 2) إنشاء Institution جديد من بيانات الـ Registration
+            var institution = new Institution
+            {
+                Name = registration.InstitutionName,
+                LicenseNumber = registration.LicenseNumber,
+                LicenseSectorId = registration.LicenseSectorId,
+                FinancialDomainId = registration.FinancialDomainId,
+                LicenseIssueDate = registration.IssueDate,
+                LicenseExpiryDate = registration.ExpiryDate,
+                CountryId = registration.CountryId,
+                Address = registration.Address,
+                IsActive = true, // Institution يظهر نشط بعد الموافقة
+                CreatedOnUtc = DateTime.UtcNow
+            };
+
+            await _institutionRepository.InsertAsync(institution);
+
+            foreach (var document in documents)
+            {
+                var instituteDocuments = new InstituteDocument
+                {
+                    InstituteId = institution.Id,
+                    DocumentId = document.DocumentId
+                };
+                await _documentService.InsertAsync(instituteDocuments);
+            }
+
+
+            // 3) ربط Institution بالـ Registration
+            registration.InstitutionId = institution.Id;
+            await _registrationRepository.UpdateAsync(registration);
+        }
+
+        public async Task RejectRegistrationAsync(int registrationId, int rejectedByUserId, string comment = null)
+        {
+            var registration = await _registrationRepository.GetByIdAsync(registrationId);
+            if (registration == null)
+                throw new KeyNotFoundException($"Registration {registrationId} not found");
+
+            if (registration.Status != RegistrationStatus.Submitted)
+                throw new InvalidOperationException("Only submitted registrations can be rejected.");
+
+            // تغيير الحالة
+            registration.Status = RegistrationStatus.ReturnedForEdit;
+            registration.UpdatedByUserId = rejectedByUserId;
+
+            await _registrationRepository.UpdateAsync(registration);
+
+            // ممكن تضيف Log أو Notification للمـاكر
+            await _notificationService.SendAsync(
+                null,
+                NotificationEvent.RegistrationReturnedForEdit,
+                triggeredByUserId: rejectedByUserId,
+                recipientUserId: registration.CreatedByUserId,
+                channel: NotificationChannel.InApp,
+                tokens: new Dictionary<string, string>
+                {
+            {"RegistrationId", registration.Id.ToString()},
+            {"Comment", comment ?? "Registration returned for more details"}
+                }
+            );
+        }
+
         private async Task AddStatusLog(
     Registration registration,
     int performedByUserId,
@@ -279,8 +361,8 @@ namespace App.Services.Registrations
             if (registration == null)
                 throw new Exception("Registration not found");
 
-            registration.Status = RegistrationStatus.UnderReview; // أو تعمل Status جديد مثلاً RegistrationStatus.Audited
-            registration.StatusId = (int)RegistrationStatus.UnderReview;
+            registration.Status = RegistrationStatus.Approved; // أو تعمل Status جديد مثلاً RegistrationStatus.Audited
+            registration.StatusId = (int)RegistrationStatus.Approved;
             registration.AuditedDateUtc = DateTime.UtcNow;
             registration.UpdatedByUserId = performedByUserId;
 
@@ -321,10 +403,6 @@ namespace App.Services.Registrations
                 case RegistrationStatus.Approved:
                     registration.ApprovedDateUtc = DateTime.UtcNow;
                     break;
-
-                case RegistrationStatus.UnderReview:
-                    registration.AuditedDateUtc = DateTime.UtcNow;
-                    break;
             }
 
             await _registrationRepository.UpdateAsync(registration);
@@ -355,10 +433,8 @@ namespace App.Services.Registrations
             return oldStatus switch
             {
                 RegistrationStatus.Draft => newStatus == RegistrationStatus.Submitted || newStatus == RegistrationStatus.Archived,
-                RegistrationStatus.Submitted => newStatus == RegistrationStatus.UnderReview || newStatus == RegistrationStatus.ReturnedForEdit,
-                RegistrationStatus.UnderReview => newStatus == RegistrationStatus.Approved || newStatus == RegistrationStatus.Rejected || newStatus == RegistrationStatus.ReturnedForEdit,
-                RegistrationStatus.Approved => newStatus == RegistrationStatus.FinalSubmission || newStatus == RegistrationStatus.Archived,
-                RegistrationStatus.Rejected => newStatus == RegistrationStatus.ReturnedForEdit,
+                RegistrationStatus.Submitted => newStatus == RegistrationStatus.Approved || newStatus == RegistrationStatus.ReturnedForEdit,
+                RegistrationStatus.Approved => newStatus == RegistrationStatus.ReturnedForEdit,
                 RegistrationStatus.ReturnedForEdit => newStatus == RegistrationStatus.Submitted,
                 _ => false
             };

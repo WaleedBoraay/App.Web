@@ -9,8 +9,10 @@
 	<ItemGroup>
 		<PackageReference Include="ClosedXML" Version="0.105.0" />
 		<PackageReference Include="Elasticsearch.Net" Version="7.17.5" />
+		<PackageReference Include="MailKit" Version="4.14.1" />
 		<PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.1" />
 		<PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.8" />
+		<PackageReference Include="MimeKit" Version="4.14.0" />
 		<PackageReference Include="Scrutor.AspNetCore" Version="3.3.0" />
 		<PackageReference Include="StackExchange.Redis" Version="2.9.11" />
 		<PackageReference Include="System.Linq.Dynamic.Core" Version="1.6.7" />

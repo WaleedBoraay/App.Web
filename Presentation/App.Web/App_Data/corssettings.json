@@ -1,7 +1,15 @@
 {
   "AllowedOrigins": [
+    "https://localhost:7024",
+    "http://localhost:7024",
     "http://localhost:3000",
     "https://localhost:3000",
+    "http://localhost:5176/",
+    "https://localhost:5176/",
+    "http://localhost:5173/",
+    "https://localhost:5173/",
+    "http://localhost:5173",
+    "https://localhost:5173",
     "http://20.57.218.145",
     "https://20.57.218.145",
     "http://suptech.online",

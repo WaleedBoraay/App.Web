@@ -8,37 +8,37 @@ namespace App.Services.Organization
     public interface IOrganizationsServices
     {
         // Department CRUD
-        Task<Department> GetDepartmentByIdAsync(int id);
-        Task<IList<Department>> GetAllDepartmentsAsync();
-        Task<Department> CreateDepartmentAsync(Department department);
-        Task UpdateDepartmentAsync(Department department);
-        Task DeleteDepartmentAsync(Department department);
+        Task<Sector> GetDepartmentByIdAsync(int id);
+        Task<IList<Sector>> GetAllDepartmentsAsync();
+        Task<Sector> CreateDepartmentAsync(Sector department);
+        Task UpdateDepartmentAsync(Sector department);
+        Task DeleteDepartmentAsync(Sector department);
         // Department With Users CRUD
-        Task<Department> GetDepartmentWithUsersByIdAsync(int id);
-        Task<IList<Department>> GetAllDepartmentsWithUsersAsync();
+        Task<Sector> GetDepartmentWithUsersByIdAsync(int id);
+        Task<IList<Sector>> GetAllDepartmentsWithUsersAsync();
 
         // Unit CRUD
-        Task<Unit> GetUnitByIdAsync(int id);
-        Task<IList<Unit>> GetAllUnitsAsync();
-        Task<Unit> CreateUnitAsync(Unit unit);
-        Task UpdateUnitAsync(Unit unit);
-        Task DeleteUnitAsync(Unit unit);
+        Task<Department> GetUnitByIdAsync(int id);
+        Task<IList<Department>> GetAllUnitsAsync();
+        Task<Department> CreateUnitAsync(Department unit);
+        Task UpdateUnitAsync(Department unit);
+        Task DeleteUnitAsync(Department unit);
         // Unit With Users
-        Task<Unit> GetUnitWithUsersByIdAsync(int id);
-        Task<IList<Unit>> GetUnitsByDepartmentIdAsync(int departmentId);
-        Task<IList<Unit>> GetUnitsWithUsersByDepartmentIdAsync(int departmentId);
-        Task<IList<SubUnit>> GetSubUnitsByUnitIdAsync(int unitId);
+        Task<Department> GetUnitWithUsersByIdAsync(int id);
+        Task<IList<Department>> GetUnitsByDepartmentIdAsync(int departmentId);
+        Task<IList<Department>> GetUnitsWithUsersByDepartmentIdAsync(int departmentId);
+        Task<IList<Unit>> GetSubUnitsByUnitIdAsync(int unitId);
 
         // SubUnit CRUD
-        Task<SubUnit> GetSubUnitByIdAsync(int id);
-        Task<IList<SubUnit>> GetAllSubUnitsAsync();
-        Task<SubUnit> CreateSubUnitAsync(SubUnit subUnit);
-        Task UpdateSubUnitAsync(SubUnit subUnit);
-        Task DeleteSubUnitAsync(SubUnit subUnit);
+        Task<Unit> GetSubUnitByIdAsync(int id);
+        Task<IList<Unit>> GetAllSubUnitsAsync();
+        Task<Unit> CreateSubUnitAsync(Unit subUnit);
+        Task UpdateSubUnitAsync(Unit subUnit);
+        Task DeleteSubUnitAsync(Unit subUnit);
         // SubUnit With Users
-        Task<SubUnit> GetSubUnitWithUsersByIdAsync(int id);
-        Task<IList<SubUnit>> GetSubUnitsWithUsersByUnitIdAsync(int unitId);
-        Task<IList<SubUnit>> GetSubUnitsWithUsersByDepartmentIdAsync(int departmentId);
-        Task<IList<SubUnit>> GetSubUnitsByDepartmentIdAsync(int departmentId);
+        Task<Unit> GetSubUnitWithUsersByIdAsync(int id);
+        Task<IList<Unit>> GetSubUnitsWithUsersByUnitIdAsync(int unitId);
+        Task<IList<Unit>> GetSubUnitsWithUsersByDepartmentIdAsync(int departmentId);
+        Task<IList<Unit>> GetSubUnitsByDepartmentIdAsync(int departmentId);
     }
 }

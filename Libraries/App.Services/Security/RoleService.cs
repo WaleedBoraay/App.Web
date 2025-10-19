@@ -163,6 +163,15 @@ namespace App.Services.Security
                 nameof(UserRole), roleId, "UserId", userId.ToString(), null, actorId);
         }
 
+        public async Task ClearRolesAsync(int userId)
+        {
+            var roles = await _userRoleRepo.GetAllAsync(q => q.Where(ur => ur.UserId == userId));
+            foreach (var role in roles)
+            {
+                await _userRoleRepo.DeleteAsync(role);
+            }
+        }
+
         #endregion
     }
 }

@@ -27,31 +27,31 @@ namespace App.Web.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var departments = await _orgService.GetAllDepartmentsWithUsersAsync();
-            var units = await _orgService.GetAllUnitsAsync();
-            var subUnits = await _orgService.GetAllSubUnitsAsync();
+            var sectorss = await _orgService.GetAllDepartmentsWithUsersAsync();
+            var departments = await _orgService.GetAllUnitsAsync();
+            var units = await _orgService.GetAllSubUnitsAsync();
             var allUsers = await _userService.GetAllAsync();
             var allRoles = await _roleService.GetAllAsync();
 
 
             var model = new OrganizationPageViewModel
             {
-                Departments = departments.Select(d => new OrganizationModel
+                Sectors = departments.Select(d => new OrganizationModel
                 {
-                    DepartmentId = d.Id,
-                    DepartmentName = d.Name,
-                    Units = units.Where(u => u.DepartmentId == d.Id)
-                        .Select(u => new UnitModel
-                        {
-                            UnitId = u.Id,
-                            UnitName = u.Name,
-                            SubUnits = subUnits.Where(su => su.UnitId == u.Id)
-                                .Select(su => new SubUnitModel
+                    SectorId = d.Id,
+                    SectorName = d.Name,
+                    Departments = departments.Where(u => u.SectorId == d.Id)
+                        .Select(u => new DepartmentModel
+						{
+                            DepartmentId = u.Id,
+							DepartmentName = u.Name,
+                            Units = units.Where(su => su.DepartmentId == u.Id)
+                                .Select(su => new UnitModel
                                 {
-                                    SubUnitId = su.Id,
-                                    SubUnitName = su.Name,
-                                    SubUnitUsers = allUsers
-                                        .Where(x => x.SubUnitId == su.Id)
+                                    UnitId = su.Id,
+                                    UnitName = su.Name,
+                                    UnitUsers = allUsers
+                                        .Where(x => x.UnitId == su.Id)
                                         .Select(x => new UserModel
                                         {
                                             Id = x.Id,
@@ -93,7 +93,7 @@ namespace App.Web.Areas.Admin.Controllers
             if (string.IsNullOrEmpty(name))
                 return RedirectToAction(nameof(Index));
 
-            await _orgService.CreateDepartmentAsync(new App.Core.Domain.Organization.Department { Name = name });
+            await _orgService.CreateDepartmentAsync(new App.Core.Domain.Organization.Sector { Name = name });
             return RedirectToAction(nameof(Index));
         }
 
@@ -111,9 +111,9 @@ namespace App.Web.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUnit(int departmentId, string name)
         {
-            await _orgService.CreateUnitAsync(new App.Core.Domain.Organization.Unit
+            await _orgService.CreateUnitAsync(new App.Core.Domain.Organization.Department
             {
-                DepartmentId = departmentId,
+                SectorId = departmentId,
                 Name = name
             });
             return RedirectToAction(nameof(Index));
@@ -131,11 +131,11 @@ namespace App.Web.Areas.Admin.Controllers
 
         // SubUnit Actions 
         [HttpPost]
-        public async Task<IActionResult> CreateSubUnit(int unitId, string name)
+        public async Task<IActionResult> CreateSubUnit(int departmentId, string name)
         {
-            await _orgService.CreateSubUnitAsync(new App.Core.Domain.Organization.SubUnit
+            await _orgService.CreateSubUnitAsync(new App.Core.Domain.Organization.Unit
             {
-                UnitId = unitId,
+                DepartmentId = departmentId,
                 Name = name
             });
             return RedirectToAction(nameof(Index));
@@ -153,16 +153,16 @@ namespace App.Web.Areas.Admin.Controllers
 
         // User Assignment 
         [HttpPost]
-        public async Task<IActionResult> AssignUser(int userId, int roleId, int? departmentId, int? unitId, int? subUnitId)
+        public async Task<IActionResult> AssignUser(int userId, int roleId, int? sectortId, int? departmentId, int? unitId)
         {
             var user = await _userService.GetByIdAsync(userId);
             if (user == null)
                 return RedirectToAction(nameof(Index));
 
             // تحديث مكان اليوزر
+            user.SectorId = sectortId;
             user.DepartmentId = departmentId;
             user.UnitId = unitId;
-            user.SubUnitId = subUnitId;
             await _userService.UpdateAsync(user);
 
             // اساين رول لليوزر

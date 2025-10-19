@@ -48,23 +48,23 @@ namespace App.Web.Areas.Admin.Models
 
         public string? RoleName { get; set; }
         public IList<RoleModel> Roles { get; set; } = new List<RoleModel>();
+
         [AppResourceDisplayName("Admin.Users.Fields.Sectore")]
+        public int? SectorId { get; set; }
 
-        public int? DepartmentId { get; set; }
         [AppResourceDisplayName("Admin.Users.Fields.Department")]
+        public int? DepartmentId { get; set; }
 
-        public int? UnitId { get; set; }
         [AppResourceDisplayName("Admin.Users.Fields.Unit")]
+        public int? UnitId { get; set; }
 
-        public int? SubUnitId { get; set; }
-
+        public string? SectoreName { get; set; }
         public string? DepartmentName { get; set; }
         public string? UnitName { get; set; }
-        public string? SubUnitName { get; set; }
 
+        public IEnumerable<SelectListItem> Sectores { get; set; } = new List<SelectListItem>();
         public IEnumerable<SelectListItem> Departments { get; set; } = new List<SelectListItem>();
         public IEnumerable<SelectListItem> Units { get; set; } = new List<SelectListItem>();
-        public IEnumerable<SelectListItem> SubUnits { get; set; } = new List<SelectListItem>();
 
     }
 

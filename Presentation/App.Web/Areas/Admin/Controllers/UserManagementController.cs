@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace App.Web.Areas.Admin.Controllers
 {
     [Authorize(Roles = SystemRoles.Admin)]
-    [Route("admin/user-management")]
+    [Route("api/user-management")]
     public class UserManagementController : Controller
     {
         private readonly IUserDirectory _userDirectory;

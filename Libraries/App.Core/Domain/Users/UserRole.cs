@@ -17,12 +17,12 @@ namespace App.Core.Domain.Users
 
         // Optional Scope
         public int? DepartmentId { get; set; }
-        public virtual Department Department { get; set; }
+        public virtual Sector Department { get; set; }
 
         public int? UnitId { get; set; }
-        public virtual Unit Unit { get; set; }
+        public virtual Department Unit { get; set; }
 
         public int? SubUnitId { get; set; }
-        public virtual SubUnit SubUnit { get; set; }
+        public virtual Unit SubUnit { get; set; }
     }
 }

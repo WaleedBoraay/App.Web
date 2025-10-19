@@ -64,8 +64,8 @@
 
     <div class="form-group mb-3">
         <label class="form-label">Unit</label>
-        <select asp-for="SubUnitId" class="form-select"
-                asp-items="@(new SelectList(ViewBag.SubUnits, "Id", "Name", Model.SubUnitId))">
+        <select asp-for="UnitId" class="form-select"
+                asp-items="@(new SelectList(ViewBag.SubUnits, "Id", "Name", Model.UnitId))">
             <option value="">-- None --</option>
         </select>
     </div>

@@ -68,18 +68,18 @@ namespace App.Web.Areas.Admin.Controllers
                 CreatedOnUtc = u.CreatedOnUtc,
                 UpdatedOnUtc = u.UpdatedOnUtc,
 
+                SectorId = u.SectorId,
                 DepartmentId = u.DepartmentId,
                 UnitId = u.UnitId,
-                SubUnitId = u.SubUnitId,
 
-                DepartmentName = u.DepartmentId.HasValue
-                    ? departments.FirstOrDefault(d => d.Id == u.DepartmentId)?.Name
+                SectoreName = u.SectorId.HasValue
+                    ? departments.FirstOrDefault(d => d.Id == u.SectorId)?.Name
+                    : null,
+				DepartmentName = u.DepartmentId.HasValue
+                    ? units.FirstOrDefault(x => x.Id == u.DepartmentId)?.Name
                     : null,
                 UnitName = u.UnitId.HasValue
-                    ? units.FirstOrDefault(x => x.Id == u.UnitId)?.Name
-                    : null,
-                SubUnitName = u.SubUnitId.HasValue
-                    ? subUnits.FirstOrDefault(x => x.Id == u.SubUnitId)?.Name
+                    ? subUnits.FirstOrDefault(x => x.Id == u.UnitId)?.Name
                     : null
             }).ToList();
 
@@ -98,15 +98,15 @@ namespace App.Web.Areas.Admin.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            var departments = await _orgService.GetAllDepartmentsAsync();
-            var units = await _orgService.GetAllUnitsAsync();
-            var subUnits = await _orgService.GetAllSubUnitsAsync();
+            var sectors = await _orgService.GetAllDepartmentsAsync();
+            var departments = await _orgService.GetAllUnitsAsync();
+            var units = await _orgService.GetAllSubUnitsAsync();
 
             var model = new UserModel
             {
-                Departments = departments.Select(d => new SelectListItem { Value = d.Id.ToString(), Text = d.Name }),
-                Units = units.Select(u => new SelectListItem { Value = u.Id.ToString(), Text = u.Name }),
-                SubUnits = subUnits.Select(su => new SelectListItem { Value = su.Id.ToString(), Text = su.Name })
+                Sectores = sectors.Select(d => new SelectListItem { Value = d.Id.ToString(), Text = d.Name }),
+                Departments = departments.Select(u => new SelectListItem { Value = u.Id.ToString(), Text = u.Name }),
+                Units = units.Select(su => new SelectListItem { Value = su.Id.ToString(), Text = su.Name })
             };
 
             return View(model);
@@ -130,9 +130,9 @@ namespace App.Web.Areas.Admin.Controllers
                 CreatedOnUtc = DateTime.UtcNow,
                 UpdatedOnUtc = DateTime.UtcNow,
 
+                SectorId = model.SectorId,
                 DepartmentId = model.DepartmentId,
-                UnitId = model.UnitId,
-                SubUnitId = model.SubUnitId
+                UnitId = model.UnitId
             };
 
             var currentUser = await _workContext.GetCurrentUserAsync();
@@ -167,9 +167,9 @@ namespace App.Web.Areas.Admin.Controllers
                 LastLoginDateUtc = user.LastLoginDateUtc,
                 CreatedOnUtc = user.CreatedOnUtc,
                 UpdatedOnUtc = user.UpdatedOnUtc,
+                SectorId = user.SectorId,
                 DepartmentId = user.DepartmentId,
-                UnitId = user.UnitId,
-                SubUnitId = user.SubUnitId
+                UnitId = user.UnitId
             };
 
             return View(model);
@@ -192,9 +192,9 @@ namespace App.Web.Areas.Admin.Controllers
             user.IsLockedOut = model.IsLockedOut;
             user.UpdatedOnUtc = DateTime.UtcNow;
 
+            user.SectorId = model.SectorId;
             user.DepartmentId = model.DepartmentId;
             user.UnitId = model.UnitId;
-            user.SubUnitId = model.SubUnitId;
 
             var currentUser = await _workContext.GetCurrentUserAsync();
 
@@ -250,9 +250,9 @@ namespace App.Web.Areas.Admin.Controllers
                 return NotFound();
 
             var roles = await _roleService.GetRolesByUserIdAsync(id);
-            var departments = await _orgService.GetAllDepartmentsAsync();
-            var units = await _orgService.GetAllUnitsAsync();
-            var subUnits = await _orgService.GetAllSubUnitsAsync();
+            var sectors = await _orgService.GetAllDepartmentsAsync();
+            var departments = await _orgService.GetAllUnitsAsync();
+            var units = await _orgService.GetAllSubUnitsAsync();
             var allRoles = await _roleService.GetAllAsync();
 
             var model = new UserModel
@@ -267,19 +267,19 @@ namespace App.Web.Areas.Admin.Controllers
                 CreatedOnUtc = user.CreatedOnUtc,
                 UpdatedOnUtc = user.UpdatedOnUtc,
                 Roles = roles.Select(r => new RoleModel { Id = r.Id, Name = r.Name }).ToList(),
+                SectorId = user.SectorId,
                 DepartmentId = user.DepartmentId,
-                UnitId = user.UnitId,
-                SubUnitId = user.SubUnitId
+                UnitId = user.UnitId
             };
 
             var vm = new UserDetailsModel
             {
                 User = model,
                 AllRoles = allRoles.Select(r => new RoleModel { Id = r.Id, Name = r.Name }).ToList(),
+                Sectors = sectors,
                 Departments = departments,
-                Units = units,
-                SubUnits = subUnits
-            };
+                Units = units
+			};
 
             return View(vm);
         }
@@ -314,15 +314,15 @@ namespace App.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AssignRole(int userId, int roleId, int? departmentId, int? unitId, int? subUnitId)
+        public async Task<IActionResult> AssignRole(int userId, int roleId, int? sectorId, int? departmentId, int? unitId)
         {
             var user = await _userService.GetByIdAsync(userId);
             if (user == null)
                 return NotFound();
 
+            user.SectorId = departmentId;
             user.DepartmentId = departmentId;
             user.UnitId = unitId;
-            user.SubUnitId = subUnitId;
             await _userService.UpdateAsync(user);
 
             if (roleId != 0)

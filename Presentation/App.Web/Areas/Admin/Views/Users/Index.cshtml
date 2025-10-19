@@ -58,11 +58,11 @@
                     {
                         <span class="badge bg-primary">Dept: @user.UnitName</span>
                     }
-                    @if (user.SubUnitId.HasValue)
+                    @if (user.UnitId.HasValue)
                     {
-                        <span class="badge bg-dark">Unit: @user.SubUnitName</span>
+                        <span class="badge bg-dark">Unit: @user.UnitName</span>
                     }
-                    @if (!user.DepartmentId.HasValue && !user.UnitId.HasValue && !user.SubUnitId.HasValue)
+                    @if (!user.DepartmentId.HasValue && !user.UnitId.HasValue && !user.UnitId.HasValue)
                     {
                         <span class="text-muted">Not Assigned</span>
                     }

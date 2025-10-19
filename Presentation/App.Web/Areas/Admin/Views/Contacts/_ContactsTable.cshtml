@@ -1,13 +1,13 @@
-﻿@model List<App.Web.Areas.Admin.Models.Registrations.ContactModel>
+﻿@model App.Web.Areas.Admin.Models.Registrations.ContactsTableModel
 
 <div class="d-flex justify-content-between align-items-center mb-2">
     <h4>Contacts</h4>
-    <a asp-controller="Contacts" asp-action="Create" asp-route-registrationId="@ViewData["RegistrationId"]" class="btn btn-success">
+    <a asp-controller="Contacts" asp-action="Create" asp-route-registrationId="@Model.RegistrationId" class="btn btn-success">
         + Add Contact
     </a>
 </div>
 
-@if (Model != null && Model.Any())
+@if (Model.Contacts != null && Model.Contacts.Any())
 {
     <table class="table table-striped">
         <thead>
@@ -19,15 +19,17 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var c in Model)
+            @foreach (var c in Model.Contacts)
             {
                 <tr>
                     <td>@c.FirstName @c.LastName</td>
                     <td>@c.Email</td>
                     <td>@c.ContactPhone</td>
                     <td>
+
                         <a asp-controller="Contacts" asp-action="Edit" asp-route-id="@c.Id" class="btn btn-warning">Edit</a>
-                        <form asp-controller="Contacts" asp-action="Delete" method="post" asp-route-id="@c.Id" asp-route-registrationId="@c.RegistrationId" style="display:inline;">
+                        <a asp-controller="Contacts" asp-action="SendEmail" asp-route-to="@c.Email" class="btn btn-warning">Edit</a>
+                        <form asp-controller="Contacts" asp-action="Delete" method="post" asp-route-id="@c.Id" asp-route-registrationId="@Model.RegistrationId" style="display:inline;">
                             <button type="submit" class="btn btn-danger">Delete</button>
                         </form>
                     </td>

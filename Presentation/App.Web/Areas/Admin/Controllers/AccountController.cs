@@ -1,10 +1,12 @@
-﻿using App.Services;
+﻿using App.Core.Domain.Users;
+using App.Services;
 using App.Services.Common;
 using App.Services.Users;
 using App.Web.Areas.Admin.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Graph.Models;
 using System.Threading.Tasks;
 
 namespace App.Web.Areas.Admin.Controllers
@@ -55,6 +57,12 @@ namespace App.Web.Areas.Admin.Controllers
 
             // Update email
             currentUser.Email = model.Email;
+            var newUser = new AppUser
+            {
+                CreatedOnUtc = DateTime.UtcNow,
+                Email = model.Email,
+                LastLoginDateUtc = model.LastLoginDateUtc ?? DateTime.UtcNow
+            };
 
             if (!string.IsNullOrEmpty(model.NewPassword))
             {
@@ -62,7 +70,7 @@ namespace App.Web.Areas.Admin.Controllers
             }
             else
             {
-                await _userService.UpdateAsync(currentUser);
+                await _userService.UpdateAsync(newUser);
             }
 
             ViewData["Success"] = "Account updated successfully";

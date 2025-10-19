@@ -19,7 +19,8 @@ namespace App.Services.Registrations
         #endregion
 
         #region Workflow
-
+        Task ApproveRegistrationAsync(int registrationId, int approvedByUserId);
+        Task RejectRegistrationAsync(int registrationId, int rejectedByUserId, string comment = null);
         Task SubmitAsync(int registrationId, int performedByUserId, string remarks = null);
         Task ValidateAsync(int registrationId, int performedByUserId, ValidationStatus status, string remarks = null);
         Task ApproveAsync(int registrationId, int performedByUserId, ApprovalStatus status, string remarks = null);

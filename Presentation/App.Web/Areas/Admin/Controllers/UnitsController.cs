@@ -25,15 +25,15 @@ namespace App.Web.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Create(int departmentId)
         {
-            return View(new Unit { DepartmentId = departmentId });
+            return View(new Department { SectorId = departmentId });
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Unit model)
+        public async Task<IActionResult> Create(Department model)
         {
             if (!ModelState.IsValid) return View(model);
             await _organizationsServices.CreateUnitAsync(model);
-            return RedirectToAction(nameof(Index), new { departmentId = model.DepartmentId });
+            return RedirectToAction(nameof(Index), new { departmentId = model.SectorId });
         }
 
         [HttpGet]
@@ -45,11 +45,11 @@ namespace App.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(Unit model)
+        public async Task<IActionResult> Edit(Department model)
         {
             if (!ModelState.IsValid) return View(model);
             await _organizationsServices.UpdateUnitAsync(model);
-            return RedirectToAction(nameof(Index), new { departmentId = model.DepartmentId });
+            return RedirectToAction(nameof(Index), new { departmentId = model.SectorId });
         }
 
         [HttpPost]

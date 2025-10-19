@@ -142,7 +142,7 @@ namespace App.Services.Startup
             services.AddSingleton<UserSettings>();
             services.AddTransient(typeof(IConcurrentCollection<>), typeof(ConcurrentTrie<>));
             services.AddSingleton(provider =>
-      configuration.GetSection("UserSettings").Get<UserSettings>() ?? new UserSettings());
+            configuration.GetSection("UserSettings").Get<UserSettings>() ?? new UserSettings());
             // Register IWorkContext
             services.AddScoped<IShortTermCacheManager, PerRequestCacheManager>();
             services.AddScoped<IWorkContext, WorkContext>();
@@ -174,9 +174,15 @@ namespace App.Services.Startup
             services.AddScoped<IRegistrationSearchService, RegistrationSearchService>();
             services.AddScoped<IBranchService, BranchService>();
             services.AddScoped<IOrganizationsServices, OrganizationsServices>();
+            services.AddScoped<IEmailService, EmailService>();
 
-            // Ensure Singleton<IMigrationManager> is initialized after FluentMigrator is configured
-            services.AddScoped<IMigrationManager, MigrationManager>();
+			// Register Organization
+			services.AddScoped<ISectorServices, SectorServices>();
+			services.AddScoped<IDepartmentServices, DepartmentServices>();
+			services.AddScoped<IUnitServices, UnitServices>();
+
+			// Ensure Singleton<IMigrationManager> is initialized after FluentMigrator is configured
+			services.AddScoped<IMigrationManager, MigrationManager>();
 
         }
 

@@ -21,6 +21,7 @@ namespace App.Services.Users
         private readonly IRepository<UserLog> _userLogRepository;
         private readonly IEncryptionService _encryptionService;
         private readonly IAuditTrailService _auditTrailService;
+        private readonly IWorkContext _workContext;
         public UserService(
             IRepository<AppUser> userRepository,
             IRepository<Role> roleRepository,
@@ -29,7 +30,8 @@ namespace App.Services.Users
             IEncryptionService encryptionService,
             IAuditTrailService auditTrailService,
             ILocalizationService localizationService,
-            IRepository<UserLog> userLogRepository)
+            IRepository<UserLog> userLogRepository,
+            IWorkContext workContext)
             : base()
         {
             _userRepository = userRepository;
@@ -39,6 +41,7 @@ namespace App.Services.Users
             _encryptionService = encryptionService;
             _auditTrailService = auditTrailService;
             _userLogRepository = userLogRepository;
+            _workContext = workContext;
         }
 
         #region CRUD
@@ -89,8 +92,9 @@ namespace App.Services.Users
 
         public async Task<AppUser> UpdateAsync(AppUser user)
         {
+            var currentUser = await _workContext.GetCurrentUserAsync();
             await _userRepository.UpdateAsync(user);
-            await _auditTrailService.LogUpdateAsync(nameof(AppUser), user.Id, 0, comment: "User updated");
+            await _auditTrailService.LogUpdateAsync(nameof(AppUser), user.Id, currentUser.Id, comment: "User updated");
             return user;
         }
 

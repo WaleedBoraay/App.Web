@@ -5,54 +5,29 @@
 
 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-<form asp-action="Create" method="post">
-
-    @* Institution Reference *@
-    <input asp-for="InstitutionId" type="hidden" />
+<form asp-action="Create" method="post" enctype="multipart/form-data">
     <div class="mb-3">
-        <label class="form-label">Institution</label>
-        <input type="text" class="form-control" value="@Model.InstitutionName" readonly />
+        <label asp-for="InstitutionName" class="form-label"></label>
+        <input asp-for="InstitutionName" class="form-control" />
+        <span asp-validation-for="InstitutionName" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
         <label asp-for="LicenseNumber" class="form-label"></label>
-        @if (!string.IsNullOrEmpty(Model.LicenseNumber))
-        {
-            <input asp-for="LicenseNumber" class="form-control" readonly />
-        }
-        else
-        {
-            <input asp-for="LicenseNumber" class="form-control" />
-        }
+        <input asp-for="LicenseNumber" class="form-control" />
         <span asp-validation-for="LicenseNumber" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
         <label asp-for="LicenseSectorId" class="form-label"></label>
-        @if (Model.LicenseSectorId > 0)
-        {
-            <select asp-for="LicenseSectorId" asp-items="Html.GetEnumSelectList<LicenseSector>()" class="form-control" disabled="disabled"></select>
-            <input type="hidden" asp-for="LicenseSectorId" />
-        }
-        else
-        {
-            <select asp-for="LicenseSectorId" asp-items="Html.GetEnumSelectList<LicenseSector>()" class="form-control"></select>
-        }
+        <select asp-for="LicenseSectorId" asp-items="Html.GetEnumSelectList<LicenseSector>()" class="form-control"></select>
         <span asp-validation-for="LicenseSectorId" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
         <label asp-for="FinancialDomainId" class="form-label"></label>
-        @if (Model.LicenseSectorId > 0)
-        {
-            <select asp-for="FinancialDomainId" asp-items="Html.GetEnumSelectList<FinancialDomain>()" class="form-control" disabled="disabled"></select>
-            <input type="hidden" asp-for="FinancialDomainId" />
-        }
-        else
-        {
-            <select asp-for="LicenseSectorId" asp-items="Html.GetEnumSelectList<FinancialDomain>()" class="form-control"></select>
-        }
-        <span asp-validation-for="LicenseSectorId" class="text-danger"></span>
+        <select asp-for="FinancialDomainId" asp-items="Html.GetEnumSelectList<FinancialDomain>()" class="form-control"></select>
+        <span asp-validation-for="FinancialDomainId" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
@@ -67,21 +42,11 @@
 
     <div class="mb-3">
         <label asp-for="CountryId" class="form-label"></label>
-        @if (Model.CountryId > 0)
-        {
-            <select asp-for="CountryId" asp-items="Model.AvailableCountries" class="form-control" disabled="disabled"></select>
-            <input type="hidden" asp-for="CountryId" />
-        }
-        else
-        {
-            <select asp-for="CountryId" asp-items="Model.AvailableCountries" class="form-control"></select>
-        }
+        <select asp-for="CountryId" asp-items="Model.AvailableCountries" class="form-control"></select>
         <span asp-validation-for="CountryId" class="text-danger"></span>
     </div>
 
-    @* Status is always Draft on creation *@
-    <input type="hidden" asp-for="StatusId" value="0" />
-    <input type="hidden" asp-for="Status" value="Draft" />
+    @* الملفات *@
     <div class="mb-3">
         <label class="form-label">License File</label>
         <input type="file" name="LicenseFile" class="form-control" />
@@ -91,6 +56,55 @@
         <label class="form-label">Other Document</label>
         <input type="file" name="DocumentFile" class="form-control" />
     </div>
-    <button type="submit" class="btn btn-success">@await Html.T("Common.Save")</button>
-    <a asp-action="Index" class="btn btn-secondary">@await Html.T("Common.Cancel")</a>
+
+    <h4>Contact Information</h4>
+
+    <div class="mb-3">
+        <label>First Name</label>
+        <input name="Contacts[0].FirstName" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+        <label>Middle Name</label>
+        <input name="Contacts[0].MiddleName" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Last Name</label>
+        <input name="Contacts[0].LastName" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Email</label>
+        <input name="Contacts[0].Email" type="email" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Contact Phone</label>
+        <input name="Contacts[0].ContactPhone" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Business Phone</label>
+        <input name="Contacts[0].BusinessPhone" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Job Title</label>
+        <input name="Contacts[0].JobTitle" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Nationality Country</label>
+        <select name="Contacts[0].NationalityCountryId" class="form-control"
+                asp-items="Model.AvailableCountries"></select>
+    </div>
+
+
+    @* Status ثابت Draft *@
+    <input type="hidden" asp-for="StatusId" value="0" />
+    <input type="hidden" asp-for="Status" value="Draft" />
+
+    <button type="submit" class="btn btn-success">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
 </form>

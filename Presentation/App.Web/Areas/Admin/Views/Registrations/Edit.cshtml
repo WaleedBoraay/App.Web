@@ -1,9 +1,12 @@
-﻿@model App.Web.Areas.Admin.Models.Registrations.RegistrationModel
+﻿@using App.Core.Domain.Ref
+@using App.Web.Areas.Admin.Models.Registrations
+@model App.Web.Areas.Admin.Models.Registrations.RegistrationModel
 
 @{
-    // Determine if fields should be readonly
-    var isEditable = User.IsInRole("Maker") && Model.Status == App.Core.Domain.Registrations.RegistrationStatus.Draft;
-    var readonlyAttr = isEditable ? null : "readonly";
+    // Determine if fields should be editable
+    bool isMaker = User.IsInRole("Maker");
+    bool isChecker = User.IsInRole("Checker");
+    bool isEditable = isMaker && Model.Status == App.Core.Domain.Registrations.RegistrationStatus.Draft;
 }
 
 <h2>Edit Registration</h2>
@@ -22,30 +25,38 @@
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label asp-for="InstitutionName" class="form-label"></label>
-                    <input asp-for="InstitutionName" class="form-control" readonly="@readonlyAttr" />
+                    <input asp-for="InstitutionName" class="form-control" readonly="@(isEditable ? "false" : "true")" />
                 </div>
                 <div class="col-md-6 mb-3">
                     <label asp-for="LicenseNumber" class="form-label"></label>
-                    <input asp-for="LicenseNumber" class="form-control" readonly="@readonlyAttr" />
+                    <input asp-for="LicenseNumber" class="form-control" readonly="@(isEditable ? "false" : "true")" />
                 </div>
                 <div class="col-md-6 mb-3">
                     <label asp-for="LicenseSectorId" class="form-label"></label>
-                    <input asp-for="LicenseSectorId" class="form-control" readonly="@readonlyAttr" />
+                    <select asp-for="LicenseSectorId"
+                            asp-items="Html.GetEnumSelectList<LicenseSector>()"
+                            class="form-control" disabled="@(isEditable ? "false" : "true")"></select>
                 </div>
                 <div class="col-md-6 mb-3">
-                    <label asp-for="CountryName" class="form-label"></label>
-                    <input asp-for="CountryName" class="form-control" readonly />
+                    <label asp-for="FinancialDomainId" class="form-label"></label>
+                    <select asp-for="FinancialDomainId"
+                            asp-items="Html.GetEnumSelectList<FinancialDomain>()"
+                            class="form-control" disabled="@(isEditable ? "false" : "true")"></select>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="CountryId" class="form-label"></label>
+                    <select asp-for="CountryId"
+                            asp-items="Model.AvailableCountries"
+                            class="form-control" disabled="@(isEditable ? "false" : "true")"></select>
                 </div>
             </div>
         </div>
 
         <div class="tab-pane fade" id="contacts">
-            @* Checker ممكن يعدل Contacts *@
-            @if (User.IsInRole("Maker") || User.IsInRole("Checker"))
+            @if (isMaker || isChecker)
             {
-                @await Html.PartialAsync("~/Areas/Admin/Views/Contacts/_ContactsTable.cshtml", Model.Contacts,
-                new ViewDataDictionary(ViewData) { { "RegistrationId", Model.Id } })
-                        }
+                @await Html.PartialAsync("~/Areas/Admin/Views/Contacts/_ContactsTable.cshtml", new ContactsTableModel { RegistrationId = Model.Id, Contacts = Model.Contacts })
+            }
             else
             {
                 <p class="text-muted">Read-only</p>
@@ -53,11 +64,10 @@
         </div>
 
         <div class="tab-pane fade" id="documents">
-            @* Maker بس يرفع مستندات في مرحلة Draft *@
-            @if (User.IsInRole("Maker") && Model.Status == App.Core.Domain.Registrations.RegistrationStatus.Draft)
+            @if (isMaker && Model.Status == App.Core.Domain.Registrations.RegistrationStatus.Draft)
             {
-                @await Html.PartialAsync("~/Areas/Admin/Views/Documents/_DocumentsTable.cshtml", Model.Documents,
-                new ViewDataDictionary(ViewData) { { "RegistrationId", Model.Id } })
+                @await Html.PartialAsync(
+                "~/Areas/Admin/Views/Documents/_DocumentsTable.cshtml",new DocumentsTableModel { RegistrationId = Model.Id, Documents = Model.Documents })
                         }
             else
             {
@@ -66,12 +76,9 @@
         </div>
     </div>
 
-    @* زرار Update يظهر فقط لو Maker (Draft) أو Checker *@
-    @if ((User.IsInRole("Maker") && Model.Status == App.Core.Domain.Registrations.RegistrationStatus.Draft)
-        || User.IsInRole("Checker"))
+    @if ((isMaker && Model.Status == App.Core.Domain.Registrations.RegistrationStatus.Draft) || isChecker)
     {
         <button type="submit" class="btn btn-primary mt-3">Update</button>
     }
-
     <a asp-action="Index" class="btn btn-secondary mt-3">Cancel</a>
 </form>

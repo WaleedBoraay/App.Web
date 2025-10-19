@@ -1,7 +1,7 @@
-﻿@model IEnumerable<App.Core.Domain.Organization.SubUnit>
+﻿@model IEnumerable<App.Core.Domain.Organization.Unit>
 
-<h2>SubUnits</h2>
-<a asp-action="Create" asp-route-unitId="@ViewBag.UnitId" class="btn btn-primary mb-3">+ Add SubUnit</a>
+<h2>Units</h2>
+<a asp-action="Create" asp-route-unitId="@ViewBag.UnitId" class="btn btn-primary mb-3">+ Add Unit</a>
 
 <table class="table table-bordered table-striped">
     <thead class="table-dark">
@@ -26,4 +26,4 @@
     </tbody>
 </table>
 
-<a asp-controller="Units" asp-action="Index" asp-route-departmentId="@Model.FirstOrDefault()?.Unit.DepartmentId" class="btn btn-secondary">Back to Units</a>
+<a asp-controller="Units" asp-action="Index" asp-route-departmentId="@Model.FirstOrDefault()?.Department.SectorId" class="btn btn-secondary">Back to Sector</a>

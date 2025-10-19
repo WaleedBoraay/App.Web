@@ -22,17 +22,24 @@ namespace App.Web.Areas.Admin.Controllers
             var users = await _userService.GetAllAsync(false);
             var roles = await _roleService.GetAllAsync();
 
-            // فلترة: بس اللي InstitutionId = null && RegistrationId = null
             var filteredUsers = users
                 .Where(u => u.InstitutionId == null && u.RegistrationId == null)
                 .ToList();
 
-            var model = new List<UserRoleModel>();
+            var model = new UserRolesIndexModel
+            {
+                Users = new List<UserRoleModel>(),
+                AllRoles = roles.Select(r => new RoleModel
+                {
+                    Id = r.Id,
+                    Name = r.Name
+                }).ToList()
+            };
 
             foreach (var user in filteredUsers)
             {
                 var userRoles = await _roleService.GetRolesByUserIdAsync(user.Id);
-                model.Add(new UserRoleModel
+                model.Users.Add(new UserRoleModel
                 {
                     UserId = user.Id,
                     Username = user.Username,
@@ -40,22 +47,25 @@ namespace App.Web.Areas.Admin.Controllers
                 });
             }
 
-            ViewData["AllRoles"] = roles;
-
             return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Assign(AssignRoleToUserModel model)
+        public async Task<IActionResult> UpdateRoles(UserRoleUpdateListModel model)
         {
-            await _roleService.AddUserToRoleAsync(model.UserId, model.RoleId);
-            return RedirectToAction(nameof(Index));
-        }
+            foreach (var userRole in model.UserRoles)
+            {
+                var user = await _userService.GetByIdAsync(userRole.UserId);
+                if (user == null) continue;
 
-        [HttpPost]
-        public async Task<IActionResult> Remove(AssignRoleToUserModel model)
-        {
-            await _roleService.RemoveUserFromRoleAsync(model.UserId, model.RoleId);
+                await _roleService.ClearRolesAsync(user.Id);
+
+                foreach (var roleId in userRole.SelectedRoleIds)
+                {
+                    await _roleService.AddUserToRoleAsync(user.Id, roleId);
+                }
+            }
+
             return RedirectToAction(nameof(Index));
         }
     }

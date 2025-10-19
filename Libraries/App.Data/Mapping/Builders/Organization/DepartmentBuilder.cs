@@ -7,13 +7,13 @@ namespace App.Data.Mapping.Builders.Organization;
 /// <summary>
 /// Represents a Department entity builder
 /// </summary>
-public partial class DepartmentBuilder : EntityBuilder<Department>
+public partial class DepartmentBuilder : EntityBuilder<Sector>
 {
     public override void MapEntity(CreateTableExpressionBuilder table)
     {
         table
-            .WithColumn(nameof(Department.Id)).AsInt32().PrimaryKey().Identity()
-            .WithColumn(nameof(Department.Name)).AsString(256).Nullable()
-            .WithColumn(nameof(Department.ParentDepartmentId)).AsInt32().Nullable();
+            .WithColumn(nameof(Sector.Id)).AsInt32().PrimaryKey().Identity()
+            .WithColumn(nameof(Sector.Name)).AsString(256).Nullable()
+            .WithColumn(nameof(Sector.ParentDepartmentId)).AsInt32().Nullable();
     }
 }

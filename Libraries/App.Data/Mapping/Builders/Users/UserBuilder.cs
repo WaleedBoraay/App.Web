@@ -34,9 +34,9 @@ namespace App.Data.Mapping.Builders.Users
                 .WithColumn(nameof(AppUser.RegistrationId)).AsInt32().Nullable()
 
                 // Organization hierarchy (new)
+                .WithColumn(nameof(AppUser.SectorId)).AsInt32().Nullable()
                 .WithColumn(nameof(AppUser.DepartmentId)).AsInt32().Nullable()
                 .WithColumn(nameof(AppUser.UnitId)).AsInt32().Nullable()
-                .WithColumn(nameof(AppUser.SubUnitId)).AsInt32().Nullable()
 
                 .WithColumn(nameof(AppUser.PasswordResetToken)).AsString(256).Nullable()
                 .WithColumn(nameof(AppUser.PasswordResetTokenExpiry)).AsDateTime().Nullable()

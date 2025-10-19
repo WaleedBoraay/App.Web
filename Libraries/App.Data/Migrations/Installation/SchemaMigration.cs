@@ -46,9 +46,9 @@ namespace App.Data.Migrations.Installation
 
             // ===== Organization =====
             // order is important: Department -> Unit -> SubUnit
+            Create.TableFor<Sector>();
             Create.TableFor<Department>();
             Create.TableFor<Unit>();
-            Create.TableFor<SubUnit>();
 
             // ===== Directory =====
             Create.TableFor<BusinessScaleRange>();

@@ -1,0 +1,30 @@
+﻿@model App.Web.Areas.Admin.Models.Institutes.InstituteDetailsModel
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="card text-center p-3 shadow-sm">
+            <h6>License Number</h6>
+            <p>@Model.LicenseNumber</p>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center p-3 shadow-sm">
+            <h6>Country</h6>
+            <p>@Model.CountryName</p>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center p-3 shadow-sm">
+            <h6>Status</h6>
+            <span class="badge @(Model.IsActive ? "bg-success" : "bg-danger")">
+                @(Model.IsActive ? "Active" : "Inactive")
+            </span>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center p-3 shadow-sm">
+            <h6>Contacts</h6>
+            <p>@Model.Contacts?.Count() ?? 0</p>
+        </div>
+    </div>
+</div>

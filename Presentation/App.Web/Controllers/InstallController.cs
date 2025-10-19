@@ -212,13 +212,13 @@ namespace App.Web.Controllers
                 var roleRepo = EngineContext.Current.Resolve<IRepository<Role>>();
                 var userRoleRepo = EngineContext.Current.Resolve<IRepository<UserRole>>();
 
-                var adminRole = (await roleRepo.GetAllAsync(q => q.Where(r => r.SystemName == "Super Admin"))).FirstOrDefault();
+                var adminRole = (await roleRepo.GetAllAsync(q => q.Where(r => r.SystemName == "Super.Admin.Role"))).FirstOrDefault();
                 if (adminRole == null)
                 {
                     adminRole = new Role
                     {
                         Name = "Super Admin",
-                        SystemName = "Super Admin",
+                        SystemName = "Super.Admin.Role",
                         IsActive = true
                     };
                     await roleRepo.InsertAsync(adminRole);

@@ -1,15 +1,15 @@
-﻿@model App.Core.Domain.Organization.SubUnit
+﻿@model App.Core.Domain.Organization.Unit
 
-<h2>Edit SubUnit</h2>
+<h2>Edit Unit</h2>
 
 <form asp-action="Edit" method="post">
     <input type="hidden" asp-for="Id" />
-    <input type="hidden" asp-for="UnitId" />
+    <input type="hidden" asp-for="DepartmentId" />
     <div class="mb-3">
         <label asp-for="Name" class="form-label"></label>
         <input asp-for="Name" class="form-control" />
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
     <button type="submit" class="btn btn-primary">Update</button>
-    <a asp-action="Index" asp-route-unitId="@Model.UnitId" class="btn btn-secondary">Cancel</a>
+    <a asp-action="Index" asp-route-unitId="@Model.DepartmentId" class="btn btn-secondary">Cancel</a>
 </form>

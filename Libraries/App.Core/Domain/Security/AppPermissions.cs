@@ -53,6 +53,7 @@
         // ---------------------------
         // Users
         // ---------------------------
+        public const string User_View = "User.View";
         public const string User_Create = "User.Create";
         public const string User_Read = "User.Read";
         public const string User_Update = "User.Update";

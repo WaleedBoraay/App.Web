@@ -14,6 +14,7 @@ using App.Web.Infrastructure.Mapper.Admin;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -35,7 +36,10 @@ builder.Services.AddControllersWithViews();
 // 🔹 Add Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddSwaggerGen(c =>
+{
+    c.CustomSchemaIds(type => type.FullName);
+});
 var env = builder.Environment;
 CommonHelper.DefaultFileProvider = new AppFileProvider(env);
 
@@ -75,11 +79,11 @@ if (!builder.Services.Any(sd => sd.ServiceType == typeof(IAuthenticationSchemePr
 {
     builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options =>
-        {
-            options.LoginPath = "/Account/Login";
-            options.AccessDeniedPath = "/Account/Login";
-            options.LogoutPath = "/Account/Logout";
-        });
+            {
+                options.LoginPath = "/Account/Login";
+                options.AccessDeniedPath = "/Account/Login";
+                options.LogoutPath = "/Account/Logout";
+            });
 }
 builder.Services.AddAuthorization();
 
@@ -163,5 +167,4 @@ app.MapControllerRoute(
 
 app.MapDefaultControllerRoute();
 app.MapRazorPages();
-
 app.Run();

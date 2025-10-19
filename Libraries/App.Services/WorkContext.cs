@@ -38,14 +38,18 @@ namespace App.Services
             if (userIdClaim == null)
                 return null;
 
+            var emailClaim = user.FindFirst(ClaimTypes.Email);
+
             _cachedUser = new AppUser
             {
                 Id = int.Parse(userIdClaim.Value),
-                Username = user.Identity.Name
+                Username = user.Identity.Name,
+                Email = emailClaim?.Value
             };
 
             return await Task.FromResult(_cachedUser);
         }
+
 
         /// <summary>
         /// Manually set current user (useful for system tasks or testing)

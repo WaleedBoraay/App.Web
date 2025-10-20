@@ -257,7 +257,11 @@ namespace App.Web.Api.Controllers
 
             var reg = await _registrationService.GetByIdAsync(id);
             var contacts =  await _registrationService.GetContactsByRegistrationIdAsync(id);
-            var password = await GenerateRandomPassword(12);
+
+            var regDocuments = await _documentService.GetRegistrationDocumentByIdAsync(id);
+
+            var docement = await _documentService.GetByIdAsync(id); 
+			var password = await GenerateRandomPassword(12);
 			//create user for each contact
 			foreach (var contact in contacts)
             {
@@ -272,7 +276,7 @@ namespace App.Web.Api.Controllers
                var insUser = await _userService.InsertAsync(users, password, user.Id);
 
 				//assign role to user
-                var role = await _roleService.GetAllAsync();
+				var role = await _roleService.GetAllAsync();
                 var userRole = role.FirstOrDefault(r => r.SystemName == "Admin" || r.Name == "Admin");
                 if (userRole != null)
                 {
@@ -293,8 +297,6 @@ namespace App.Web.Api.Controllers
                     body: emailBody);
 
 			}
-
-			//send email for user 
 
 			if (roles.Any(r => r.SystemName == "Checker"))
             {

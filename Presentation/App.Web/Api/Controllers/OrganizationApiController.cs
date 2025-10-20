@@ -170,11 +170,20 @@ namespace App.Web.Api.Controllers
             var user = await _userService.GetByIdAsync(model.UserId);
             if (user == null)
                 return NotFound(new { message = "User not found" });
+            if(user.SectorId != null)
+            {
+				user.SectorId = model.SectorId;
+			}
 
-            user.SectorId = model.SectorId;
-            user.DepartmentId = model.DepartmentId;
-            user.UnitId = model.UnitId;
-            await _userService.UpdateAsync(user);
+            if(user.DepartmentId != null)
+            {
+                user.DepartmentId = model.DepartmentId;
+			}
+            if(user.UnitId != null)
+            {
+				user.UnitId = model.UnitId;
+			}
+			await _userService.UpdateAsync(user);
 
             if (model.RoleId.HasValue)
                 await _roleService.AddUserToRoleAsync(model.UserId, model.RoleId.Value);

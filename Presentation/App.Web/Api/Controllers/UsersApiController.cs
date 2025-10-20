@@ -8,6 +8,7 @@ using App.Services.Users;
 using App.Web.Areas.Admin.Models;
 using App.Web.Areas.Admin.Models.Users;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Graph.Models;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,14 +25,20 @@ namespace App.Web.Api.Controllers
         private readonly INotificationService _notificationService;
         private readonly IRoleService _roleService;
         private readonly IOrganizationsServices _orgService;
+        private readonly ISectorServices _sectorService;
+        private readonly IDepartmentServices _departmentService;
+        private readonly IUnitServices _unitService;
 
-        public UsersApiController(
+		public UsersApiController(
             IUserService userService,
             IWorkContext workContext,
             IPermissionService permissionService,
             INotificationService notificationService,
             IRoleService roleService,
-            IOrganizationsServices orgService)
+            IOrganizationsServices orgService,
+            ISectorServices sectorService,
+            IDepartmentServices departmentService,
+            IUnitServices unitService)
         {
             _userService = userService;
             _workContext = workContext;
@@ -39,6 +46,9 @@ namespace App.Web.Api.Controllers
             _notificationService = notificationService;
             _roleService = roleService;
             _orgService = orgService;
+            _sectorService = sectorService;
+            _departmentService = departmentService;
+            _unitService = unitService;
         }
 
         [HttpGet]
@@ -98,16 +108,31 @@ namespace App.Web.Api.Controllers
                 UnitId = model.UnitId
             };
 
-            var currentUser = await _workContext.GetCurrentUserAsync();
-            await _userService.InsertAsync(entity, model.Password, currentUser.Id);
+            //var currentUser = await _workContext.GetCurrentUserAsync();
+            var insUser = await _userService.InsertAsync(entity, model.Password, 0);
+            var sector = await _sectorService.GetSectorByIdAsync(model.SectorId ?? 0);
+            var department = await _departmentService.GetDepartmentByIdAsync(model.DepartmentId ?? 0);
+            var unit = await _unitService.GetUnitByIdAsync(model.UnitId ?? 0);
+            if(sector != null)
+                entity.Sector = sector;
+            if(department != null)
+                entity.Department = department;
+            if(unit != null)
+                entity.Unit = unit;
+            await _userService.UpdateAsync(entity);
 
-            return Ok(new { success = true, userId = entity.Id });
+			return Ok(new { success = true, userId = entity.Id });
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Edit(int id, [FromBody] UserModel model)
         {
-            var user = await _userService.GetByIdAsync(id);
+
+			var sector = await _sectorService.GetSectorByIdAsync(model.SectorId ?? 0);
+			var department = await _departmentService.GetDepartmentByIdAsync(model.DepartmentId ?? 0);
+			var unit = await _unitService.GetUnitByIdAsync(model.UnitId ?? 0);
+
+			var user = await _userService.GetByIdAsync(id);
             if (user == null) return NotFound();
 
             user.Username = model.UserName;
@@ -119,9 +144,15 @@ namespace App.Web.Api.Controllers
             user.DepartmentId = model.DepartmentId;
             user.UnitId = model.UnitId;
 
-            var currentUser = await _workContext.GetCurrentUserAsync();
-            if (!string.IsNullOrEmpty(model.Password))
-                await _userService.ResetPasswordAsync(user.Id, model.Password, currentUser.Id);
+			if (sector != null)
+				user.Sector = sector;
+			if (department != null)
+				user.Department = department;
+			if (unit != null)
+				user.Unit = unit;
+
+			if (!string.IsNullOrEmpty(model.Password))
+                await _userService.ResetPasswordAsync(user.Id, model.Password, user.Id);
             else
                 await _userService.UpdateAsync(user);
 
@@ -133,8 +164,12 @@ namespace App.Web.Api.Controllers
         {
             var user = await _userService.GetByIdAsync(id);
             if (user == null) return NotFound();
-
-            await _userService.DeleteAsync(user.Id);
+            var userrole = await _roleService.GetRolesByUserIdAsync(user.Id);
+            foreach (var role in userrole)
+            {
+                await _roleService.RemoveUserFromRoleAsync(user.Id, role.Id);
+			}
+			await _userService.DeleteAsync(user.Id);
             return Ok(new { success = true });
         }
 

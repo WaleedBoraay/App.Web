@@ -92,9 +92,9 @@ namespace App.Services.Users
 
         public async Task<AppUser> UpdateAsync(AppUser user)
         {
-            var currentUser = await _workContext.GetCurrentUserAsync();
+            //var currentUser = await _workContext.GetCurrentUserAsync();
             await _userRepository.UpdateAsync(user);
-            await _auditTrailService.LogUpdateAsync(nameof(AppUser), user.Id, currentUser.Id, comment: "User updated");
+            //await _auditTrailService.LogUpdateAsync(nameof(AppUser), user.Id, currentUser.Id, comment: "User updated");
             return user;
         }
 

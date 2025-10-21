@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <PropertyGroup>
+    <PackageJsonName Condition="$(PackageJsonName) == ''">bank-portal</PackageJsonName>
+    <PackageJsonVersion Condition="$(PackageJsonVersion) == ''">0.1.0</PackageJsonVersion>
+    <PackageJsonPrivate Condition="$(PackageJsonPrivate) == ''">true</PackageJsonPrivate>
+    <PackageJsonHomepage Condition="$(PackageJsonHomepage) == ''">http://suptech.online</PackageJsonHomepage>
+    <PackageJsonDependenciesFortawesomeFontawesomeFree Condition="$(PackageJsonDependenciesFortawesomeFontawesomeFree) == ''">^7.1.0</PackageJsonDependenciesFortawesomeFontawesomeFree>
+    <PackageJsonDependenciesTestingLibraryDom Condition="$(PackageJsonDependenciesTestingLibraryDom) == ''">^10.4.1</PackageJsonDependenciesTestingLibraryDom>
+    <PackageJsonDependenciesTestingLibraryJestDom Condition="$(PackageJsonDependenciesTestingLibraryJestDom) == ''">^6.8.0</PackageJsonDependenciesTestingLibraryJestDom>
+    <PackageJsonDependenciesTestingLibraryReact Condition="$(PackageJsonDependenciesTestingLibraryReact) == ''">^16.3.0</PackageJsonDependenciesTestingLibraryReact>
+    <PackageJsonDependenciesTestingLibraryUserEvent Condition="$(PackageJsonDependenciesTestingLibraryUserEvent) == ''">^13.5.0</PackageJsonDependenciesTestingLibraryUserEvent>
+    <PackageJsonDependenciesTypesStyledComponents Condition="$(PackageJsonDependenciesTypesStyledComponents) == ''">^5.1.34</PackageJsonDependenciesTypesStyledComponents>
+    <PackageJsonDependenciesAxios Condition="$(PackageJsonDependenciesAxios) == ''">^1.6.0</PackageJsonDependenciesAxios>
+    <PackageJsonDependenciesJspdf Condition="$(PackageJsonDependenciesJspdf) == ''">^3.0.2</PackageJsonDependenciesJspdf>
+    <PackageJsonDependenciesReact Condition="$(PackageJsonDependenciesReact) == ''">^19.1.1</PackageJsonDependenciesReact>
+    <PackageJsonDependenciesReactDom Condition="$(PackageJsonDependenciesReactDom) == ''">^19.1.1</PackageJsonDependenciesReactDom>
+    <PackageJsonDependenciesReactIcons Condition="$(PackageJsonDependenciesReactIcons) == ''">^5.5.0</PackageJsonDependenciesReactIcons>
+    <PackageJsonDependenciesReactModal Condition="$(PackageJsonDependenciesReactModal) == ''">^3.16.3</PackageJsonDependenciesReactModal>
+    <PackageJsonDependenciesReactRouterDom Condition="$(PackageJsonDependenciesReactRouterDom) == ''">^6.20.0</PackageJsonDependenciesReactRouterDom>
+    <PackageJsonDependenciesReactScripts Condition="$(PackageJsonDependenciesReactScripts) == ''">^5.0.1</PackageJsonDependenciesReactScripts>
+    <PackageJsonDependenciesReactStepProgressBar Condition="$(PackageJsonDependenciesReactStepProgressBar) == ''">^1.0.3</PackageJsonDependenciesReactStepProgressBar>
+    <PackageJsonDependenciesReactToastify Condition="$(PackageJsonDependenciesReactToastify) == ''">^11.0.5</PackageJsonDependenciesReactToastify>
+    <PackageJsonDependenciesStyledComponents Condition="$(PackageJsonDependenciesStyledComponents) == ''">^6.1.19</PackageJsonDependenciesStyledComponents>
+    <PackageJsonDependenciesWebVitals Condition="$(PackageJsonDependenciesWebVitals) == ''">^2.1.4</PackageJsonDependenciesWebVitals>
+    <PackageJsonScriptsStart Condition="$(PackageJsonScriptsStart) == ''">react-scripts start</PackageJsonScriptsStart>
+    <PackageJsonScriptsBuild Condition="$(PackageJsonScriptsBuild) == ''">react-scripts build</PackageJsonScriptsBuild>
+    <PackageJsonScriptsBuildProd Condition="$(PackageJsonScriptsBuildProd) == ''">GENERATE_SOURCEMAP=false react-scripts build</PackageJsonScriptsBuildProd>
+    <PackageJsonScriptsTest Condition="$(PackageJsonScriptsTest) == ''">react-scripts test</PackageJsonScriptsTest>
+    <PackageJsonScriptsEject Condition="$(PackageJsonScriptsEject) == ''">react-scripts eject</PackageJsonScriptsEject>
+    <PackageJsonScriptsDeploy Condition="$(PackageJsonScriptsDeploy) == ''">npm run build:prod &amp;&amp; echo 'Build completed! Upload ALL contents of build/ folder to http://suptech.online root directory'</PackageJsonScriptsDeploy>
+    <PackageJsonScriptsDeployCheck Condition="$(PackageJsonScriptsDeployCheck) == ''">npm run build:prod &amp;&amp; echo 'Checking build folder...' &amp;&amp; dir build &amp;&amp; echo 'Make sure .htaccess file is included!'</PackageJsonScriptsDeployCheck>
+    <PackageJsonScriptsDev Condition="$(PackageJsonScriptsDev) == ''">vite</PackageJsonScriptsDev>
+    <PackageJsonEslintconfigExtends Condition="$(PackageJsonEslintconfigExtends) == ''">[
+  "react-app",
+  "react-app/jest"
+]</PackageJsonEslintconfigExtends>
+    <PackageJsonBrowserslistProduction Condition="$(PackageJsonBrowserslistProduction) == ''">[
+  "\u003E0.2%",
+  "not dead",
+  "not op_mini all"
+]</PackageJsonBrowserslistProduction>
+    <PackageJsonBrowserslistDevelopment Condition="$(PackageJsonBrowserslistDevelopment) == ''">[
+  "last 1 chrome version",
+  "last 1 firefox version",
+  "last 1 safari version"
+]</PackageJsonBrowserslistDevelopment>
+    <PackageJsonDevdependenciesHttpProxyMiddleware Condition="$(PackageJsonDevdependenciesHttpProxyMiddleware) == ''">^3.0.5</PackageJsonDevdependenciesHttpProxyMiddleware>
+    <PackageJsonProxy Condition="$(PackageJsonProxy) == ''">https://localhost:7024</PackageJsonProxy>
+  </PropertyGroup>
+</Project>

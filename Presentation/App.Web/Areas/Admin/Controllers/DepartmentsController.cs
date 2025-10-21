@@ -9,56 +9,69 @@ namespace App.Web.Areas.Admin.Controllers
     public class DepartmentsController : Controller
     {
         private readonly IOrganizationsServices _organizationsServices;
+        private readonly IDepartmentServices _departmentServices;
+        private readonly ISectorServices _sectorServices;
 
-        public DepartmentsController(IOrganizationsServices organizationsServices)
+		public DepartmentsController(IOrganizationsServices organizationsServices, IDepartmentServices departmentServices, ISectorServices sectorServices)
         {
             _organizationsServices = organizationsServices;
+            _departmentServices = departmentServices;
+            _sectorServices = sectorServices;
         }
 
         public async Task<IActionResult> Index()
         {
-            var departments = await _organizationsServices.GetAllDepartmentsAsync();
+            var departments = await _departmentServices.GetAllDepartmentsAsync();
             return View(departments);
         }
 
-        // GET: Create
         [HttpGet]
-        public IActionResult Create() => View();
-
-        // POST: Create
-        [HttpPost]
-        public async Task<IActionResult> Create(Sector model)
+        public async Task<IActionResult> Create(int sectorId)
         {
-            if (!ModelState.IsValid) return View(model);
-            await _organizationsServices.CreateDepartmentAsync(model);
+            if (sectorId <= 0) 
+                return BadRequest();
+			var sector = await _sectorServices.GetSectorByIdAsync(sectorId);
+            var department = new Department
+            {
+                SectorId = sectorId,
+                Sector = sector
+			};
+			return View(department);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(Department model)
+        {
+            if (!ModelState.IsValid) 
+                return View(model);
+            await _departmentServices.CreateDepartmentAsync(model);
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: Edit
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            var dept = await _organizationsServices.GetDepartmentByIdAsync(id);
-            if (dept == null) return NotFound();
-            return View(dept);
+            var department = await _departmentServices.GetDepartmentByIdAsync(id);
+            if (department == null) 
+                return NotFound();
+            return View(department);
         }
 
-        // POST: Edit
         [HttpPost]
-        public async Task<IActionResult> Edit(Sector model)
+        public async Task<IActionResult> Edit(Department model)
         {
-            if (!ModelState.IsValid) return View(model);
-            await _organizationsServices.UpdateDepartmentAsync(model);
+            if (!ModelState.IsValid)
+                return View(model);
+            await _departmentServices.UpdateDepartmentAsync(model);
             return RedirectToAction(nameof(Index));
         }
 
-        // POST: Delete
         [HttpPost]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id, int departmentId)
         {
-            var dept = await _organizationsServices.GetDepartmentByIdAsync(id);
-            if (dept != null)
-                await _organizationsServices.DeleteDepartmentAsync(dept);
+            var department = await _departmentServices.GetDepartmentByIdAsync(id);
+            if (department != null)
+                await _departmentServices.DeleteDepartmentAsync(department);
 
             return RedirectToAction(nameof(Index));
         }

@@ -7,6 +7,7 @@ namespace App.Web.Areas.Admin.Models.Organization
     {
         public int SectorId { get; set; }
         public string SectorName { get; set; }
+        public string SectorDescription { get; set; }
 
         public List<DepartmentModel> Departments { get; set; } = new();
         public List<UserModel> DepartmentUsers { get; set; } = new();

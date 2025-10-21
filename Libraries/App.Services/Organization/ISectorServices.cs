@@ -15,5 +15,8 @@ namespace App.Services.Organization
         Task<Sector> CreateSectorAsync(Sector sector);
         Task UpdateSectorAsync(Sector sector);
         Task DeleteSectorAsync(Sector sector);
+
+		//Get Departments by Sector Id
+        Task<IList<Department>> GetDepartmentsBySectorIdAsync(int sectorId);
 	}
 }

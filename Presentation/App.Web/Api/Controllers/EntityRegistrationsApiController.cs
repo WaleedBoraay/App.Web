@@ -340,7 +340,22 @@ namespace App.Web.Api.Controllers
         public async Task<IActionResult> ReturnRegistrationForEdit(int id, [FromBody] string remarks, int userId)
         {
             await HandleStatusChange(id, RegistrationStatus.ReturnedForEdit, userId, remarks);
-            await _auditService.LogUpdateAsync("Registration", id, userId, "Registration returned for edit",
+
+			//send notification to maker
+            await _notificationService.SendAsync(
+                registrationId: id,
+                eventType: NotificationEvent.RegistrationReturnedForEdit,
+                triggeredByUserId: userId,
+                recipientUserId: userId,
+                channel: NotificationChannel.InApp,
+                tokens: new Dictionary<string, string>
+                {
+                    ["RegistrationId"] = id.ToString(),
+                    ["InstitutionName"] = (await _registrationService.GetByIdAsync(id))?.InstitutionName ?? "",
+                    ["Status"] = RegistrationStatus.ReturnedForEdit.ToString(),
+                    ["Remarks"] = remarks ?? "No remarks provided"
+                });
+			await _auditService.LogUpdateAsync("Registration", id, userId, "Registration returned for edit",
                 comment: remarks ?? "No remarks provided");
 			return Ok(new { success = true });
         }

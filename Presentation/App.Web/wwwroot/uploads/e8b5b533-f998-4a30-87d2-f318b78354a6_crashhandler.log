@@ -1,0 +1,6 @@
+[   INFO][           ]: == Initialization - Crash Handler v1.3.0 ==
+[  ERROR][    CMDLINE]: The required argument --project hasn't been received / initialized correctly.
+[  ERROR][    CMDLINE]: Fatal error has occurred when analyzing the received command line.
+[   INFO][       CORE]: Crash handler - Version 1.3.0
+[   INFO][       CORE]: Game Engine   - Version 
+[   INFO][           ]: == Closing the logfile ==

@@ -7,7 +7,9 @@ using App.Services.Security;
 using App.Services.Users;
 using App.Web.Areas.Admin.Models;
 using App.Web.Areas.Admin.Models.Users;
+using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Graph.Models;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,14 +26,22 @@ namespace App.Web.Api.Controllers
         private readonly INotificationService _notificationService;
         private readonly IRoleService _roleService;
         private readonly IOrganizationsServices _orgService;
+        private readonly ISectorServices _sectorService;
+        private readonly IDepartmentServices _departmentService;
+        private readonly IUnitServices _unitService;
+        private readonly IEmailService _emailService;
 
-        public UsersApiController(
+		public UsersApiController(
             IUserService userService,
             IWorkContext workContext,
             IPermissionService permissionService,
             INotificationService notificationService,
             IRoleService roleService,
-            IOrganizationsServices orgService)
+            IOrganizationsServices orgService,
+            ISectorServices sectorServices,
+            IDepartmentServices departmentServices,
+            IUnitServices unitServices,
+            IEmailService emailService)
         {
             _userService = userService;
             _workContext = workContext;
@@ -39,20 +49,27 @@ namespace App.Web.Api.Controllers
             _notificationService = notificationService;
             _roleService = roleService;
             _orgService = orgService;
-        }
+            _sectorService = sectorServices;
+            _departmentService = departmentServices;
+            _unitService = unitServices;
+            _emailService = emailService;
+		}
+
+
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var departments = await _orgService.GetAllDepartmentsAsync();
-            var units = await _orgService.GetAllUnitsAsync();
-            var subUnits = await _orgService.GetAllSubUnitsAsync();
-            var users = await _userService.GetAllAsync(false);
+            var sectors = await _sectorService.GetAllSectorsAsync();
+            var departments = await _departmentService.GetAllDepartmentsAsync();
+            var units = await _unitService.GetAllUnitsAsync();
 
-            var filtered = users
-                .Where(u => u.InstitutionId == null && u.RegistrationId == null)
-                .Select(u => new UserModel
+			var users = await _userService.GetAllAsync(false);
+
+			var filtered = users
+                .Select(async u => new UserModel
                 {
+
                     Id = u.Id,
                     UserName = u.Username,
                     Email = u.Email,
@@ -62,21 +79,19 @@ namespace App.Web.Api.Controllers
                     LastLoginDateUtc = u.LastLoginDateUtc,
                     CreatedOnUtc = u.CreatedOnUtc,
                     UpdatedOnUtc = u.UpdatedOnUtc,
-                    SectorId = u.SectorId,
-                    DepartmentId = u.DepartmentId,
-                    UnitId = u.UnitId,
-                    SectoreName = u.SectorId.HasValue
-                        ? departments.FirstOrDefault(d => d.Id == u.SectorId)?.Name
-                        : null,
-					DepartmentName = u.DepartmentId.HasValue
-                        ? units.FirstOrDefault(x => x.Id == u.DepartmentId)?.Name
-                        : null,
-					UnitName = u.UnitId.HasValue
-                        ? subUnits.FirstOrDefault(x => x.Id == u.UnitId)?.Name
-                        : null
-                }).ToList();
+                    RoleName = string.Join(", ", _roleService.GetRolesByUserIdAsync(u.Id).Result.Select(r => r.Name)),
+					SectorId = u.SectorId,
+                    SectoreName = sectors.Where(s => s.Id == u.SectorId).Select(n=>n.Name).FirstOrDefault(),
+					DepartmentId = u.DepartmentId,
+                    DepartmentName = departments.Where(d => d.Id == u.DepartmentId).Select(n => n.Name).FirstOrDefault(),
+					UnitId = u.UnitId,
+                    UnitName = units.Where(x => x.Id == u.UnitId).Select(n => n.Name).FirstOrDefault()
+					//assign sector, department, unit names
 
-            return Ok(filtered);
+
+				}).ToList();
+
+			return Ok(filtered);
         }
 
         [HttpPost]
@@ -98,10 +113,29 @@ namespace App.Web.Api.Controllers
                 UnitId = model.UnitId
             };
 
-            var currentUser = await _workContext.GetCurrentUserAsync();
-            await _userService.InsertAsync(entity, model.Password, currentUser.Id);
+            //var currentUser = await _workContext.GetCurrentUserAsync();
+            var user = await _userService.InsertAsync(entity, model.Password, 0);
+            //Send email to userwith password setup instructions could be added here
+            if (user != null)
+            {
 
-            return Ok(new { success = true, userId = entity.Id });
+				var emailBody = $"Dear {user.Username},<br/><br/>" +
+				$"Your account has been created.<br/>" +
+				$"Username: {user.Username}<br/>" +
+				$"Password: {model.Password}<br/><br/>" +
+				$"Please change your password after logging in.<br/><br/>" +
+				$"https://suptech.online/<br/><br/>" +
+				$"Best regards,<br/>" +
+				$"The Team";
+				await _emailService.SendEmailAsync(
+					to: user.Email,
+					subject: "Your Account Credentials",
+					body: emailBody);
+
+            }
+
+
+				return Ok(new { success = true, userId = entity.Id });
         }
 
         [HttpPut("{id}")]

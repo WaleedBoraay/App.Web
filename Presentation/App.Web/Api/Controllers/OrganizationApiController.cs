@@ -1,4 +1,5 @@
 ﻿using App.Core.Domain.Organization;
+using App.Core.Domain.Users;
 using App.Services.Organization;
 using App.Services.Security;
 using App.Services.Users;
@@ -163,26 +164,93 @@ namespace App.Web.Api.Controllers
             return NoContent();
         }
 
-        // ✅ User assignment to org units
-        [HttpPost("assign-user")]
-        public async Task<IActionResult> AssignUser([FromBody] AssignUserModel model)
+		[HttpPost("assign-user-to-sector")]
+		public async Task<IActionResult> AssignUser([FromBody] AssignUserModel model)
+		{
+			var user = await _userService.GetByIdAsync(model.UserId);
+			if (user == null)
+				return NotFound(new { message = "User not found" });
+
+			// Update sector if provided
+			if (model.SectorId != null)
+			{
+				user.SectorId = model.SectorId;
+				await _userService.UpdateAsync(user);
+			}
+
+			// Assign role if valid
+			if (model.RoleId.HasValue && model.RoleId.Value != 0)
+			{
+				var userRoles = await _roleService.GetRolesByUserIdAsync(model.UserId);
+				bool alreadyHasRole = userRoles.Any(r => r.Id == model.RoleId.Value);
+
+				if (!alreadyHasRole)
+				{
+					await _roleService.AddUserToRoleAsync(model.UserId, model.RoleId.Value);
+				}
+			}
+
+			return Ok(new { message = "User assigned successfully." });
+		}
+		//assign user to department
+		[HttpPost("assign-user-to-department")]
+        public async Task<IActionResult> AssignUserToDepartment([FromBody] AssignUserModel model)
         {
             var user = await _userService.GetByIdAsync(model.UserId);
-            if (user == null)
+			if (user == null)
+                return NotFound(new { message = "User not found" });
+            if (model.DepartmentId != null)
+            {
+				user.DepartmentId = model.DepartmentId;
+				await _userService.UpdateAsync(user);
+			}
+
+
+			// Assign role if valid
+			if (model.RoleId.HasValue && model.RoleId.Value != 0)
+			{
+				var userRoles = await _roleService.GetRolesByUserIdAsync(model.UserId);
+				bool alreadyHasRole = userRoles.Any(r => r.Id == model.RoleId.Value);
+
+				if (!alreadyHasRole)
+				{
+					await _roleService.AddUserToRoleAsync(model.UserId, model.RoleId.Value);
+				}
+			}
+			return Ok(new { message = "User assigned to department successfully." });
+		}
+
+        //assign user to unit
+        [HttpPost("assign-user-to-unit")]
+        public async Task<IActionResult> AssignUserToUnit([FromBody] AssignUserModel model)
+        {
+            var user = await _userService.GetByIdAsync(model.UserId);
+
+			if (user == null)
                 return NotFound(new { message = "User not found" });
 
-            user.SectorId = model.SectorId;
-            user.DepartmentId = model.DepartmentId;
-            user.UnitId = model.UnitId;
-            await _userService.UpdateAsync(user);
+            if (model.UnitId != null)
+            {
+				user.UnitId = model.UnitId;
+				await _userService.UpdateAsync(user);
+			}
 
-            if (model.RoleId.HasValue)
-                await _roleService.AddUserToRoleAsync(model.UserId, model.RoleId.Value);
 
-            return Ok(new { message = "User assigned successfully." });
-        }
+			// Assign role if valid
+			if (model.RoleId.HasValue && model.RoleId.Value != 0)
+			{
+				var userRoles = await _roleService.GetRolesByUserIdAsync(model.UserId);
+				bool alreadyHasRole = userRoles.Any(r => r.Id == model.RoleId.Value);
 
-        [HttpPost("remove-user-role")]
+				if (!alreadyHasRole)
+				{
+					await _roleService.AddUserToRoleAsync(model.UserId, model.RoleId.Value);
+				}
+			}
+			return Ok(new { message = "User assigned to unit successfully." });
+		}
+
+		[HttpPost("remove-user-role")]
         public async Task<IActionResult> RemoveUserRole([FromBody] RemoveUserRoleModel model)
         {
             await _roleService.RemoveUserFromRoleAsync(model.UserId, model.RoleId);

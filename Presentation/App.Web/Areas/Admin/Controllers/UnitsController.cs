@@ -9,57 +9,64 @@ namespace App.Web.Areas.Admin.Controllers
     public class UnitsController : Controller
     {
         private readonly IOrganizationsServices _organizationsServices;
+        private readonly IUnitServices _unitServices;
 
-        public UnitsController(IOrganizationsServices organizationsServices)
+		public UnitsController(IOrganizationsServices organizationsServices, IUnitServices unitServices)
         {
             _organizationsServices = organizationsServices;
+            _unitServices = unitServices;
         }
 
-        public async Task<IActionResult> Index(int departmentId)
+        public async Task<IActionResult> Index()
         {
-            var units = await _organizationsServices.GetUnitsByDepartmentIdAsync(departmentId);
-            ViewBag.DepartmentId = departmentId;
-            return View(units);
+            var Units = await _unitServices.GetAllUnitsAsync();
+            return View(Units);
         }
 
         [HttpGet]
         public IActionResult Create(int departmentId)
         {
-            return View(new Department { SectorId = departmentId });
+            return View(new Unit { DepartmentId = departmentId });
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Department model)
+        public async Task<IActionResult> Create(Unit model)
         {
-            if (!ModelState.IsValid) return View(model);
-            await _organizationsServices.CreateUnitAsync(model);
-            return RedirectToAction(nameof(Index), new { departmentId = model.SectorId });
+            if (!ModelState.IsValid)
+                return View(model);
+
+            await _unitServices.CreateUnitAsync(model);
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            var unit = await _organizationsServices.GetUnitByIdAsync(id);
-            if (unit == null) return NotFound();
+            var unit = await _unitServices.GetUnitByIdAsync(id);
+            if (unit == null)
+                return NotFound();
+
             return View(unit);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(Department model)
+        public async Task<IActionResult> Edit(Unit model)
         {
-            if (!ModelState.IsValid) return View(model);
-            await _organizationsServices.UpdateUnitAsync(model);
-            return RedirectToAction(nameof(Index), new { departmentId = model.SectorId });
+            if (!ModelState.IsValid)
+                return View(model);
+
+            await _unitServices.UpdateUnitAsync(model);
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete(int id, int departmentId)
+        public async Task<IActionResult> Delete(int id, int unitId)
         {
-            var unit = await _organizationsServices.GetUnitByIdAsync(id);
+            var unit = await _unitServices.GetUnitByIdAsync(id);
             if (unit != null)
-                await _organizationsServices.DeleteUnitAsync(unit);
+                await _unitServices.DeleteUnitAsync(unit);
 
-            return RedirectToAction(nameof(Index), new { departmentId });
+            return RedirectToAction(nameof(Index));
         }
     }
 }

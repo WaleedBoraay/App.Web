@@ -219,8 +219,9 @@ namespace App.Web.Controllers
                     {
                         Name = "Super Admin",
                         SystemName = "Super.Admin.Role",
-                        IsActive = true
-                    };
+                        IsActive = true,
+						CreatedOnUtc = DateTime.UtcNow
+					};
                     await roleRepo.InsertAsync(adminRole);
                 }
 

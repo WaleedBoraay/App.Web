@@ -37,6 +37,20 @@ namespace App.Services.Organization
 				query.OrderBy(s => s.Name));
 		}
 
+        public async Task<IList<Department>> GetDepartmentsBySectorIdAsync(int sectorId)
+		{
+			// Get the sector by id, including its Departments collection
+			var sector = await _sectorRepository.GetAllAsync(query =>
+				query.Where(s => s.Id == sectorId));
+
+			// sector is IList<Sector>, but should only have one item (since Id is unique)
+			var departments = sector.FirstOrDefault()?.Departments
+				?.OrderBy(d => d.Name)
+				.ToList() ?? new List<Department>();
+
+			return departments;
+		}
+
         public async Task<Sector> GetSectorByIdAsync(int id)
 		{
 			return await _sectorRepository.GetByIdAsync(id);

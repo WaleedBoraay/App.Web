@@ -1,7 +1,6 @@
 ﻿@model IEnumerable<App.Core.Domain.Organization.Unit>
 
-<h2>Departments</h2>
-<a asp-action="Create" asp-route-departmentId="@ViewBag.DepartmentId" class="btn btn-primary mb-3">+ Add Department</a>
+<h2>Units</h2>
 
 <table class="table table-bordered table-striped">
     <thead class="table-dark">
@@ -16,15 +15,16 @@
             <tr>
                 <td>@item.Name</td>
                 <td>
+                    <a asp-action="Create" asp-route-unitId="@item.DepartmentId" class="btn btn-primary mb-3">+ Add Unit</a>
+
                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a>
-                    <form asp-action="Delete" asp-route-id="@item.Id" asp-route-departmentId="@ViewBag.DepartmentId" method="post" style="display:inline">
+                    <form asp-action="Delete" asp-route-id="@item.Id" asp-route-unitId="@item.DepartmentId" method="post" style="display:inline">
                         <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                     </form>
-                    <a asp-controller="SubUnits" asp-action="Index" asp-route-unitId="@item.Id" class="btn btn-sm btn-info">Units</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
 
-<a asp-controller="Departments" asp-action="Index" class="btn btn-secondary">Back to Sectors</a>
+<a asp-controller="Departments" asp-action="Index" class="btn btn-secondary">Back to Sector</a>

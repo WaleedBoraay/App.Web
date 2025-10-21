@@ -73,7 +73,10 @@ foreach (var startup in startupInstances)
     startup.ConfigureServices(builder.Services, builder.Configuration);
 }
 
-
+if (builder.Environment.IsDevelopment())
+{
+	builder.WebHost.UseSetting("hotReloadEnabled", "false");
+}
 // 3) Authentication & Authorization (only if not already registered)
 if (!builder.Services.Any(sd => sd.ServiceType == typeof(IAuthenticationSchemeProvider)))
 {
@@ -158,12 +161,13 @@ app.UseAuthorization();
 
 // MVC routes
 app.MapControllerRoute(
-    name: "areas",
-    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+	name: "areas",
+	pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+	pattern: "{controller=Home}/{action=Index}/{id?}",
+	defaults: new { area = "Admin", controller = "Home", action = "Index" });
 
 app.MapDefaultControllerRoute();
 app.MapRazorPages();

@@ -404,21 +404,9 @@
                                             </div>
                                         </a>
                                     </div>
+                                    @* this *@
                                     <div class="d-grid py-4 px-7 pt-8">
-                                        <div class="upgrade-plan bg-primary-subtle position-relative overflow-hidden rounded-4 p-4 mb-9">
-                                            <div class="row">
-                                                <div class="col-6">
-                                                    <h5 class="fs-4 mb-3 fw-semibold">Unlimited Access</h5>
-                                                    <button class="btn btn-primary">Upgrade</button>
-                                                </div>
-                                                <div class="col-6">
-                                                    <div class="m-n4 unlimited-img">
-                                                        <img src="~/Modern/assets/images/backgrounds/unlimited-bg.png" alt="modernize-img" class="w-100" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <a href="~/Modern/main/authentication-login.html" class="btn btn-outline-primary">Log Out</a>
+                                        <a asp-area="" asp-controller="Account" asp-action="Logout" class="btn btn-outline-primary">Log Out</a>
                                     </div>
                                 </div>
                             </div>
@@ -1002,27 +990,17 @@
                                         </a>
                                     </div>
                                     <div class="d-grid py-4 px-7 pt-8">
-                                        <div class="upgrade-plan bg-primary-subtle position-relative overflow-hidden rounded-4 p-4 mb-9">
-                                            <div class="row">
-                                                <div class="col-6">
-                                                    <h5 class="fs-4 mb-3 fw-semibold">Unlimited Access</h5>
-                                                    <button class="btn btn-primary">Upgrade</button>
-                                                </div>
-                                                <div class="col-6">
-                                                    <div class="m-n4 unlimited-img">
-                                                        <img src="~/Modern/assets/images/backgrounds/unlimited-bg.png" alt="modernize-img" class="w-100" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <a href="~/Modern/main/authentication-login.html" class="btn btn-outline-primary">Log Out</a>
+                                        <form asp-area="Admin" asp-controller="Account" asp-action="Logout" method="post" class="dropdown-item p-0 m-0">
+                                            <button class="text-nowrap logo-img" tabindex="0" type="button" aria-label="logout" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="logout">
+                                                <i class="ti ti-power fs-6"></i>
+                                                <img src="~/Modern/assets/images/logos/logo.png" class="dark-logo" alt="Logo-Dark" />
+                                                <img src="~/Modern/assets/images/logos/logo.png" class="light-logo" alt="Logo-light" />
+                                            </button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
                         </li>
-                        <!-- ------------------------------- -->
-                        <!-- end profile Dropdown -->
-                        <!-- ------------------------------- -->
                     </ul>
                 </div>
             </div>

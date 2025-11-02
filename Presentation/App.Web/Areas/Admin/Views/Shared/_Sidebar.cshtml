@@ -41,7 +41,6 @@
 <!-- ---------------------------------- -->
 <!-- Start Vertical Layout Sidebar -->
 <!-- ---------------------------------- -->
-
 @* 
 <nav id="sidebar" class="sidebar js-sidebar">
     <div class="sidebar-content js-simplebar">
@@ -348,118 +347,154 @@
                         <span class="hide-menu">Modern</span>
                     </a>
                 </li>
-                <li class="sidebar-item">
-                    <a class="sidebar-link" href="/admin" aria-expanded="false">
-                        <span>
-                            <i class="ti ti-shopping-cart"></i>
-                        </span>
-                        <span class="hide-menu">Home</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a class="sidebar-link" href="/Admin/Registrations" aria-expanded="false">
-                        <span>
-                            <i class="ti ti-currency-dollar"></i>
-                        </span>
-                        <span class="hide-menu">Entity Registrations</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a class="sidebar-link" href="/Admin/Institutes" aria-expanded="false">
-                        <span>
-                            <i class="ti ti-cpu"></i>
-                        </span>
-                        <span class="hide-menu">Entity Profile</span>
-                    </a>
-                </li>
+                @if (canDashboard)
+                {
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="/admin" aria-expanded="false">
+                            <span>
+                                <i class="ti ti-shopping-cart"></i>
+                            </span>
+                            <span class="hide-menu">Home</span>
+                        </a>
+                    </li>
+                }
+                @if (canRegistrations)
+                {
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="/Admin/Registrations" aria-expanded="false">
+                            <span>
+                                <i class="ti ti-currency-dollar"></i>
+                            </span>
+                            <span class="hide-menu">Entity Registrations</span>
+                        </a>
+                    </li>
+                }
+                @if (canInstitutes)
+                {
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="/Admin/Institutes" aria-expanded="false">
+                            <span>
+                                <i class="ti ti-cpu"></i>
+                            </span>
+                            <span class="hide-menu">Entity Profile</span>
+                        </a>
+                    </li>
+                }
 
-                <!-- ---------------------------------- -->
-                <!-- Apps -->
-                <!-- ---------------------------------- -->
+
                 <li class="nav-small-cap">
                     <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
                     <span class="hide-menu">Mange Organization</span>
                 </li>
-                <li class="sidebar-item">
-                    <a class="sidebar-link" href="/Admin/Organization/" aria-expanded="false">
-                        <span>
-                            <i class="ti ti-calendar"></i>
-                        </span>
-                        <span class="hide-menu">Organization</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a class="sidebar-link" href="/Admin/Sectors/" aria-expanded="false">
-                        <span>
-                            <i class="ti ti-layout-kanban"></i>
-                        </span>
-                        <span class="hide-menu">Mange Sectors</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a class="sidebar-link" href="/Admin/Departments/" aria-expanded="false">
-                        <span>
-                            <i class="ti ti-message-dots"></i>
-                        </span>
-                        <span class="hide-menu">Mange Departments</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a class="sidebar-link" href="/Admin/Units/" aria-expanded="false">
-                        <span>
-                            <i class="ti ti-mail"></i>
-                        </span>
-                        <span class="hide-menu">Mange Units</span>
-                    </a>
-                </li>
+                @if (canOrganization)
+                {
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="/Admin/Organization/" aria-expanded="false">
+                            <span>
+                                <i class="ti ti-calendar"></i>
+                            </span>
+                            <span class="hide-menu">Organization</span>
+                        </a>
+                    </li>
+                }
+                @if (canDepartments)
+                {
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="/Admin/Sectors/" aria-expanded="false">
+                            <span>
+                                <i class="ti ti-layout-kanban"></i>
+                            </span>
+                            <span class="hide-menu">Mange Sectors</span>
+                        </a>
+                    </li>
+                }
+                @if (canUnits)
+                {
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="/Admin/Departments/" aria-expanded="false">
+                            <span>
+                                <i class="ti ti-message-dots"></i>
+                            </span>
+                            <span class="hide-menu">Mange Departments</span>
+                        </a>
+                    </li>
+                }
+                @if (canSubUnits)
+                {
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="/Admin/Units/" aria-expanded="false">
+                            <span>
+                                <i class="ti ti-mail"></i>
+                            </span>
+                            <span class="hide-menu">Mange Units</span>
+                        </a>
+                    </li>
+
+                }
+
                 <!-- ---------------------------------- -->
                 <!-- PAGES -->
                 <!-- ---------------------------------- -->
-                <li class="nav-small-cap">
-                    <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-                    <span class="hide-menu">Mange Users / Roles</span>
-                </li>
-                <li class="sidebar-item">
-                    <a class="sidebar-link" href="/Admin/Users" aria-expanded="false">
-                        <span>
-                            <i class="ti ti-currency-dollar"></i>
-                        </span>
-                        <span class="hide-menu">Users</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a class="sidebar-link" href="/Admin/Roles/" aria-expanded="false">
-                        <span>
-                            <i class="ti ti-help"></i>
-                        </span>
-                        <span class="hide-menu">Roles</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a class="sidebar-link" href="/Admin/Permissions/" aria-expanded="false">
-                        <span>
-                            <i class="ti ti-user-circle"></i>
-                        </span>
-                        <span class="hide-menu">Permissions</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a class="sidebar-link" href="/Admin/UserRoles/" aria-expanded="false">
-                        <span>
-                            <i class="ti ti-app-window"></i>
-                        </span>
-                        <span class="hide-menu">UserRoles</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a class="sidebar-link" href="/Admin/UserPermissionOverrides" aria-expanded="false">
-                        <span>
-                            <i class="ti ti-app-window"></i>
-                        </span>
-                        <span class="hide-menu">UserPermissionOverrides</span>
-                    </a>
-                </li>
+                @if (canUsers)
+                {
+                    <li class="nav-small-cap">
+                        <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                        <span class="hide-menu">Mange Users / Roles</span>
+                    </li>
 
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="/Admin/Users" aria-expanded="false">
+                            <span>
+                                <i class="ti ti-currency-dollar"></i>
+                            </span>
+                            <span class="hide-menu">Users</span>
+                        </a>
+                    </li>
+                }
+                @if (canRoles)
+                {
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="/Admin/Roles/" aria-expanded="false">
+                            <span>
+                                <i class="ti ti-help"></i>
+                            </span>
+                            <span class="hide-menu">Roles</span>
+                        </a>
+                    </li>
+                }
+                @if (canPermissions)
+                {
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="/Admin/Permissions/" aria-expanded="false">
+                            <span>
+                                <i class="ti ti-user-circle"></i>
+                            </span>
+                            <span class="hide-menu">Permissions</span>
+                        </a>
+                    </li>
+                }
+                @if (canUserRoles)
+                {
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="/Admin/UserRoles/" aria-expanded="false">
+                            <span>
+                                <i class="ti ti-app-window"></i>
+                            </span>
+                            <span class="hide-menu">UserRoles</span>
+                        </a>
+                    </li>
+                }
+                @if (canUserPermissionOverrides)
+                {
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="/Admin/UserPermissionOverrides" aria-expanded="false">
+                            <span>
+                                <i class="ti ti-app-window"></i>
+                            </span>
+                            <span class="hide-menu">UserPermissionOverrides</span>
+                        </a>
+                    </li>
+                }
                 <!-- ---------------------------------- -->
                 <!-- Forms -->
                 <!-- ---------------------------------- -->
@@ -471,38 +506,52 @@
                 <!-- ---------------------------------- -->
                 <!-- Form Input -->
                 <!-- ---------------------------------- -->
-                <li class="sidebar-item">
-                    <a class="sidebar-link" href="/Admin/AuditTrail" aria-expanded="false">
-                        <span class="d-flex">
-                            <i class="ti ti-archive"></i>
-                        </span>
-                        <span class="hide-menu">Logs</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a class="sidebar-link" href="/Admin/Settings/" aria-expanded="false">
-                        <span class="d-flex">
-                            <i class="ti ti-box-align-left"></i>
-                        </span>
-                        <span class="hide-menu">Settings</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a class="sidebar-link" href="/Admin/Languages/" aria-expanded="false">
-                        <span class="d-flex">
-                            <i class="ti ti-box-align-bottom"></i>
-                        </span>
-                        <span class="hide-menu">Languages</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a class="sidebar-link" href="/Admin/Resources/" aria-expanded="false">
-                        <span class="d-flex">
-                            <i class="ti ti-file-export"></i>
-                        </span>
-                        <span class="hide-menu">Resources</span>
-                    </a>
-                </li>
+                @if (canLogs)
+                {
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="/Admin/AuditTrail" aria-expanded="false">
+                            <span class="d-flex">
+                                <i class="ti ti-archive"></i>
+                            </span>
+                            <span class="hide-menu">Logs</span>
+                        </a>
+                    </li>
+
+                }
+                @if (canSettings)
+                {
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="/Admin/Settings/" aria-expanded="false">
+                            <span class="d-flex">
+                                <i class="ti ti-box-align-left"></i>
+                            </span>
+                            <span class="hide-menu">Settings</span>
+                        </a>
+                    </li>
+                }
+                @if (canLanguages)
+                {
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="/Admin/Languages/" aria-expanded="false">
+                            <span class="d-flex">
+                                <i class="ti ti-box-align-bottom"></i>
+                            </span>
+                            <span class="hide-menu">Languages</span>
+                        </a>
+                    </li>
+                }
+                @if (canResources)
+                {
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="/Admin/Resources/" aria-expanded="false">
+                            <span class="d-flex">
+                                <i class="ti ti-file-export"></i>
+                            </span>
+                            <span class="hide-menu">Resources</span>
+                        </a>
+                    </li>
+
+                }
             </ul>
         </nav>
 
@@ -515,9 +564,10 @@
                     <h6 class="mb-0 fs-4 fw-semibold">Mathew</h6>
                     <span class="fs-2">Designer</span>
                 </div>
-                <button class="border-0 bg-transparent text-primary ms-auto" tabindex="0" type="button" aria-label="logout" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="logout">
+                <a asp-area="" asp-controller="Account" asp-action="Logout" class="border-0 bg-transparent text-primary ms-auto" tabindex="0" aria-label="logout" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="logout">
                     <i class="ti ti-power fs-6"></i>
-                </button>
+                </a>
+
             </div>
         </div>
     </div>

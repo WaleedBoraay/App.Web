@@ -10,12 +10,12 @@ namespace App.Data.Mapping.Builders.Correspondencess
         public override void MapEntity(CreateTableExpressionBuilder table)
         {
             table
-                .WithColumn(nameof(Correspondence.SenderUserId)).AsInt32().NotNullable()
-                .WithColumn(nameof(Correspondence.RecipientUserId)).AsInt32().NotNullable()
-                .WithColumn(nameof(Correspondence.Subject)).AsString(250).NotNullable()
-                .WithColumn(nameof(Correspondence.Message)).AsString(int.MaxValue).NotNullable()
-                .WithColumn(nameof(Correspondence.SentOnUtc)).AsDateTime2().NotNullable()
-                .WithColumn(nameof(Correspondence.Status)).AsString(50).NotNullable();
+                .WithColumn(nameof(Correspondence.SenderUserId)).AsInt32().Nullable()
+                .WithColumn(nameof(Correspondence.RecipientUserId)).AsInt32().Nullable()
+                .WithColumn(nameof(Correspondence.Subject)).AsString(250).Nullable()
+                .WithColumn(nameof(Correspondence.Message)).AsString(int.MaxValue).Nullable()
+                .WithColumn(nameof(Correspondence.SentOnUtc)).AsDateTime2().Nullable()
+                .WithColumn(nameof(Correspondence.Status)).AsString(50).Nullable();
         }
     }
 }

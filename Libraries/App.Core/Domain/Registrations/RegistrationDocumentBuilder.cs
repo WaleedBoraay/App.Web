@@ -17,7 +17,7 @@ namespace App.Core.Domain.Registrations
                 .WithColumn(nameof(RegistrationDocument.RegistrationId)).AsInt32().Nullable()
                     .ForeignKey(nameof(Registration), nameof(Registration.Id))
                 .WithColumn(nameof(RegistrationDocument.DocumentId)).AsInt32().Nullable()
-                    .ForeignKey(nameof(FIDocument), nameof(FIDocument.Id));
+                    .ForeignKey(nameof(Document), nameof(Document.Id));
         }
     }
 }

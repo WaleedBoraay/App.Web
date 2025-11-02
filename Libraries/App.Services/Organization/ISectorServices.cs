@@ -18,5 +18,8 @@ namespace App.Services.Organization
 
 		//Get Departments by Sector Id
         Task<IList<Department>> GetDepartmentsBySectorIdAsync(int sectorId);
+
+		//Get sector by contact id
+        Task<IList<Sector>> GetSectorByContactIdAsync(int contactId);
 	}
 }

@@ -11,9 +11,9 @@ public partial class UserLogBuilder : EntityBuilder<UserLog>
 {
     public override void MapEntity(CreateTableExpressionBuilder table) => table
         .WithColumn(nameof(UserLog.Id)).AsInt32().PrimaryKey().Identity()
-        .WithColumn(nameof(UserLog.UserId)).AsInt32().NotNullable()
+        .WithColumn(nameof(UserLog.UserId)).AsInt32().Nullable()
             .ForeignKey(nameof(AppUser), nameof(AppUser.Id))
         .WithColumn(nameof(UserLog.Action)).AsString(256).Nullable()
-        .WithColumn(nameof(UserLog.CreatedOnUtc)).AsDateTime2().NotNullable()
+        .WithColumn(nameof(UserLog.CreatedOnUtc)).AsDateTime2().Nullable()
         .WithColumn(nameof(UserLog.ClientIp)).AsString(256).Nullable();
 }

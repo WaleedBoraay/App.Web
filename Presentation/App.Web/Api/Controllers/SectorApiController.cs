@@ -1,5 +1,9 @@
 ﻿using App.Core.Domain.Organization;
+using App.Core.Domain.Registrations;
+using App.Core.Domain.Users;
 using App.Services.Organization;
+using App.Services.Registrations;
+using App.Web.Areas.Admin.Models.Organization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -11,11 +15,15 @@ namespace App.Web.Api.Controllers
     {
         private readonly IOrganizationsServices _organizationsServices;
         private readonly ISectorServices _sectorServices;
+        private readonly IRegistrationService _registrationServices;
+        private readonly IContactService _contactService;
 
-		public SectorApiController(IOrganizationsServices organizationsServices, ISectorServices sectorServices)
+		public SectorApiController(IOrganizationsServices organizationsServices, ISectorServices sectorServices, IRegistrationService registrationService, IContactService contactService)
         {
             _organizationsServices = organizationsServices;
             _sectorServices = sectorServices;
+            _registrationServices = registrationService;
+            _contactService = contactService;
 		}
 
         // GET: api/admin/departments
@@ -23,7 +31,18 @@ namespace App.Web.Api.Controllers
         public async Task<IActionResult> GetAll()
         {
             var sectors = await _sectorServices.GetAllSectorsAsync();
-            return Ok(sectors);
+            var contact = await _contactService.GetAllAsync();
+			var model = sectors.Select(s => new SectorModel
+            {
+                Id = s.Id,
+                SectorName = s.Name,
+                SectorDescription = s.SectorDescription,
+                ContactId = s.ContactId,
+                ContactTypeId = s.ContactTypeId,
+				Contacts = contact
+
+            }).ToList();
+			return Ok(model);
         }
 
         // GET: api/admin/departments/{id}
@@ -37,12 +56,21 @@ namespace App.Web.Api.Controllers
 
         // POST: api/admin/departments
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Sector model)
+        public async Task<IActionResult> Create([FromBody] SectorModel model)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+			//Create sector entity
+            var sector = new Sector
+            {
+                Name = model.SectorName,
+                SectorDescription = model.SectorDescription,    
+                ContactId = model.ContactId,
+                ContactTypeId = model.ContactTypeId
+			};
+            var insSec = await _sectorServices.CreateSectorAsync(sector);
 
-            await _sectorServices.CreateSectorAsync(model);
-            return Ok(new { success = true, message = "Sector created successfully" });
+			return Ok(new { success = true, message = "Sector created successfully" });
         }
 
         // PUT: api/admin/departments/{id}
@@ -54,7 +82,7 @@ namespace App.Web.Api.Controllers
             var sector = await _sectorServices.GetSectorByIdAsync(id);
             if (sector == null) return NotFound();
 
-            model.Id = id; // Ensure the id is set correctly
+            model.Id = id;
             await _sectorServices.UpdateSectorAsync(model);
 
             return Ok(new { success = true, message = "Sector updated successfully" });

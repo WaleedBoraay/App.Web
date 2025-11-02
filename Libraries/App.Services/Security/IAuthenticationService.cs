@@ -29,6 +29,8 @@ namespace App.Services.Authentication
         Task SignInAsync(AppUser user, bool isPersistent, IList<string> roles);
         Task SignOutAsync();
 
+        Task<string> GenerateJwtTokenAsync(AppUser user, IList<string> roles);
 
-    }
+
+	}
 }

@@ -11,11 +11,11 @@ public partial class LanguageBuilder : EntityBuilder<Language>
 {
     public override void MapEntity(CreateTableExpressionBuilder table) => table
         .WithColumn(nameof(Language.Id)).AsInt32().PrimaryKey().Identity()
-        .WithColumn(nameof(Language.Name)).AsString(256).NotNullable()
+        .WithColumn(nameof(Language.Name)).AsString(256).Nullable()
         .WithColumn(nameof(Language.LanguageCulture)).AsString(256).Nullable()
         .WithColumn(nameof(Language.UniqueSeoCode)).AsString(64).Nullable()
         .WithColumn(nameof(Language.FlagImageFileName)).AsString(256).Nullable()
-        .WithColumn(nameof(Language.Rtl)).AsBoolean().NotNullable()
-        .WithColumn(nameof(Language.Published)).AsBoolean().NotNullable()
+        .WithColumn(nameof(Language.Rtl)).AsBoolean().Nullable()
+        .WithColumn(nameof(Language.Published)).AsBoolean().Nullable()
         .WithColumn(nameof(Language.DisplayOrder)).AsInt32().Nullable();
 }

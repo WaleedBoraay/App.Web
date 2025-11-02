@@ -17,7 +17,7 @@ public partial class AttachmentBuilder : EntityBuilder<Attachment>
         .WithColumn(nameof(Attachment.MimeType)).AsString(128).Nullable()
         .WithColumn(nameof(Attachment.Extension)).AsString(20).Nullable()
         .WithColumn(nameof(Attachment.FileSize)).AsInt64().Nullable()
-        .WithColumn(nameof(Attachment.UploadedByUserId)).AsInt32().NotNullable()
+        .WithColumn(nameof(Attachment.UploadedByUserId)).AsInt32().Nullable()
             .ForeignKey(nameof(AppUser), nameof(AppUser.Id))
-        .WithColumn(nameof(Attachment.UploadedOnUtc)).AsDateTime2().NotNullable();
+        .WithColumn(nameof(Attachment.UploadedOnUtc)).AsDateTime2().Nullable();
 }

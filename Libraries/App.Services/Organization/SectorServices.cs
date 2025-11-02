@@ -51,6 +51,15 @@ namespace App.Services.Organization
 			return departments;
 		}
 
+        public async Task<IList<Sector>> GetSectorByContactIdAsync(int contactId)
+        {
+			var sectors = await _sectorRepository.GetAllAsync(query =>
+				query.Where(s => s.ContactId == contactId));
+
+			// Ensure a non-null return value
+			return sectors ?? new List<Sector>();
+		}
+
         public async Task<Sector> GetSectorByIdAsync(int id)
 		{
 			return await _sectorRepository.GetByIdAsync(id);

@@ -13,9 +13,9 @@ namespace App.Data.Mapping.Builders.Registrations
         {
             table
                 .WithColumn(nameof(WorkflowStep.Id)).AsInt32().PrimaryKey().Identity()
-                .WithColumn(nameof(WorkflowStep.Name)).AsString(256).NotNullable()
+                .WithColumn(nameof(WorkflowStep.Name)).AsString(256).Nullable()
                 .WithColumn(nameof(WorkflowStep.NextStepId)).AsInt32().Nullable()
-                .WithColumn(nameof(WorkflowStep.RoleAllowedId)).AsInt32().NotNullable();
+                .WithColumn(nameof(WorkflowStep.RoleAllowedId)).AsInt32().Nullable();
         }
     }
 }

@@ -15,6 +15,9 @@ public partial class SubUnitBuilder : EntityBuilder<Unit>
             .WithColumn(nameof(Unit.Id)).AsInt32().PrimaryKey().Identity()
             .WithColumn(nameof(Unit.Name)).AsString(256).Nullable()
             .WithColumn(nameof(Unit.DepartmentId)).AsInt32().Nullable()
-                .ForeignKey(nameof(Department), nameof(Department.Id));
-    }
+                .ForeignKey(nameof(Department), nameof(Department.Id))
+.WithColumn(nameof(Unit.ContactId)).AsInt32().Nullable();
+
+
+	}
 }

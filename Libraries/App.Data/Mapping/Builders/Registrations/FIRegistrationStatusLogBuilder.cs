@@ -7,23 +7,23 @@ namespace App.Data.Mapping.Builders.Registrations;
 /// <summary>
 /// Represents a FIRegistrationStatusLog entity builder
 /// </summary>
-public partial class FIRegistrationStatusLogBuilder : EntityBuilder<FIRegistrationStatusLog>
+public partial class FIRegistrationStatusLogBuilder : EntityBuilder<RegistrationStatusLog>
 {
     public override void MapEntity(CreateTableExpressionBuilder table)
     {
         table
-        .WithColumn(nameof(FIRegistrationStatusLog.Id)).AsInt32().PrimaryKey().Identity()
-        .WithColumn(nameof(FIRegistrationStatusLog.RegistrationId)).AsInt32().NotNullable()
+        .WithColumn(nameof(RegistrationStatusLog.Id)).AsInt32().PrimaryKey().Identity()
+        .WithColumn(nameof(RegistrationStatusLog.RegistrationId)).AsInt32().Nullable()
             .ForeignKey(nameof(Registration), nameof(Registration.Id))
 
         // Enum-based statuses
-        .WithColumn(nameof(FIRegistrationStatusLog.RegistrationStatus)).AsInt32().NotNullable()
-        .WithColumn(nameof(FIRegistrationStatusLog.ValidationStatus)).AsInt32().Nullable()
-        .WithColumn(nameof(FIRegistrationStatusLog.ApprovalStatus)).AsInt32().Nullable()
-        .WithColumn(nameof(FIRegistrationStatusLog.AuditStatus)).AsInt32().Nullable()
+        .WithColumn(nameof(RegistrationStatusLog.RegistrationStatus)).AsInt32().Nullable()
+        .WithColumn(nameof(RegistrationStatusLog.ValidationStatus)).AsInt32().Nullable()
+        .WithColumn(nameof(RegistrationStatusLog.ApprovalStatus)).AsInt32().Nullable()
+        .WithColumn(nameof(RegistrationStatusLog.AuditStatus)).AsInt32().Nullable()
 
-        .WithColumn(nameof(FIRegistrationStatusLog.PerformedBy)).AsInt32().NotNullable()
-        .WithColumn(nameof(FIRegistrationStatusLog.ActionDateUtc)).AsDateTime().NotNullable()
-        .WithColumn(nameof(FIRegistrationStatusLog.Remarks)).AsString(512).Nullable();
+        .WithColumn(nameof(RegistrationStatusLog.PerformedBy)).AsInt32().Nullable()
+        .WithColumn(nameof(RegistrationStatusLog.ActionDateUtc)).AsDateTime().Nullable()
+        .WithColumn(nameof(RegistrationStatusLog.Remarks)).AsString(512).Nullable();
     }
 }

@@ -8,11 +8,12 @@ namespace App.Data.Mapping.Builders.Registrations;
 /// <summary>
 /// Represents a FIDocument entity builder
 /// </summary>
-public partial class FIDocumentBuilder : EntityBuilder<FIDocument>
+public partial class FIDocumentBuilder : EntityBuilder<Document>
 {
     public override void MapEntity(CreateTableExpressionBuilder table)
     {
-        table.WithColumn(nameof(FIDocument.DocumentTypeId)).AsInt32().Nullable();
-        table.WithColumn(nameof(FIDocument.UploadedOnUtc)).AsDateTime2().NotNullable();
-    }
+        table.WithColumn(nameof(Document.DocumentTypeId)).AsInt32().Nullable();
+        table.WithColumn(nameof(Document.UploadedOnUtc)).AsDateTime2().Nullable();
+        table.WithColumn(nameof(Document.ContactId)).AsInt32().Nullable();
+	}
 }

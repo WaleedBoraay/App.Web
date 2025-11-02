@@ -31,7 +31,7 @@ namespace App.Data.Migrations.Installation
 
         public override void Up()
         {
-            Create.TableFor<FIDocument>();
+            Create.TableFor<Document>();
         }
     }
 }

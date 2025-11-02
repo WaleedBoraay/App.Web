@@ -2,6 +2,6 @@
 {
     public record class BaseAppEntityModel : BaseAppModel
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
     }
 }

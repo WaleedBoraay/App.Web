@@ -70,7 +70,7 @@ namespace App.Web.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid) return View(model);
             var currentUser = await _workContext.GetCurrentUserAsync();
-            var entity = new FIContact
+            var entity = new Contact
             {
                 RegistrationId = model.RegistrationId,
                 ContactTypeId = model.ContactTypeId,
@@ -146,7 +146,7 @@ namespace App.Web.Areas.Admin.Controllers
 
             await _registrationService.UpdateContactAsync(entity);
 
-            await _auditService.LogUpdateAsync("FIContact", model.Id, 0, comment: "Contact updated");
+            await _auditService.LogUpdateAsync("FIContact", model.Id.Value, 0, comment: "Contact updated");
 
             return RedirectToAction("Details", "Registrations", new { id = model.RegistrationId });
         }

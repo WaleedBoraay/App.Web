@@ -27,6 +27,11 @@ builder.Configuration
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
     .AddJsonFile(Path.Combine("App_Data", "corssettings.json"), optional: true, reloadOnChange: true)
     .AddEnvironmentVariables();
+builder.Services.AddMvc()
+	.AddJsonOptions(options =>
+	{
+		options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+	});
 foreach (var kv in builder.Configuration.AsEnumerable())
 {
     Console.WriteLine($"{kv.Key} = {kv.Value}");

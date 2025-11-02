@@ -1,34 +1,44 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using App.Core.Domain.Registrations;
+﻿using App.Core.Domain.Registrations;
 using App.Core.RepositoryServices;
 using App.Services.Common;
 using App.Services.Localization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace App.Services.Registrations
 {
     public class DocumentService : IDocumentService
     {
-        private readonly IRepository<FIDocument> _documentRepository;
+        private readonly IRepository<Document> _documentRepository;
         private readonly IRepository<RegistrationDocument> _registrationDocumentRepository;
         private readonly IRepository<InstituteDocument> _instituteDocumentRepository;
         private readonly ILocalizationService _localizationService;
 
-        public DocumentService(
-            IRepository<FIDocument> documentRepository,
+		private readonly string _uploadRoot;
+
+		public DocumentService(
+            IRepository<Document> documentRepository,
             ILocalizationService localizationService,
             IRepository<RegistrationDocument> registrationDocumentRepository,
-            IRepository<InstituteDocument> instituteDocumentRepository)
+            IRepository<InstituteDocument> instituteDocumentRepository,
+			IWebHostEnvironment env)
         {
             _documentRepository = documentRepository;
             _localizationService = localizationService;
             _registrationDocumentRepository = registrationDocumentRepository;
             _instituteDocumentRepository = instituteDocumentRepository;
+            _uploadRoot = Path.Combine(env.ContentRootPath, "wwwroot", "Uploads", "Documents");
 
-        }
+			if (!System.IO.Directory.Exists(_uploadRoot))
+				System.IO.Directory.CreateDirectory(_uploadRoot);
 
-        public async Task<FIDocument> GetByIdAsync(int id)
+		}
+
+        public async Task<Document> GetByIdAsync(int id)
             => await _documentRepository.GetByIdAsync(id);
 
         public async Task<IList<RegistrationDocument>> GetRegistrationDocumentsByRegistrationIdAsync(int registrationId)
@@ -42,7 +52,7 @@ namespace App.Services.Registrations
              query.Where(doc => doc.InstituteId == instituteId));
         }
 
-        public async Task<FIDocument> InsertAsync(FIDocument document)
+        public async Task<Document> InsertAsync(Document document)
         {
             if (document == null)
                 throw new KeyNotFoundException(await _localizationService.GetResourceAsync("Document.Insert.Null"));
@@ -52,7 +62,7 @@ namespace App.Services.Registrations
             return document;
         }
 
-        public async Task<FIDocument> UpdateAsync(FIDocument document)
+        public async Task<Document> UpdateAsync(Document document)
         {
             if (document == null)
                 throw new KeyNotFoundException(await _localizationService.GetResourceAsync("Document.Update.Null"));
@@ -72,7 +82,7 @@ namespace App.Services.Registrations
             await _localizationService.GetResourceAsync("Document.Delete.Success");
         }
 
-        public async Task<IList<FIDocument>> GetAllAsync()
+        public async Task<IList<Document>> GetAllAsync()
         {
             return await _documentRepository.GetAllAsync(query =>
                 query.OrderBy(doc => doc.UploadedOnUtc)
@@ -125,7 +135,7 @@ namespace App.Services.Registrations
                 t.Result.FirstOrDefault());
         }
 
-        public async Task<IList<FIDocument>> GetDocumentsByInstituteIdAsync(int instituteId)
+        public async Task<IList<Document>> GetDocumentsByInstituteIdAsync(int instituteId)
         {
             if (instituteId == 0)
                 throw new KeyNotFoundException(await _localizationService.GetResourceAsync("InstituteDocument.NotFound"));
@@ -136,7 +146,7 @@ namespace App.Services.Registrations
             var documentIds = instituteDocuments.Select(r => r.DocumentId).ToList();
 
             if (!documentIds.Any())
-                return new List<FIDocument>();
+                return new List<Document>();
 
             var documents = await _documentRepository.GetAllAsync(q =>
                 q.Where(d => documentIds.Contains(d.Id)));
@@ -176,7 +186,7 @@ namespace App.Services.Registrations
 
         }
 
-        public async Task AddDocumentToInstituteAsync(int instituteId, FIDocument document)
+        public async Task AddDocumentToInstituteAsync(int instituteId, Document document)
         {
             if (document == null)
                 throw new KeyNotFoundException(await _localizationService.GetResourceAsync("Document.Insert.Null"));
@@ -191,7 +201,7 @@ namespace App.Services.Registrations
             await _instituteDocumentRepository.InsertAsync(instituteDoc);
         }
 
-        public async Task AddDocumentToRegistrationAsync(int registrationId, FIDocument document)
+        public async Task AddDocumentToRegistrationAsync(int registrationId, Document document)
         {
             if (document == null)
                 throw new KeyNotFoundException(await _localizationService.GetResourceAsync("Document.Insert.Null"));
@@ -208,10 +218,34 @@ namespace App.Services.Registrations
             await _registrationDocumentRepository.InsertAsync(regDoc);
         }
 
-        public async Task<IList<FIDocument>> GetDocumentsByIdsAsync(int id)
+        public async Task<IList<Document>> GetDocumentsByIdsAsync(int id)
         {
             return await _documentRepository.GetAllAsync(q => q.Where(d => d.Id == id) );
 
 		}
-    }
+
+		public async Task<Document> UploadDocumentAsync(Document document, IFormFile file)
+		{
+			if (file == null || file.Length == 0)
+				throw new ArgumentException(await _localizationService.GetResourceAsync("Document.File.Invalid"));
+
+			// 🔹 توليد اسم فريد للملف
+			var uniqueName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+			var savePath = Path.Combine(_uploadRoot, uniqueName);
+
+			// 🔹 حفظ الملف فعليًا
+			using (var stream = new FileStream(savePath, FileMode.Create))
+			{
+				await file.CopyToAsync(stream);
+			}
+
+			document.FilePath = Path.Combine("wwwroot", "Uploads", "Documents", uniqueName)
+				.Replace("\\", "/");
+			document.UploadedOnUtc = DateTime.UtcNow;
+
+			await _documentRepository.InsertAsync(document);
+
+			return document;
+		}
+	}
 }

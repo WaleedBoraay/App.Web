@@ -30,7 +30,7 @@ namespace App.Web.Api.Controllers
         /// </summary>
         [HttpPost("upload")]
         [RequestSizeLimit(50_000_000)] // 50MB limit
-        public async Task<IActionResult> Upload([FromForm] int registrationId, [FromForm] int documentTypeId, [FromForm] IFormFile file)
+        public async Task<IActionResult> Upload([FromForm] int registrationId, [FromForm] int documentTypeId, [FromForm] int contactId, [FromForm] IFormFile file)
         {
             if (file == null || file.Length == 0)
                 return BadRequest(new { message = "File is required." });
@@ -49,14 +49,14 @@ namespace App.Web.Api.Controllers
                 await file.CopyToAsync(stream);
             }
 
-            var entity = new FIDocument
+            var entity = new Document
             {
                 FilePath = filePath,
                 UploadedOnUtc = System.DateTime.UtcNow
             };
 
             await _registrationService.AddDocumentAsync(registrationId, entity);
-            await _auditService.LogCreateAsync("FIDocument", entity.Id, 0, "Document uploaded");
+            await _auditService.LogCreateAsync("Document", entity.Id, 0, "Document uploaded");
 
             return Ok(new
             {

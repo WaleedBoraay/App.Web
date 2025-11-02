@@ -46,5 +46,8 @@ namespace App.Services.Audit
         Task InsertUserAuditTrailAsync(UserAuditTrail entry);
         Task UpdateUserAuditTrailAsync(UserAuditTrail entry);
         Task DeleteUserAuditTrailAsync(int id);
-    }
+
+		//Get by registration id
+        Task<IList<AuditTrail>> GetUserAuditTrailsByRegistrationIdAsync(int registrationId);
+	}
 }

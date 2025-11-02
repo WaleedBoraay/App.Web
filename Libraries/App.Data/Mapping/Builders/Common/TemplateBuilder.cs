@@ -11,11 +11,11 @@ namespace App.Data.Mapping.Builders.Common
         {
             table
                 .WithColumn(nameof(Template.Id)).AsInt32().PrimaryKey().Identity()
-                .WithColumn(nameof(Template.Name)).AsString(200).NotNullable()
-                .WithColumn(nameof(Template.TemplateType)).AsString(50).NotNullable()
-                .WithColumn(nameof(Template.Content)).AsString(int.MaxValue).NotNullable()
-                .WithColumn(nameof(Template.CreatedByUserId)).AsInt32().NotNullable()
-                .WithColumn(nameof(Template.CreatedOnUtc)).AsDateTime2().NotNullable();
+                .WithColumn(nameof(Template.Name)).AsString(200).Nullable()
+                .WithColumn(nameof(Template.TemplateType)).AsString(50).Nullable()
+                .WithColumn(nameof(Template.Content)).AsString(int.MaxValue).Nullable()
+                .WithColumn(nameof(Template.CreatedByUserId)).AsInt32().Nullable()
+                .WithColumn(nameof(Template.CreatedOnUtc)).AsDateTime2().Nullable();
         }
     }
 }

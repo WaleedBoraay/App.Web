@@ -11,8 +11,8 @@ public partial class LocalizedPropertyBuilder : EntityBuilder<LocalizedProperty>
 {
     public override void MapEntity(CreateTableExpressionBuilder table) => table
         .WithColumn(nameof(LocalizedProperty.Id)).AsInt32().PrimaryKey().Identity()
-        .WithColumn(nameof(LocalizedProperty.EntityId)).AsInt32().NotNullable()
-        .WithColumn(nameof(LocalizedProperty.LanguageId)).AsInt32().NotNullable()
+        .WithColumn(nameof(LocalizedProperty.EntityId)).AsInt32().Nullable()
+        .WithColumn(nameof(LocalizedProperty.LanguageId)).AsInt32().Nullable()
             .ForeignKey(nameof(Language), nameof(Language.Id))
         .WithColumn(nameof(LocalizedProperty.LocaleKeyGroup)).AsString(256).Nullable()
         .WithColumn(nameof(LocalizedProperty.LocaleKey)).AsString(256).Nullable()

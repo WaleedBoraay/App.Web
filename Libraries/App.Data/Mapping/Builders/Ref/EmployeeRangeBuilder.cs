@@ -11,7 +11,7 @@ public partial class EmployeeRangeBuilder : EntityBuilder<EmployeeRange>
 {
     public override void MapEntity(CreateTableExpressionBuilder table) => table
         .WithColumn(nameof(EmployeeRange.Id)).AsInt32().PrimaryKey().Identity()
-        .WithColumn(nameof(EmployeeRange.Name)).AsString(256).NotNullable()
+        .WithColumn(nameof(EmployeeRange.Name)).AsString(256).Nullable()
         .WithColumn(nameof(EmployeeRange.MinValue)).AsInt32().Nullable()
         .WithColumn(nameof(EmployeeRange.MaxValue)).AsInt32().Nullable();
 }

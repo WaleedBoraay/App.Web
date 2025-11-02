@@ -116,7 +116,11 @@ namespace App.Services.Users
                .FirstOrDefault();
 
         public async Task<AppUser> GetByUsernameAsync(string username)
-            => (await _userRepository.GetAllAsync(q => q.Where(u => u.Username == username))).FirstOrDefault();
+        {
+            return (await _userRepository.GetAllAsync(q =>
+                    q.Where(u => u.Username.ToLower() == username.ToLower())))
+               .FirstOrDefault();
+		}
         #endregion
 
         #region Security

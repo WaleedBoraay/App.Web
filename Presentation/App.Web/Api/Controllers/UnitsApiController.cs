@@ -1,5 +1,6 @@
 ﻿using App.Core.Domain.Organization;
 using App.Services.Organization;
+using App.Web.Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -10,17 +11,57 @@ namespace App.Web.Api.Controllers
     public class UnitsApiController : ControllerBase
     {
         private readonly IUnitServices _unitServices;
+        private readonly IDepartmentServices _departmentServices;
+        private readonly ISectorServices _sectorServices;
 
-		public UnitsApiController(IUnitServices unitServices)
+		public UnitsApiController(IUnitServices unitServices, IDepartmentServices departmentServices,ISectorServices sectorServices)
         {
             _unitServices = unitServices;
+            _departmentServices = departmentServices;
+            _sectorServices = sectorServices;
+		}
+
+        [HttpGet("getallunits")]
+		public async Task<IActionResult> GetAllUnits()
+        {
+            var units = await _unitServices.GetAllUnitsAsync();
+            var result = new List<UnitModel>();
+			foreach (var unit in units)
+            {
+                var department = await _departmentServices.GetDepartmentByIdAsync(unit.DepartmentId);
+                var sector = await _sectorServices.GetSectorByIdAsync(department.SectorId);
+				var model = new UnitModel
+                {
+                    Id = unit.Id,
+                    UnitName = unit.Name,
+                    DepartmentId = unit.DepartmentId,
+                    DepartmentName = department != null ? department.Name : string.Empty,
+                    SectorName = sector != null ? sector.Name : string.Empty,
+				};
+                result.Add(model);
+
+			}
+			return Ok(result);
         }
 
-        [HttpGet("department/{departmentId:int}")]
+
+		[HttpGet("department/{departmentId:int}")]
         public async Task<IActionResult> GetByUnit(int departmentId)
         {
             var units = await _unitServices.GetUnitsByDepartmentIdAsync(departmentId);
-            return Ok(units);
+            foreach (var unit in units)
+                {
+                var department = await _departmentServices.GetDepartmentByIdAsync(unit.DepartmentId);
+                var model = new UnitModel
+                {
+                    Id = unit.Id,
+                    UnitName = unit.Name,
+                    DepartmentId = unit.DepartmentId,
+                    DepartmentName = department != null ? department.Name : string.Empty,
+
+                };
+			}
+			return Ok(units);
         }
 
         [HttpGet("{id:int}")]
@@ -71,5 +112,5 @@ namespace App.Web.Api.Controllers
             await _unitServices.DeleteUnitAsync(unit);
             return NoContent();
         }
-    }
+	}
 }

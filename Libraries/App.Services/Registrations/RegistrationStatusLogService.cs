@@ -10,28 +10,28 @@ namespace App.Services.Registrations
 {
     public class RegistrationStatusLogService : BaseService, IRegistrationStatusLogService
     {
-        private readonly IRepository<FIRegistrationStatusLog> _statusLogRepository;
+        private readonly IRepository<RegistrationStatusLog> _statusLogRepository;
         private readonly ILocalizationService _localizationService;
 
         public RegistrationStatusLogService(
-            IRepository<FIRegistrationStatusLog> statusLogRepository,
+            IRepository<RegistrationStatusLog> statusLogRepository,
             ILocalizationService localizationService)
         {
             _statusLogRepository = statusLogRepository;
             _localizationService = localizationService;
         }
 
-        public async Task<FIRegistrationStatusLog> GetByIdAsync(int id)
+        public async Task<RegistrationStatusLog> GetByIdAsync(int id)
             => await _statusLogRepository.GetByIdAsync(id);
 
-        public async Task<IList<FIRegistrationStatusLog>> GetByRegistrationIdAsync(int registrationId)
+        public async Task<IList<RegistrationStatusLog>> GetByRegistrationIdAsync(int registrationId)
             => await _statusLogRepository.GetAllAsync(q => q.Where(l => l.RegistrationId == registrationId)
                                                             .OrderByDescending(l => l.ActionDateUtc));
 
-        public async Task<ServiceResult<FIRegistrationStatusLog>> InsertAsync(FIRegistrationStatusLog log)
+        public async Task<ServiceResult<RegistrationStatusLog>> InsertAsync(RegistrationStatusLog log)
         {
             if (log == null)
-                return Failed<FIRegistrationStatusLog>(await _localizationService.GetResourceAsync("StatusLog.Insert.Null"));
+                return Failed<RegistrationStatusLog>(await _localizationService.GetResourceAsync("StatusLog.Insert.Null"));
 
             await _statusLogRepository.InsertAsync(log);
             return Success(log, await _localizationService.GetResourceAsync("StatusLog.Insert.Success"));

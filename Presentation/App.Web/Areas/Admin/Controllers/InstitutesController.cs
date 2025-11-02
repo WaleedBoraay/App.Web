@@ -132,7 +132,7 @@ namespace App.Web.Areas.Admin.Controllers
             // لو فيه LicenseFile
             if (LicenseFile != null && LicenseFile.Length > 0)
             {
-                var doc = new FIDocument
+                var doc = new Document
                 {
                     FilePath = await SaveFileAsync(LicenseFile),
                     UploadedOnUtc = DateTime.UtcNow,
@@ -143,7 +143,7 @@ namespace App.Web.Areas.Admin.Controllers
 
             if (DocumentFile != null && DocumentFile.Length > 0)
             {
-                var doc = new FIDocument
+                var doc = new Document
                 {
                     FilePath = await SaveFileAsync(DocumentFile),
                     UploadedOnUtc = DateTime.UtcNow,
@@ -398,7 +398,7 @@ namespace App.Web.Areas.Admin.Controllers
                 await file.CopyToAsync(stream);
             }
 
-            var document = new FIDocument
+            var document = new Document
             {
                 FilePath = $"/uploads/{uniqueName}",
                 UploadedOnUtc = DateTime.UtcNow,

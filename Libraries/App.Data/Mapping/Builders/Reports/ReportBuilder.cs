@@ -10,8 +10,8 @@ namespace App.Data.Mapping.Builders.Reports
         public override void MapEntity(CreateTableExpressionBuilder table)
         {
             table
-                .WithColumn(nameof(Report.Title)).AsString(200).NotNullable()
-                .WithColumn(nameof(Report.ReportType)).AsString(50).NotNullable()
+                .WithColumn(nameof(Report.Title)).AsString(200).Nullable()
+                .WithColumn(nameof(Report.ReportType)).AsString(50).Nullable()
                 .WithColumn(nameof(Report.FilePath)).AsString(500).Nullable();
         }
     }

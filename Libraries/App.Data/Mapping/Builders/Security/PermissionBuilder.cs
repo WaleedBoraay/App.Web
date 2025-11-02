@@ -11,10 +11,10 @@ namespace App.Data.Mapping.Builders.Security
         {
             table
                 .WithColumn(nameof(Permission.Id)).AsInt32().PrimaryKey().Identity()
-                .WithColumn(nameof(Permission.SystemName)).AsString(256).NotNullable().Unique()
+                .WithColumn(nameof(Permission.SystemName)).AsString(256).Nullable().Unique()
                 .WithColumn(nameof(Permission.Category)).AsString(128).Nullable()
                 .WithColumn(nameof(Permission.Description)).AsString(512).Nullable()
-                .WithColumn(nameof(Permission.IsActive)).AsBoolean().NotNullable();
+                .WithColumn(nameof(Permission.IsActive)).AsBoolean().Nullable();
         }
     }
 

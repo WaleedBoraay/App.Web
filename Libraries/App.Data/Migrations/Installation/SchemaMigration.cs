@@ -71,10 +71,10 @@ namespace App.Data.Migrations.Installation
 
             // ===== Registrations =====
             Create.TableFor<Registration>();
-            Create.TableFor<FIContact>();
-            Create.TableFor<FIDocument>();
+            Create.TableFor<Contact>();
+            Create.TableFor<Document>();
             Create.TableFor<RegistrationDocument>();
-            Create.TableFor<FIRegistrationStatusLog>();
+            Create.TableFor<RegistrationStatusLog>();
             Create.TableFor<WorkflowStep>();
 
             // ===== Audit =====

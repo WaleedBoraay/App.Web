@@ -22,39 +22,42 @@ namespace App.Services
 
         }
 
-        /// <summary>
-        /// Get current user from HttpContext (based on ClaimsPrincipal)
-        /// </summary>
-        public async Task<AppUser> GetCurrentUserAsync()
-        {
-            if (_cachedUser != null)
-                return _cachedUser;
+		/// <summary>
+		/// Get current user from HttpContext (based on ClaimsPrincipal)
+		/// </summary>
+		public async Task<AppUser> GetCurrentUserAsync()
+		{
+			if (_cachedUser != null)
+				return _cachedUser;
 
-            var user = _httpContextAccessor.HttpContext?.User;
-            if (user == null || !user.Identity.IsAuthenticated)
-                return null;
+			var principal = _httpContextAccessor.HttpContext?.User;
+			if (principal == null || !principal.Identity?.IsAuthenticated == true)
+				return null;
 
-            var userIdClaim = user.FindFirst(ClaimTypes.NameIdentifier);
-            if (userIdClaim == null)
-                return null;
+			var id = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+			if (string.IsNullOrEmpty(id))
+				return null;
 
-            var emailClaim = user.FindFirst(ClaimTypes.Email);
+			var email = principal.FindFirst(ClaimTypes.Email)?.Value;
+			var username = principal.Identity?.Name ?? principal.FindFirst(ClaimTypes.Name)?.Value;
+			var registrationClaim = principal.FindFirst("RegistrationId")?.Value;
 
-            _cachedUser = new AppUser
-            {
-                Id = int.Parse(userIdClaim.Value),
-                Username = user.Identity.Name,
-                Email = emailClaim?.Value
-            };
+			_cachedUser = new AppUser
+			{
+				Id = int.Parse(id),
+				Username = username,
+				Email = email,
+				RegistrationId = int.TryParse(registrationClaim, out var regId) ? regId : (int?)null
+			};
 
-            return await Task.FromResult(_cachedUser);
-        }
+			return await Task.FromResult(_cachedUser);
+		}
 
 
-        /// <summary>
-        /// Manually set current user (useful for system tasks or testing)
-        /// </summary>
-        public async Task SetCurrentUserAsync(AppUser user = null)
+		/// <summary>
+		/// Manually set current user (useful for system tasks or testing)
+		/// </summary>
+		public async Task SetCurrentUserAsync(AppUser user = null)
         {
             _cachedUser = user;
             await Task.CompletedTask;

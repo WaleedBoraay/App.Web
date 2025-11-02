@@ -71,20 +71,5 @@ namespace App.Web.Areas.Admin.Models.Registrations
         public IEnumerable<SelectListItem> AvailableCountries { get; set; } = new List<SelectListItem>();
         public string? Address { get; set; }
 
-        public IEnumerable<SelectListItem> AvailableLicenseSectors
-        {
-            get
-            {
-                foreach (LicenseSector sector in Enum.GetValues(typeof(LicenseSector)))
-                {
-                    yield return new SelectListItem
-                    {
-                        Text = sector.ToString(),
-                        Value = ((int)sector).ToString()
-                    };
-                }
-            }
-        }
-
     }
 }

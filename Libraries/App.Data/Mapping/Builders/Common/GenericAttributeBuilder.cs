@@ -14,11 +14,11 @@ namespace App.Data.Mapping.Builders.Common
         {
             table
                 .WithColumn(nameof(GenericAttribute.Id)).AsInt32().PrimaryKey().Identity()
-                .WithColumn(nameof(GenericAttribute.EntityId)).AsInt32().NotNullable()
-                .WithColumn(nameof(GenericAttribute.KeyGroup)).AsString(256).NotNullable()
-                .WithColumn(nameof(GenericAttribute.Key)).AsString(256).NotNullable()
+                .WithColumn(nameof(GenericAttribute.EntityId)).AsInt32().Nullable()
+                .WithColumn(nameof(GenericAttribute.KeyGroup)).AsString(256).Nullable()
+                .WithColumn(nameof(GenericAttribute.Key)).AsString(256).Nullable()
                 .WithColumn(nameof(GenericAttribute.Value)).AsString(4000).Nullable()
-                .WithColumn(nameof(GenericAttribute.StoreId)).AsInt32().NotNullable()
+                .WithColumn(nameof(GenericAttribute.StoreId)).AsInt32().Nullable()
                 .WithColumn(nameof(GenericAttribute.CreatedOrUpdatedDateUTC)).AsDateTime2().Nullable();
         }
     }

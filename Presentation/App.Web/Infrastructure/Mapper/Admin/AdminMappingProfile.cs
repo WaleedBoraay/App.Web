@@ -20,9 +20,9 @@ namespace App.Web.Infrastructure.Mapper.Admin
 
             // Registrations
             CreateMap<Registration, RegistrationModel>().ReverseMap();
-            CreateMap<FIContact, ContactModel>().ReverseMap();
-            CreateMap<FIDocument, DocumentModel>().ReverseMap();
-            CreateMap<FIRegistrationStatusLog, StatusLogModel>().ReverseMap();
+            CreateMap<Contact, ContactModel>().ReverseMap();
+            CreateMap<Document, DocumentModel>().ReverseMap();
+            CreateMap<RegistrationStatusLog, StatusLogModel>().ReverseMap();
         }
     }
 }

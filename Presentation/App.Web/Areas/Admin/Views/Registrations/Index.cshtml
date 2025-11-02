@@ -7,7 +7,7 @@
         <tr>
             <th>
                 <h6 class="fs-4 fw-semibold mb-0">Institution</h6>
-                </th>
+            </th>
             <th><h6 class="fs-4 fw-semibold mb-0">License</h6></th>
             <th><h6 class="fs-4 fw-semibold mb-0">Status</h6></th>
             <th><h6 class="fs-4 fw-semibold mb-0">Created On</h6></th>
@@ -23,23 +23,23 @@
                 <td>@item.LicenseNumber</td>
                 <td>
                     <span class="badge" @(item.Status switch
-                          {
+                                        {
                                             RegistrationStatus.Draft => "bg-primary-subtle text-primary",
                                             RegistrationStatus.Submitted => "bg-primary-subtle text-primary",
                                             RegistrationStatus.Approved => "bg-success-subtle text-success",
                                             RegistrationStatus.ReturnedForEdit => "bg-danger-subtle text-danger",
-                              _ => "bg-light text-dark"
-                          })">
-                    @item.Status
-                </span>
-            </td>
-            <td>@item.CreatedOnUtc</td>
-            <td>@item.CreatedByUserName</td>
-            <td>
-                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">Details</a>
+                                            _ => "bg-light text-dark"
+                                        })">
+                        @item.Status
+                    </span>
+                </td>
+                <td>@item.CreatedOnUtc</td>
+                <td>@item.CreatedByUserName</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">Details</a>
 
                     @* Maker actions *@
-                @if (Model.IsMaker && item.StatusId == (int)RegistrationStatus.Draft || item.StatusId == (int)RegistrationStatus.ReturnedForEdit)
+                    @if (Model.IsMaker && item.StatusId == (int)RegistrationStatus.Draft || item.StatusId == (int)RegistrationStatus.ReturnedForEdit)
                     {
                         <form asp-action="Submit" asp-route-id="@item.Id" method="post" style="display:inline">
                             <button type="submit" class="btn btn-success">Submit</button>
@@ -68,7 +68,7 @@
     <a asp-action="Create" asp-controller="Registrations" class="btn btn-success">+ New Registration</a>
 }
 
-<table class="table text-nowrap mb-0 align-middle">
+@* <table class="table text-nowrap mb-0 align-middle">
     <thead class="text-dark fs-4">
         <tr>
             <th>
@@ -90,7 +90,7 @@
         <tr>
             <td>
                 <div class="d-flex align-items-center">
-                    <img src=".~/Modern/assets/images/profile/user-10.jpg" class="rounded-circle" width="40" height="40">
+                    <img src="~/Modern/assets/images/profile/user-10.jpg" class="rounded-circle" width="40" height="40">
                     <div class="ms-3">
                         <h6 class="fs-4 fw-semibold mb-0">Olivia Rhye</h6>
                     </div>
@@ -102,10 +102,10 @@
             <td>
                 <div class="d-flex align-items-center">
                     <a href="javascript:void(0)">
-                        <img src=".~/Modern/assets/images/profile/user-4.jpg" class="rounded-circle me-n2 card-hover border border-2 border-white" width="39" height="39">
+                        <img src="~/Modern/assets/images/profile/user-4.jpg" class="rounded-circle me-n2 card-hover border border-2 border-white" width="39" height="39">
                     </a>
                     <a href="javascript:void(0)">
-                        <img src=".~/Modern/assets/images/profile/user-2.jpg" class="rounded-circle me-n2 card-hover border border-2 border-white" width="39" height="39">
+                        <img src="~/Modern/assets/images/profile/user-2.jpg" class="rounded-circle me-n2 card-hover border border-2 border-white" width="39" height="39">
                     </a>
                 </div>
             </td>
@@ -134,7 +134,7 @@
         <tr>
             <td>
                 <div class="d-flex align-items-center">
-                    <img src=".~/Modern/assets/images/profile/user-2.jpg" class="rounded-circle" width="40" height="40">
+                    <img src="~/Modern/assets/images/profile/user-2.jpg" class="rounded-circle" width="40" height="40">
                     <div class="ms-3">
                         <h6 class="fs-4 fw-semibold mb-0">Barbara Steele</h6>
                     </div>
@@ -146,13 +146,13 @@
             <td>
                 <div class="d-flex align-items-center">
                     <a href="javascript:void(0)">
-                        <img src=".~/Modern/assets/images/profile/user-5.jpg" class="rounded-circle me-n2 card-hover border border-2 border-white" width="39" height="39">
+                        <img src="~/Modern/assets/images/profile/user-5.jpg" class="rounded-circle me-n2 card-hover border border-2 border-white" width="39" height="39">
                     </a>
                     <a href="javascript:void(0)">
-                        <img src=".~/Modern/assets/images/profile/user-2.jpg" class="rounded-circle me-n2 card-hover border border-2 border-white" width="39" height="39">
+                        <img src="~/Modern/assets/images/profile/user-2.jpg" class="rounded-circle me-n2 card-hover border border-2 border-white" width="39" height="39">
                     </a>
                     <a href="javascript:void(0)">
-                        <img src=".~/Modern/assets/images/profile/user-3.jpg" class="rounded-circle me-n2 card-hover border border-2 border-white" width="39" height="39">
+                        <img src="~/Modern/assets/images/profile/user-3.jpg" class="rounded-circle me-n2 card-hover border border-2 border-white" width="39" height="39">
                     </a>
                 </div>
             </td>
@@ -181,7 +181,7 @@
         <tr>
             <td>
                 <div class="d-flex align-items-center">
-                    <img src=".~/Modern/assets/images/profile/user-3.jpg" class="rounded-circle" width="40" height="40">
+                    <img src="~/Modern/assets/images/profile/user-3.jpg" class="rounded-circle" width="40" height="40">
                     <div class="ms-3">
                         <h6 class="fs-4 fw-semibold mb-0">Leonard Gordon</h6>
                     </div>
@@ -193,10 +193,10 @@
             <td>
                 <div class="d-flex align-items-center">
                     <a href="javascript:void(0)">
-                        <img src=".~/Modern/assets/images/profile/user-3.jpg" class="rounded-circle me-n2 card-hover border border-2 border-white" width="39" height="39">
+                        <img src="~/Modern/assets/images/profile/user-3.jpg" class="rounded-circle me-n2 card-hover border border-2 border-white" width="39" height="39">
                     </a>
                     <a href="javascript:void(0)">
-                        <img src=".~/Modern/assets/images/profile/user-2.jpg" class="rounded-circle me-n2 card-hover border border-2 border-white" width="39" height="39">
+                        <img src="~/Modern/assets/images/profile/user-2.jpg" class="rounded-circle me-n2 card-hover border border-2 border-white" width="39" height="39">
                     </a>
                 </div>
             </td>
@@ -225,7 +225,7 @@
         <tr>
             <td>
                 <div class="d-flex align-items-center">
-                    <img src=".~/Modern/assets/images/profile/user-4.jpg" class="rounded-circle" width="40" height="40">
+                    <img src="~/Modern/assets/images/profile/user-4.jpg" class="rounded-circle" width="40" height="40">
                     <div class="ms-3">
                         <h6 class="fs-4 fw-semibold mb-0">Evelyn Pope</h6>
                     </div>
@@ -237,13 +237,13 @@
             <td>
                 <div class="d-flex align-items-center">
                     <a href="javascript:void(0)">
-                        <img src=".~/Modern/assets/images/profile/user-3.jpg" class="rounded-circle me-n2 card-hover border border-2 border-white" width="39" height="39">
+                        <img src="~/Modern/assets/images/profile/user-3.jpg" class="rounded-circle me-n2 card-hover border border-2 border-white" width="39" height="39">
                     </a>
                     <a href="javascript:void(0)">
-                        <img src=".~/Modern/assets/images/profile/user-2.jpg" class="rounded-circle me-n2 card-hover border border-2 border-white" width="39" height="39">
+                        <img src="~/Modern/assets/images/profile/user-2.jpg" class="rounded-circle me-n2 card-hover border border-2 border-white" width="39" height="39">
                     </a>
                     <a href="javascript:void(0)">
-                        <img src=".~/Modern/assets/images/profile/user-5.jpg" class="rounded-circle me-n2 card-hover border border-2 border-white" width="39" height="39">
+                        <img src="~/Modern/assets/images/profile/user-5.jpg" class="rounded-circle me-n2 card-hover border border-2 border-white" width="39" height="39">
                     </a>
                 </div>
             </td>
@@ -272,7 +272,7 @@
         <tr>
             <td>
                 <div class="d-flex align-items-center">
-                    <img src=".~/Modern/assets/images/profile/user-5.jpg" class="rounded-circle" width="40" height="40">
+                    <img src="~/Modern/assets/images/profile/user-5.jpg" class="rounded-circle" width="40" height="40">
                     <div class="ms-3">
                         <h6 class="fs-4 fw-semibold mb-0">Tommy Garza</h6>
                     </div>
@@ -284,10 +284,10 @@
             <td>
                 <div class="d-flex align-items-center">
                     <a href="javascript:void(0)">
-                        <img src=".~/Modern/assets/images/profile/user-5.jpg" class="rounded-circle me-n2 card-hover border border-2 border-white" width="39" height="39">
+                        <img src="~/Modern/assets/images/profile/user-5.jpg" class="rounded-circle me-n2 card-hover border border-2 border-white" width="39" height="39">
                     </a>
                     <a href="javascript:void(0)">
-                        <img src=".~/Modern/assets/images/profile/user-6.jpg" class="rounded-circle me-n2 card-hover border border-2 border-white" width="39" height="39">
+                        <img src="~/Modern/assets/images/profile/user-6.jpg" class="rounded-circle me-n2 card-hover border border-2 border-white" width="39" height="39">
                     </a>
                 </div>
             </td>
@@ -316,7 +316,7 @@
         <tr>
             <td>
                 <div class="d-flex align-items-center">
-                    <img src=".~/Modern/assets/images/profile/user-6.jpg" class="rounded-circle" width="40" height="40">
+                    <img src="~/Modern/assets/images/profile/user-6.jpg" class="rounded-circle" width="40" height="40">
                     <div class="ms-3">
                         <h6 class="fs-4 fw-semibold mb-0">James Smith</h6>
                     </div>
@@ -328,10 +328,10 @@
             <td>
                 <div class="d-flex align-items-center">
                     <a href="javascript:void(0)">
-                        <img src=".~/Modern/assets/images/profile/user-2.jpg" class="rounded-circle me-n2 card-hover border border-2 border-white" width="39" height="39">
+                        <img src="~/Modern/assets/images/profile/user-2.jpg" class="rounded-circle me-n2 card-hover border border-2 border-white" width="39" height="39">
                     </a>
                     <a href="javascript:void(0)">
-                        <img src=".~/Modern/assets/images/profile/user-4.jpg" class="rounded-circle me-n2 card-hover border border-2 border-white" width="39" height="39">
+                        <img src="~/Modern/assets/images/profile/user-4.jpg" class="rounded-circle me-n2 card-hover border border-2 border-white" width="39" height="39">
                     </a>
                 </div>
             </td>
@@ -358,5 +358,5 @@
             </td>
         </tr>
     </tbody>
-</table>
+</table> *@
 

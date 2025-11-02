@@ -21,7 +21,7 @@ namespace App.Web.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index(
             string entityName,
-            int? userId,
+            int? entityId,
             DateTime? fromDate,
             DateTime? toDate,
             int pageIndex = 1,
@@ -31,6 +31,9 @@ namespace App.Web.Areas.Admin.Controllers
 
             if (!string.IsNullOrEmpty(entityName))
                 logs = logs.Where(l => l.EntityName == entityName).ToList();
+
+          if (entityId.HasValue)
+                logs = logs.Where(l => l.EntityId == entityId).ToList();
 
             if (fromDate.HasValue)
                 logs = logs.Where(l => l.ChangedOnUtc >= fromDate.Value).ToList();
@@ -60,7 +63,7 @@ namespace App.Web.Areas.Admin.Controllers
             var model = new AuditTrailSearchModel
             {
                 EntityName = entityName,
-                UserId = userId,
+                EntityId = entityId,
                 FromDate = fromDate,
                 ToDate = toDate,
                 PageIndex = pageIndex,

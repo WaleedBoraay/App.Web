@@ -9,8 +9,8 @@
                class="form-control" placeholder="Entity Name" />
     </div>
     <div class="col-md-2">
-        <input type="number" name="userId" value="@Model.UserId"
-               class="form-control" placeholder="User Id" />
+        <input type="number" name="entityId" value="@Model.EntityId"
+               class="form-control" placeholder="Entity Id" />
     </div>
     <div class="col-md-2">
         <input type="date" name="fromDate" value="@(Model.FromDate?.ToString("yyyy-MM-dd"))" class="form-control" />
@@ -89,7 +89,7 @@
                 <a class="page-link" asp-action="Index" asp-route-pageIndex="@(Model.PageIndex - 1)"
                    asp-route-pageSize="@Model.PageSize"
                    asp-route-entityName="@Model.EntityName"
-                   asp-route-userId="@Model.UserId"
+                   asp-route-entityId="@Model.EntityId"
                    asp-route-fromDate="@(Model.FromDate?.ToString("yyyy-MM-dd"))"
                    asp-route-toDate="@(Model.ToDate?.ToString("yyyy-MM-dd"))">Previous</a>
             </li>
@@ -100,7 +100,7 @@
                     <a class="page-link" asp-action="Index" asp-route-pageIndex="@i"
                        asp-route-pageSize="@Model.PageSize"
                        asp-route-entityName="@Model.EntityName"
-                       asp-route-userId="@Model.UserId"
+                       asp-route-entityId="@Model.EntityId"
                        asp-route-fromDate="@(Model.FromDate?.ToString("yyyy-MM-dd"))"
                        asp-route-toDate="@(Model.ToDate?.ToString("yyyy-MM-dd"))">@i</a>
                 </li>
@@ -110,7 +110,7 @@
                 <a class="page-link" asp-action="Index" asp-route-pageIndex="@(Model.PageIndex + 1)"
                    asp-route-pageSize="@Model.PageSize"
                    asp-route-entityName="@Model.EntityName"
-                   asp-route-userId="@Model.UserId"
+                   asp-route-entityId="@Model.EntityId"
                    asp-route-fromDate="@(Model.FromDate?.ToString("yyyy-MM-dd"))"
                    asp-route-toDate="@(Model.ToDate?.ToString("yyyy-MM-dd"))">Next</a>
             </li>

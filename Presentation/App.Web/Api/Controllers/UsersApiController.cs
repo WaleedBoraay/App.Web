@@ -1,15 +1,16 @@
-﻿using App.Core.Domain.Users;
+﻿using App.Core.Domain.Registrations;
+using App.Core.Domain.Users;
 using App.Core.Security;
 using App.Services;
 using App.Services.Notifications;
 using App.Services.Organization;
+using App.Services.Registrations;
 using App.Services.Security;
 using App.Services.Users;
 using App.Web.Areas.Admin.Models;
 using App.Web.Areas.Admin.Models.Users;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Graph.Models;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -30,6 +31,7 @@ namespace App.Web.Api.Controllers
         private readonly IDepartmentServices _departmentService;
         private readonly IUnitServices _unitService;
         private readonly IEmailService _emailService;
+        private readonly IContactService _contactService;
 
 		public UsersApiController(
             IUserService userService,
@@ -41,7 +43,8 @@ namespace App.Web.Api.Controllers
             ISectorServices sectorServices,
             IDepartmentServices departmentServices,
             IUnitServices unitServices,
-            IEmailService emailService)
+            IEmailService emailService,
+            IContactService contactService)
         {
             _userService = userService;
             _workContext = workContext;
@@ -53,11 +56,18 @@ namespace App.Web.Api.Controllers
             _departmentService = departmentServices;
             _unitService = unitServices;
             _emailService = emailService;
+            _contactService = contactService;
 		}
 
+		private async Task<string> GenerateRandomPassword(int length = 8)
+		{
+			const string validChars = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*?_-";
+			var random = new Random();
+			return new string(Enumerable.Repeat(validChars, length)
+			  .Select(s => s[random.Next(s.Length)]).ToArray());
+		}
 
-
-        [HttpGet]
+		[HttpGet]
         public async Task<IActionResult> GetAll()
         {
             var sectors = await _sectorService.GetAllSectorsAsync();
@@ -113,13 +123,18 @@ namespace App.Web.Api.Controllers
                 UnitId = model.UnitId
             };
 
-            //var currentUser = await _workContext.GetCurrentUserAsync();
-            var user = await _userService.InsertAsync(entity, model.Password, 0);
+
+            var password = await GenerateRandomPassword(10);
+
+            var currentPassword = model.Password ?? password;
+			//var currentUser = await _workContext.GetCurrentUserAsync();
+			var user = await _userService.InsertAsync(entity, model.Password, 0);
+
             //Send email to userwith password setup instructions could be added here
             if (user != null)
             {
 
-				var emailBody = $"Dear {user.Username},<br/><br/>" +
+				var emailBody = $"Dear {user.Email},<br/><br/>" +
 				$"Your account has been created.<br/>" +
 				$"Username: {user.Username}<br/>" +
 				$"Password: {model.Password}<br/><br/>" +
@@ -167,8 +182,12 @@ namespace App.Web.Api.Controllers
         {
             var user = await _userService.GetByIdAsync(id);
             if (user == null) return NotFound();
-
-            await _userService.DeleteAsync(user.Id);
+            var roles = await _roleService.GetRolesByUserIdAsync(id);
+            foreach (var role in roles)
+            {
+                await _roleService.RemoveUserFromRoleAsync(id, role.Id);
+			}
+			await _userService.DeleteAsync(user.Id);
             return Ok(new { success = true });
         }
 

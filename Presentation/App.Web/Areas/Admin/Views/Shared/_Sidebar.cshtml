@@ -6,11 +6,13 @@
 @inject ILocalizationService _localizationService
 @inject ISettingService _settingService
 
-
 @{
     var currentUser = await _workContext.GetCurrentUserAsync();
-
     var logoUrl = await _settingService.GetAsync("Branding.LogoUrl", "/images/logo.png");
+
+    // Badges (optional - override via ViewData["Badge_Tables"] / ViewData["Badge_Forms"])
+    var tablesBadge = (ViewData["Badge_Tables"] as int?) ?? 2;
+    var formsBadge = (ViewData["Badge_Forms"] as int?) ?? 5;
 
     // Pages
     bool canDashboard = await _acl.CanDoAsync(currentUser.Id, AppPermissions.System_Admin);
@@ -36,6 +38,11 @@
     bool canResources = await _acl.CanDoAsync(currentUser.Id, "Localization.Resource.Manage");
 }
 
+<!-- ---------------------------------- -->
+<!-- Start Vertical Layout Sidebar -->
+<!-- ---------------------------------- -->
+
+@* 
 <nav id="sidebar" class="sidebar js-sidebar">
     <div class="sidebar-content js-simplebar">
         <a class="sidebar-brand" href="/Admin">
@@ -44,13 +51,14 @@
 
         <ul class="sidebar-nav">
 
-            <li class="sidebar-header">Pages</li>
+            <li class="sidebar-section">Pages</li>
 
             @if (canDashboard)
             {
                 <li class="sidebar-item active">
                     <a class="sidebar-link" href="/admin">
-                        <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
+                        <i class="align-middle" data-feather="sliders"></i>
+                        <span class="sidebar-label">Dashboard</span>
                     </a>
                 </li>
             }
@@ -59,7 +67,9 @@
             {
                 <li class="sidebar-item">
                     <a class="sidebar-link" href="/Admin/Registrations">
-                        <i class="align-middle" data-feather="user"></i> <span class="align-middle">Entity Registrations</span>
+                        <i class="align-middle" data-feather="user"></i>
+                        <span class="sidebar-label">Entity Registrations</span>
+                        <i class="sidebar-chevron" data-feather="chevron-right"></i>
                     </a>
                 </li>
             }
@@ -68,7 +78,9 @@
             {
                 <li class="sidebar-item">
                     <a class="sidebar-link" href="/Admin/Institutes">
-                        <i class="align-middle" data-feather="user"></i> <span class="align-middle">Entity Profile</span>
+                        <i class="align-middle" data-feather="user"></i>
+                        <span class="sidebar-label">Entity Profile</span>
+                        <i class="sidebar-chevron" data-feather="chevron-right"></i>
                     </a>
                 </li>
             }
@@ -77,18 +89,22 @@
             {
                 <li class="sidebar-item">
                     <a class="sidebar-link" href="/Admin/Users">
-                        <i class="align-middle" data-feather="user"></i> <span class="align-middle">Admin Users</span>
+                        <i class="align-middle" data-feather="user"></i>
+                        <span class="sidebar-label">Admin Users</span>
+                        <i class="sidebar-chevron" data-feather="chevron-right"></i>
                     </a>
                 </li>
             }
 
-            <li class="sidebar-header">Organization</li>
+            <li class="sidebar-section">Organization</li>
 
             @if (canOrganization)
             {
                 <li class="sidebar-item">
                     <a class="sidebar-link" href="/Admin/Organization/">
-                        <i class="align-middle" data-feather="square"></i> <span class="align-middle">Organization</span>
+                        <i class="align-middle" data-feather="square"></i>
+                        <span class="sidebar-label">Organization</span>
+                        <i class="sidebar-chevron" data-feather="chevron-right"></i>
                     </a>
                 </li>
             }
@@ -97,7 +113,9 @@
             {
                 <li class="sidebar-item">
                     <a class="sidebar-link" href="/Admin/Sectors/">
-                        <i class="align-middle" data-feather="square"></i> <span class="align-middle">Bank sector</span>
+                        <i class="align-middle" data-feather="square"></i>
+                        <span class="sidebar-label">Bank sector</span>
+                        <i class="sidebar-chevron" data-feather="chevron-right"></i>
                     </a>
                 </li>
             }
@@ -106,7 +124,9 @@
             {
                 <li class="sidebar-item">
                     <a class="sidebar-link" href="/Admin/Departments/">
-                        <i class="align-middle" data-feather="square"></i> <span class="align-middle">Departments</span>
+                        <i class="align-middle" data-feather="square"></i>
+                        <span class="sidebar-label">Departments</span>
+                        <i class="sidebar-chevron" data-feather="chevron-right"></i>
                     </a>
                 </li>
             }
@@ -115,19 +135,22 @@
             {
                 <li class="sidebar-item">
                     <a class="sidebar-link" href="/Admin/Units/">
-                        <i class="align-middle" data-feather="square"></i> <span class="align-middle">Units</span>
+                        <i class="align-middle" data-feather="square"></i>
+                        <span class="sidebar-label">Units</span>
+                        <i class="sidebar-chevron" data-feather="chevron-right"></i>
                     </a>
                 </li>
             }
 
-            <li class="sidebar-header">Users & Access Control</li>
+            <li class="sidebar-section">Users &amp; Access Control</li>
 
             @if (canRoles)
             {
-
                 <li class="sidebar-item">
                     <a class="sidebar-link" href="/Admin/Roles/">
-                        <i class="align-middle" data-feather="square"></i> <span class="align-middle">Roles</span>
+                        <i class="align-middle" data-feather="square"></i>
+                        <span class="sidebar-label">Roles</span>
+                        <i class="sidebar-chevron" data-feather="chevron-right"></i>
                     </a>
                 </li>
             }
@@ -136,7 +159,9 @@
             {
                 <li class="sidebar-item">
                     <a class="sidebar-link" href="/Admin/Permissions/">
-                        <i class="align-middle" data-feather="check-square"></i> <span class="align-middle">Permissions</span>
+                        <i class="align-middle" data-feather="check-square"></i>
+                        <span class="sidebar-label">Permissions</span>
+                        <i class="sidebar-chevron" data-feather="chevron-right"></i>
                     </a>
                 </li>
             }
@@ -145,7 +170,9 @@
             {
                 <li class="sidebar-item">
                     <a class="sidebar-link" href="/Admin/UserRoles/">
-                        <i class="align-middle" data-feather="grid"></i> <span class="align-middle">User Roles</span>
+                        <i class="align-middle" data-feather="grid"></i>
+                        <span class="sidebar-label">User Roles</span>
+                        <i class="sidebar-chevron" data-feather="chevron-right"></i>
                     </a>
                 </li>
             }
@@ -154,18 +181,22 @@
             {
                 <li class="sidebar-item">
                     <a class="sidebar-link" href="/Admin/UserPermissionOverrides">
-                        <i class="align-middle" data-feather="align-left"></i> <span class="align-middle">User Permission Overrides</span>
+                        <i class="align-middle" data-feather="align-left"></i>
+                        <span class="sidebar-label">User Permission Overrides</span>
+                        <i class="sidebar-chevron" data-feather="chevron-right"></i>
                     </a>
                 </li>
             }
 
-            <li class="sidebar-header">Configurations</li>
+            <li class="sidebar-section">Configurations</li>
 
             @if (canLogs)
             {
                 <li class="sidebar-item">
                     <a class="sidebar-link" href="/Admin/AuditTrail">
-                        <i class="align-middle" data-feather="bar-chart-2"></i> <span class="align-middle">Logs</span>
+                        <i class="align-middle" data-feather="bar-chart-2"></i>
+                        <span class="sidebar-label">Logs</span>
+                        <i class="sidebar-chevron" data-feather="chevron-right"></i>
                     </a>
                 </li>
             }
@@ -174,7 +205,9 @@
             {
                 <li class="sidebar-item">
                     <a class="sidebar-link" href="/Admin/Settings/">
-                        <i class="align-middle" data-feather="map"></i> <span class="align-middle">Setting</span>
+                        <i class="align-middle" data-feather="map"></i>
+                        <span class="sidebar-label">Setting</span>
+                        <i class="sidebar-chevron" data-feather="chevron-right"></i>
                     </a>
                 </li>
             }
@@ -183,7 +216,9 @@
             {
                 <li class="sidebar-item">
                     <a class="sidebar-link" href="/Admin/Languages/">
-                        <i class="align-middle" data-feather="map"></i> <span class="align-middle">@await Html.T("UI.Language")</span>
+                        <i class="align-middle" data-feather="map"></i>
+                        <span class="sidebar-label">@await Html.T("UI.Language")</span>
+                        <i class="sidebar-chevron" data-feather="chevron-right"></i>
                     </a>
                 </li>
             }
@@ -192,10 +227,298 @@
             {
                 <li class="sidebar-item">
                     <a class="sidebar-link" href="/Admin/Resources/">
-                        <i class="align-middle" data-feather="map"></i> <span class="align-middle">Resources</span>
+                        <i class="align-middle" data-feather="map"></i>
+                        <span class="sidebar-label">Resources</span>
+                        <i class="sidebar-chevron" data-feather="chevron-right"></i>
                     </a>
                 </li>
             }
+
+            <!-- Example items to show badges like photo -->
+            <li class="sidebar-section">Charts &amp; Tables</li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/Admin/Charts">
+                    <i class="align-middle" data-feather="clock"></i>
+                    <span class="sidebar-label">Charts</span>
+                    <i class="sidebar-chevron" data-feather="chevron-right"></i>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/Admin/Tables">
+                    <i class="align-middle" data-feather="archive"></i>
+                    <span class="sidebar-label">Tables</span>
+                    @if (tablesBadge > 0)
+                    {
+                        <span class="sidebar-badge badge-warning">@tablesBadge</span>
+                    }
+                    <i class="sidebar-chevron" data-feather="chevron-right"></i>
+                </a>
+            </li>
+
+            <li class="sidebar-section">Forms &amp; Icons</li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/Admin/Forms">
+                    <i class="align-middle" data-feather="file-text"></i>
+                    <span class="sidebar-label">Forms</span>
+                    @if (formsBadge > 0)
+                    {
+                        <span class="sidebar-badge badge-success">@formsBadge</span>
+                    }
+                    <i class="sidebar-chevron" data-feather="chevron-right"></i>
+                </a>
+            </li>
+
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/Admin/Icons">
+                    <i class="align-middle" data-feather="layers"></i>
+                    <span class="sidebar-label">Icons</span>
+                    <i class="sidebar-chevron" data-feather="chevron-right"></i>
+                </a>
+            </li>
+
+            <li class="sidebar-section">Pages</li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/Admin/Pages">
+                    <i class="align-middle" data-feather="layers"></i>
+                    <span class="sidebar-label">Pages</span>
+                    <i class="sidebar-chevron" data-feather="chevron-right"></i>
+                </a>
+            </li>
+
+            <li class="sidebar-section">E-Commerce</li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/Admin/ECommerce">
+                    <i class="align-middle" data-feather="shopping-cart"></i>
+                    <span class="sidebar-label">E-Commerce</span>
+                    <i class="sidebar-chevron" data-feather="chevron-right"></i>
+                </a>
+            </li>
+
+            <li class="sidebar-section">Custom &amp; Error Pages</li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/Admin/CustomPages">
+                    <i class="align-middle" data-feather="settings"></i>
+                    <span class="sidebar-label">Custom Pages</span>
+                    <i class="sidebar-chevron" data-feather="chevron-right"></i>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="/Admin/ErrorPages">
+                    <i class="align-middle" data-feather="alert-circle"></i>
+                    <span class="sidebar-label">Error Pages</span>
+                    <i class="sidebar-chevron" data-feather="chevron-right"></i>
+                </a>
+            </li>
+
         </ul>
     </div>
-</nav>
+</nav> *@
+<aside class="left-sidebar with-vertical">
+    <div>
+        <!-- ---------------------------------- -->
+        <!-- Start Vertical Layout Sidebar -->
+        <!-- ---------------------------------- -->
+        <div class="brand-logo d-flex align-items-center justify-content-between">
+            <a href="~/Modern/main/index.html" class="text-nowrap logo-img">
+                <img src="~/Modern/assets/images/logos/logo.png" class="dark-logo" alt="Logo-Dark" />
+                <img src="~/Modern/assets/images/logos/logo.png" class="light-logo" alt="Logo-light" />
+            </a>
+            <a href="javascript:void(0)" class="sidebartoggler ms-auto text-decoration-none fs-5 d-block d-xl-none">
+                <i class="ti ti-x"></i>
+            </a>
+        </div>
+
+        <nav class="sidebar-nav scroll-sidebar" data-simplebar>
+            <ul id="sidebarnav">
+                <!-- ---------------------------------- -->
+                <!-- Home -->
+                <!-- ---------------------------------- -->
+                <li class="nav-small-cap">
+                    <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                    <span class="hide-menu">Home</span>
+                </li>
+                <!-- ---------------------------------- -->
+                <!-- Dashboard -->
+                <!-- ---------------------------------- -->
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="" id="get-url" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-aperture"></i>
+                        </span>
+                        <span class="hide-menu">Modern</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="/admin" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-shopping-cart"></i>
+                        </span>
+                        <span class="hide-menu">Home</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="/Admin/Registrations" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-currency-dollar"></i>
+                        </span>
+                        <span class="hide-menu">Entity Registrations</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="/Admin/Institutes" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-cpu"></i>
+                        </span>
+                        <span class="hide-menu">Entity Profile</span>
+                    </a>
+                </li>
+
+                <!-- ---------------------------------- -->
+                <!-- Apps -->
+                <!-- ---------------------------------- -->
+                <li class="nav-small-cap">
+                    <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                    <span class="hide-menu">Mange Organization</span>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="/Admin/Organization/" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-calendar"></i>
+                        </span>
+                        <span class="hide-menu">Organization</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="/Admin/Sectors/" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-layout-kanban"></i>
+                        </span>
+                        <span class="hide-menu">Mange Sectors</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="/Admin/Departments/" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-message-dots"></i>
+                        </span>
+                        <span class="hide-menu">Mange Departments</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="/Admin/Units/" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-mail"></i>
+                        </span>
+                        <span class="hide-menu">Mange Units</span>
+                    </a>
+                </li>
+                <!-- ---------------------------------- -->
+                <!-- PAGES -->
+                <!-- ---------------------------------- -->
+                <li class="nav-small-cap">
+                    <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                    <span class="hide-menu">Mange Users / Roles</span>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="/Admin/Users" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-currency-dollar"></i>
+                        </span>
+                        <span class="hide-menu">Users</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="/Admin/Roles/" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-help"></i>
+                        </span>
+                        <span class="hide-menu">Roles</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="/Admin/Permissions/" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-user-circle"></i>
+                        </span>
+                        <span class="hide-menu">Permissions</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="/Admin/UserRoles/" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-app-window"></i>
+                        </span>
+                        <span class="hide-menu">UserRoles</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="/Admin/UserPermissionOverrides" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-app-window"></i>
+                        </span>
+                        <span class="hide-menu">UserPermissionOverrides</span>
+                    </a>
+                </li>
+
+                <!-- ---------------------------------- -->
+                <!-- Forms -->
+                <!-- ---------------------------------- -->
+                <li class="nav-small-cap">
+                    <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                    <span class="hide-menu">Configurations</span>
+                </li>
+
+                <!-- ---------------------------------- -->
+                <!-- Form Input -->
+                <!-- ---------------------------------- -->
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="/Admin/AuditTrail" aria-expanded="false">
+                        <span class="d-flex">
+                            <i class="ti ti-archive"></i>
+                        </span>
+                        <span class="hide-menu">Logs</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="/Admin/Settings/" aria-expanded="false">
+                        <span class="d-flex">
+                            <i class="ti ti-box-align-left"></i>
+                        </span>
+                        <span class="hide-menu">Settings</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="/Admin/Languages/" aria-expanded="false">
+                        <span class="d-flex">
+                            <i class="ti ti-box-align-bottom"></i>
+                        </span>
+                        <span class="hide-menu">Languages</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="/Admin/Resources/" aria-expanded="false">
+                        <span class="d-flex">
+                            <i class="ti ti-file-export"></i>
+                        </span>
+                        <span class="hide-menu">Resources</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="fixed-profile p-3 mx-4 mb-2 bg-secondary-subtle rounded mt-3">
+            <div class="hstack gap-3">
+                <div class="john-img">
+                    <img src="~/Modern/assets/images/profile/user-1.jpg" class="rounded-circle" width="40" height="40" alt="modernize-img" />
+                </div>
+                <div class="john-title">
+                    <h6 class="mb-0 fs-4 fw-semibold">Mathew</h6>
+                    <span class="fs-2">Designer</span>
+                </div>
+                <button class="border-0 bg-transparent text-primary ms-auto" tabindex="0" type="button" aria-label="logout" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="logout">
+                    <i class="ti ti-power fs-6"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</aside>

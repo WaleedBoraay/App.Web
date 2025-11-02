@@ -11,10 +11,10 @@ public partial class NotificationLogBuilder : EntityBuilder<NotificationLog>
 {
     public override void MapEntity(CreateTableExpressionBuilder table) => table
         .WithColumn(nameof(NotificationLog.Id)).AsInt32().PrimaryKey().Identity()
-        .WithColumn(nameof(NotificationLog.NotificationId)).AsInt32().NotNullable()
+        .WithColumn(nameof(NotificationLog.NotificationId)).AsInt32().Nullable()
             .ForeignKey(nameof(Notification), nameof(Notification.Id))
-        .WithColumn(nameof(NotificationLog.Channel)).AsString(256).NotNullable()
-        .WithColumn(nameof(NotificationLog.Success)).AsBoolean().NotNullable()
+        .WithColumn(nameof(NotificationLog.Channel)).AsString(256).Nullable()
+        .WithColumn(nameof(NotificationLog.Success)).AsBoolean().Nullable()
         .WithColumn(nameof(NotificationLog.Response)).AsString(256).Nullable()
         .WithColumn(nameof(NotificationLog.SentOnUtc)).AsDateTime2().Nullable();
 }

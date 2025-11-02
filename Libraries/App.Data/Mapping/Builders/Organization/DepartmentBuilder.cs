@@ -14,6 +14,9 @@ public partial class DepartmentBuilder : EntityBuilder<Sector>
         table
             .WithColumn(nameof(Sector.Id)).AsInt32().PrimaryKey().Identity()
             .WithColumn(nameof(Sector.Name)).AsString(256).Nullable()
-            .WithColumn(nameof(Sector.ParentDepartmentId)).AsInt32().Nullable();
-    }
+            .WithColumn(nameof(Sector.ParentDepartmentId)).AsInt32().Nullable()
+            .WithColumn(nameof(Sector.ContactId)).AsInt32().Nullable()
+            .WithColumn(nameof(Sector.ContactTypeId)).AsInt32().Nullable();
+
+	}
 }

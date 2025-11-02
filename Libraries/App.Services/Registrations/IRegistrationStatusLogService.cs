@@ -7,9 +7,9 @@ namespace App.Services.Registrations
 {
     public interface IRegistrationStatusLogService
     {
-        Task<FIRegistrationStatusLog> GetByIdAsync(int id);
-        Task<IList<FIRegistrationStatusLog>> GetByRegistrationIdAsync(int registrationId);
-        Task<ServiceResult<FIRegistrationStatusLog>> InsertAsync(FIRegistrationStatusLog log);
+        Task<RegistrationStatusLog> GetByIdAsync(int id);
+        Task<IList<RegistrationStatusLog>> GetByRegistrationIdAsync(int registrationId);
+        Task<ServiceResult<RegistrationStatusLog>> InsertAsync(RegistrationStatusLog log);
         Task<ServiceResult> DeleteAsync(int id);
     }
 }

@@ -31,6 +31,11 @@
         UserUpdated = 13,
         RoleAssigned = 14,
         PermissionGranted = 15,
-        InstitutionCreated = 16
-    }
+        InstitutionCreated = 16,
+
+		//Create Sector department unit
+        SectorCreated = 17,
+        DepartmentCreated = 18,
+        UnitCreated = 19
+	}
 }

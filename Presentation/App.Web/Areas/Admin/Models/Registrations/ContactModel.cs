@@ -10,7 +10,7 @@ namespace App.Web.Areas.Admin.Models.Registrations
         {
             countries = new List<CountryModel>();
         }
-        public int Id { get; set; }
+        public int? Id { get; set; }
 
         public int RegistrationId { get; set; }
 

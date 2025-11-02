@@ -11,9 +11,9 @@ namespace App.Data.Mapping.Builders.Security
         {
             table
                 .WithColumn(nameof(RolePermission.Id)).AsInt32().PrimaryKey().Identity()
-                .WithColumn(nameof(RolePermission.RoleId)).AsInt32().NotNullable()
+                .WithColumn(nameof(RolePermission.RoleId)).AsInt32().Nullable()
                     .ForeignKey(nameof(Role), nameof(Role.Id))
-                .WithColumn(nameof(RolePermission.PermissionId)).AsInt32().NotNullable()
+                .WithColumn(nameof(RolePermission.PermissionId)).AsInt32().Nullable()
                     .ForeignKey(nameof(Permission), nameof(Permission.Id));
         }
     }

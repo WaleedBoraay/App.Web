@@ -17,159 +17,159 @@
  * Released under the MIT License
  */
 
-/*! ../../internals/path */
+/*! .~/Modern/.~/Modern/internals/path */
 
-/*! ../../modules/es.array.from */
+/*! .~/Modern/.~/Modern/modules/es.array.from */
 
-/*! ../../modules/es.string.iterator */
+/*! .~/Modern/.~/Modern/modules/es.string.iterator */
 
-/*! ../dist/icons.json */
+/*! .~/Modern/dist/icons.json */
 
-/*! ../internals/a-function */
+/*! .~/Modern/internals/a-function */
 
-/*! ../internals/an-object */
+/*! .~/Modern/internals/an-object */
 
-/*! ../internals/array-from */
+/*! .~/Modern/internals/array-from */
 
-/*! ../internals/array-includes */
+/*! .~/Modern/internals/array-includes */
 
-/*! ../internals/bind-context */
+/*! .~/Modern/internals/bind-context */
 
-/*! ../internals/call-with-safe-iteration-closing */
+/*! .~/Modern/internals/call-with-safe-iteration-closing */
 
-/*! ../internals/check-correctness-of-iteration */
+/*! .~/Modern/internals/check-correctness-of-iteration */
 
-/*! ../internals/classof */
+/*! .~/Modern/internals/classof */
 
-/*! ../internals/classof-raw */
+/*! .~/Modern/internals/classof-raw */
 
-/*! ../internals/copy-constructor-properties */
+/*! .~/Modern/internals/copy-constructor-properties */
 
-/*! ../internals/correct-prototype-getter */
+/*! .~/Modern/internals/correct-prototype-getter */
 
-/*! ../internals/create-iterator-constructor */
+/*! .~/Modern/internals/create-iterator-constructor */
 
-/*! ../internals/create-property */
+/*! .~/Modern/internals/create-property */
 
-/*! ../internals/create-property-descriptor */
+/*! .~/Modern/internals/create-property-descriptor */
 
-/*! ../internals/define-iterator */
+/*! .~/Modern/internals/define-iterator */
 
-/*! ../internals/descriptors */
+/*! .~/Modern/internals/descriptors */
 
-/*! ../internals/document-create-element */
+/*! .~/Modern/internals/document-create-element */
 
-/*! ../internals/enum-bug-keys */
+/*! .~/Modern/internals/enum-bug-keys */
 
-/*! ../internals/export */
+/*! .~/Modern/internals/export */
 
-/*! ../internals/fails */
+/*! .~/Modern/internals/fails */
 
-/*! ../internals/function-to-string */
+/*! .~/Modern/internals/function-to-string */
 
-/*! ../internals/get-iterator-method */
+/*! .~/Modern/internals/get-iterator-method */
 
-/*! ../internals/global */
+/*! .~/Modern/internals/global */
 
-/*! ../internals/has */
+/*! .~/Modern/internals/has */
 
-/*! ../internals/hidden-keys */
+/*! .~/Modern/internals/hidden-keys */
 
-/*! ../internals/hide */
+/*! .~/Modern/internals/hide */
 
-/*! ../internals/html */
+/*! .~/Modern/internals/html */
 
-/*! ../internals/ie8-dom-define */
+/*! .~/Modern/internals/ie8-dom-define */
 
-/*! ../internals/indexed-object */
+/*! .~/Modern/internals/indexed-object */
 
-/*! ../internals/internal-state */
+/*! .~/Modern/internals/internal-state */
 
-/*! ../internals/is-array-iterator-method */
+/*! .~/Modern/internals/is-array-iterator-method */
 
-/*! ../internals/is-forced */
+/*! .~/Modern/internals/is-forced */
 
-/*! ../internals/is-object */
+/*! .~/Modern/internals/is-object */
 
-/*! ../internals/is-pure */
+/*! .~/Modern/internals/is-pure */
 
-/*! ../internals/iterators */
+/*! .~/Modern/internals/iterators */
 
-/*! ../internals/iterators-core */
+/*! .~/Modern/internals/iterators-core */
 
-/*! ../internals/native-symbol */
+/*! .~/Modern/internals/native-symbol */
 
-/*! ../internals/native-weak-map */
+/*! .~/Modern/internals/native-weak-map */
 
-/*! ../internals/object-create */
+/*! .~/Modern/internals/object-create */
 
-/*! ../internals/object-define-properties */
+/*! .~/Modern/internals/object-define-properties */
 
-/*! ../internals/object-define-property */
+/*! .~/Modern/internals/object-define-property */
 
-/*! ../internals/object-get-own-property-descriptor */
+/*! .~/Modern/internals/object-get-own-property-descriptor */
 
-/*! ../internals/object-get-own-property-names */
+/*! .~/Modern/internals/object-get-own-property-names */
 
-/*! ../internals/object-get-own-property-symbols */
+/*! .~/Modern/internals/object-get-own-property-symbols */
 
-/*! ../internals/object-get-prototype-of */
+/*! .~/Modern/internals/object-get-prototype-of */
 
-/*! ../internals/object-keys */
+/*! .~/Modern/internals/object-keys */
 
-/*! ../internals/object-keys-internal */
+/*! .~/Modern/internals/object-keys-internal */
 
-/*! ../internals/object-property-is-enumerable */
+/*! .~/Modern/internals/object-property-is-enumerable */
 
-/*! ../internals/object-set-prototype-of */
+/*! .~/Modern/internals/object-set-prototype-of */
 
-/*! ../internals/own-keys */
+/*! .~/Modern/internals/own-keys */
 
-/*! ../internals/redefine */
+/*! .~/Modern/internals/redefine */
 
-/*! ../internals/require-object-coercible */
+/*! .~/Modern/internals/require-object-coercible */
 
-/*! ../internals/set-global */
+/*! .~/Modern/internals/set-global */
 
-/*! ../internals/set-to-string-tag */
+/*! .~/Modern/internals/set-to-string-tag */
 
-/*! ../internals/shared */
+/*! .~/Modern/internals/shared */
 
-/*! ../internals/shared-key */
+/*! .~/Modern/internals/shared-key */
 
-/*! ../internals/string-at */
+/*! .~/Modern/internals/string-at */
 
-/*! ../internals/to-absolute-index */
+/*! .~/Modern/internals/to-absolute-index */
 
-/*! ../internals/to-indexed-object */
+/*! .~/Modern/internals/to-indexed-object */
 
-/*! ../internals/to-integer */
+/*! .~/Modern/internals/to-integer */
 
-/*! ../internals/to-length */
+/*! .~/Modern/internals/to-length */
 
-/*! ../internals/to-object */
+/*! .~/Modern/internals/to-object */
 
-/*! ../internals/to-primitive */
+/*! .~/Modern/internals/to-primitive */
 
-/*! ../internals/uid */
+/*! .~/Modern/internals/uid */
 
-/*! ../internals/validate-set-prototype-of-arguments */
+/*! .~/Modern/internals/validate-set-prototype-of-arguments */
 
-/*! ../internals/well-known-symbol */
+/*! .~/Modern/internals/well-known-symbol */
 
-/*! ./../../webpack/buildin/global.js */
+/*! ~/Modern/.~/Modern/.~/Modern/webpack/buildin/global.js */
 
-/*! ./default-attrs.json */
+/*! ~/Modern/default-attrs.json */
 
-/*! ./icon */
+/*! ~/Modern/icon */
 
-/*! ./icons */
+/*! ~/Modern/icons */
 
-/*! ./replace */
+/*! ~/Modern/replace */
 
-/*! ./tags.json */
+/*! ~/Modern/tags.json */
 
-/*! ./to-svg */
+/*! ~/Modern/to-svg */
 
 /*! /home/runner/work/feather/feather/src/index.js */
 
@@ -186,35 +186,35 @@
 /*! no static exports found */
 
 /*!*********************!*\
-  !*** ./src/icon.js ***!
+  !*** ~/Modern/src/icon.js ***!
   \*********************/
 
 /*!**********************!*\
-  !*** ./src/icons.js ***!
+  !*** ~/Modern/src/icons.js ***!
   \**********************/
 
 /*!**********************!*\
-  !*** ./src/index.js ***!
+  !*** ~/Modern/src/index.js ***!
   \**********************/
 
 /*!***********************!*\
-  !*** ./src/tags.json ***!
+  !*** ~/Modern/src/tags.json ***!
   \***********************/
 
 /*!***********************!*\
-  !*** ./src/to-svg.js ***!
+  !*** ~/Modern/src/to-svg.js ***!
   \***********************/
 
 /*!************************!*\
-  !*** ./src/replace.js ***!
+  !*** ~/Modern/src/replace.js ***!
   \************************/
 
 /*!*************************!*\
-  !*** ./dist/icons.json ***!
+  !*** ~/Modern/dist/icons.json ***!
   \*************************/
 
 /*!********************************!*\
-  !*** ./src/default-attrs.json ***!
+  !*** ~/Modern/src/default-attrs.json ***!
   \********************************/
 
 /*!***********************************!*\
@@ -222,291 +222,291 @@
   \***********************************/
 
 /*!*******************************************!*\
-  !*** ./node_modules/classnames/dedupe.js ***!
+  !*** ~/Modern/node_modules/classnames/dedupe.js ***!
   \*******************************************/
 
 /*!***********************************************!*\
-  !*** ./node_modules/core-js/es/array/from.js ***!
+  !*** ~/Modern/node_modules/core-js/es/array/from.js ***!
   \***********************************************/
 
 /*!***********************************************!*\
-  !*** ./node_modules/core-js/internals/has.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/has.js ***!
   \***********************************************/
 
 /*!***********************************************!*\
-  !*** ./node_modules/core-js/internals/uid.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/uid.js ***!
   \***********************************************/
 
 /*!************************************************!*\
-  !*** ./node_modules/core-js/internals/hide.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/hide.js ***!
   \************************************************/
 
 /*!************************************************!*\
-  !*** ./node_modules/core-js/internals/html.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/html.js ***!
   \************************************************/
 
 /*!************************************************!*\
-  !*** ./node_modules/core-js/internals/path.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/path.js ***!
   \************************************************/
 
 /*!*************************************************!*\
-  !*** ./node_modules/core-js/internals/fails.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/fails.js ***!
   \*************************************************/
 
 /*!**************************************************!*\
-  !*** ./node_modules/core-js/internals/export.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/export.js ***!
   \**************************************************/
 
 /*!**************************************************!*\
-  !*** ./node_modules/core-js/internals/global.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/global.js ***!
   \**************************************************/
 
 /*!**************************************************!*\
-  !*** ./node_modules/core-js/internals/shared.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/shared.js ***!
   \**************************************************/
 
 /*!**************************************************!*\
-  !*** multi core-js/es/array/from ./src/index.js ***!
+  !*** multi core-js/es/array/from ~/Modern/src/index.js ***!
   \**************************************************/
 
 /*!***************************************************!*\
-  !*** ./node_modules/core-js/internals/classof.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/classof.js ***!
   \***************************************************/
 
 /*!***************************************************!*\
-  !*** ./node_modules/core-js/internals/is-pure.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/is-pure.js ***!
   \***************************************************/
 
 /*!****************************************************!*\
-  !*** ./node_modules/core-js/internals/own-keys.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/own-keys.js ***!
   \****************************************************/
 
 /*!****************************************************!*\
-  !*** ./node_modules/core-js/internals/redefine.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/redefine.js ***!
   \****************************************************/
 
 /*!*****************************************************!*\
-  !*** ./node_modules/core-js/internals/an-object.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/an-object.js ***!
   \*****************************************************/
 
 /*!*****************************************************!*\
-  !*** ./node_modules/core-js/internals/is-forced.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/is-forced.js ***!
   \*****************************************************/
 
 /*!*****************************************************!*\
-  !*** ./node_modules/core-js/internals/is-object.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/is-object.js ***!
   \*****************************************************/
 
 /*!*****************************************************!*\
-  !*** ./node_modules/core-js/internals/iterators.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/iterators.js ***!
   \*****************************************************/
 
 /*!*****************************************************!*\
-  !*** ./node_modules/core-js/internals/string-at.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/string-at.js ***!
   \*****************************************************/
 
 /*!*****************************************************!*\
-  !*** ./node_modules/core-js/internals/to-length.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/to-length.js ***!
   \*****************************************************/
 
 /*!*****************************************************!*\
-  !*** ./node_modules/core-js/internals/to-object.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/to-object.js ***!
   \*****************************************************/
 
 /*!******************************************************!*\
-  !*** ./node_modules/core-js/internals/a-function.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/a-function.js ***!
   \******************************************************/
 
 /*!******************************************************!*\
-  !*** ./node_modules/core-js/internals/array-from.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/array-from.js ***!
   \******************************************************/
 
 /*!******************************************************!*\
-  !*** ./node_modules/core-js/internals/set-global.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/set-global.js ***!
   \******************************************************/
 
 /*!******************************************************!*\
-  !*** ./node_modules/core-js/internals/shared-key.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/shared-key.js ***!
   \******************************************************/
 
 /*!******************************************************!*\
-  !*** ./node_modules/core-js/internals/to-integer.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/to-integer.js ***!
   \******************************************************/
 
 /*!*******************************************************!*\
-  !*** ./node_modules/core-js/internals/classof-raw.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/classof-raw.js ***!
   \*******************************************************/
 
 /*!*******************************************************!*\
-  !*** ./node_modules/core-js/internals/descriptors.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/descriptors.js ***!
   \*******************************************************/
 
 /*!*******************************************************!*\
-  !*** ./node_modules/core-js/internals/hidden-keys.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/hidden-keys.js ***!
   \*******************************************************/
 
 /*!*******************************************************!*\
-  !*** ./node_modules/core-js/internals/object-keys.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/object-keys.js ***!
   \*******************************************************/
 
 /*!*******************************************************!*\
-  !*** ./node_modules/core-js/modules/es.array.from.js ***!
+  !*** ~/Modern/node_modules/core-js/modules/es.array.from.js ***!
   \*******************************************************/
 
 /*!********************************************************!*\
-  !*** ./node_modules/core-js/internals/bind-context.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/bind-context.js ***!
   \********************************************************/
 
 /*!********************************************************!*\
-  !*** ./node_modules/core-js/internals/to-primitive.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/to-primitive.js ***!
   \********************************************************/
 
 /*!*********************************************************!*\
-  !*** ./node_modules/core-js/internals/enum-bug-keys.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/enum-bug-keys.js ***!
   \*********************************************************/
 
 /*!*********************************************************!*\
-  !*** ./node_modules/core-js/internals/native-symbol.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/native-symbol.js ***!
   \*********************************************************/
 
 /*!*********************************************************!*\
-  !*** ./node_modules/core-js/internals/object-create.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/object-create.js ***!
   \*********************************************************/
 
 /*!**********************************************************!*\
-  !*** ./node_modules/core-js/internals/array-includes.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/array-includes.js ***!
   \**********************************************************/
 
 /*!**********************************************************!*\
-  !*** ./node_modules/core-js/internals/ie8-dom-define.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/ie8-dom-define.js ***!
   \**********************************************************/
 
 /*!**********************************************************!*\
-  !*** ./node_modules/core-js/internals/indexed-object.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/indexed-object.js ***!
   \**********************************************************/
 
 /*!**********************************************************!*\
-  !*** ./node_modules/core-js/internals/internal-state.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/internal-state.js ***!
   \**********************************************************/
 
 /*!**********************************************************!*\
-  !*** ./node_modules/core-js/internals/iterators-core.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/iterators-core.js ***!
   \**********************************************************/
 
 /*!***********************************************************!*\
-  !*** ./node_modules/core-js/internals/create-property.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/create-property.js ***!
   \***********************************************************/
 
 /*!***********************************************************!*\
-  !*** ./node_modules/core-js/internals/define-iterator.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/define-iterator.js ***!
   \***********************************************************/
 
 /*!***********************************************************!*\
-  !*** ./node_modules/core-js/internals/native-weak-map.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/native-weak-map.js ***!
   \***********************************************************/
 
 /*!************************************************************!*\
-  !*** ./node_modules/core-js/modules/es.string.iterator.js ***!
+  !*** ~/Modern/node_modules/core-js/modules/es.string.iterator.js ***!
   \************************************************************/
 
 /*!*************************************************************!*\
-  !*** ./node_modules/core-js/internals/set-to-string-tag.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/set-to-string-tag.js ***!
   \*************************************************************/
 
 /*!*************************************************************!*\
-  !*** ./node_modules/core-js/internals/to-absolute-index.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/to-absolute-index.js ***!
   \*************************************************************/
 
 /*!*************************************************************!*\
-  !*** ./node_modules/core-js/internals/to-indexed-object.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/to-indexed-object.js ***!
   \*************************************************************/
 
 /*!*************************************************************!*\
-  !*** ./node_modules/core-js/internals/well-known-symbol.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/well-known-symbol.js ***!
   \*************************************************************/
 
 /*!**************************************************************!*\
-  !*** ./node_modules/core-js/internals/function-to-string.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/function-to-string.js ***!
   \**************************************************************/
 
 /*!***************************************************************!*\
-  !*** ./node_modules/core-js/internals/get-iterator-method.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/get-iterator-method.js ***!
   \***************************************************************/
 
 /*!****************************************************************!*\
-  !*** ./node_modules/core-js/internals/object-keys-internal.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/object-keys-internal.js ***!
   \****************************************************************/
 
 /*!******************************************************************!*\
-  !*** ./node_modules/core-js/internals/object-define-property.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/object-define-property.js ***!
   \******************************************************************/
 
 /*!*******************************************************************!*\
-  !*** ./node_modules/core-js/internals/document-create-element.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/document-create-element.js ***!
   \*******************************************************************/
 
 /*!*******************************************************************!*\
-  !*** ./node_modules/core-js/internals/object-get-prototype-of.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/object-get-prototype-of.js ***!
   \*******************************************************************/
 
 /*!*******************************************************************!*\
-  !*** ./node_modules/core-js/internals/object-set-prototype-of.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/object-set-prototype-of.js ***!
   \*******************************************************************/
 
 /*!********************************************************************!*\
-  !*** ./node_modules/core-js/internals/correct-prototype-getter.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/correct-prototype-getter.js ***!
   \********************************************************************/
 
 /*!********************************************************************!*\
-  !*** ./node_modules/core-js/internals/is-array-iterator-method.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/is-array-iterator-method.js ***!
   \********************************************************************/
 
 /*!********************************************************************!*\
-  !*** ./node_modules/core-js/internals/object-define-properties.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/object-define-properties.js ***!
   \********************************************************************/
 
 /*!********************************************************************!*\
-  !*** ./node_modules/core-js/internals/require-object-coercible.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/require-object-coercible.js ***!
   \********************************************************************/
 
 /*!**********************************************************************!*\
-  !*** ./node_modules/core-js/internals/create-property-descriptor.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/create-property-descriptor.js ***!
   \**********************************************************************/
 
 /*!***********************************************************************!*\
-  !*** ./node_modules/core-js/internals/copy-constructor-properties.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/copy-constructor-properties.js ***!
   \***********************************************************************/
 
 /*!***********************************************************************!*\
-  !*** ./node_modules/core-js/internals/create-iterator-constructor.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/create-iterator-constructor.js ***!
   \***********************************************************************/
 
 /*!*************************************************************************!*\
-  !*** ./node_modules/core-js/internals/object-get-own-property-names.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/object-get-own-property-names.js ***!
   \*************************************************************************/
 
 /*!*************************************************************************!*\
-  !*** ./node_modules/core-js/internals/object-property-is-enumerable.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/object-property-is-enumerable.js ***!
   \*************************************************************************/
 
 /*!**************************************************************************!*\
-  !*** ./node_modules/core-js/internals/check-correctness-of-iteration.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/check-correctness-of-iteration.js ***!
   \**************************************************************************/
 
 /*!***************************************************************************!*\
-  !*** ./node_modules/core-js/internals/object-get-own-property-symbols.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/object-get-own-property-symbols.js ***!
   \***************************************************************************/
 
 /*!****************************************************************************!*\
-  !*** ./node_modules/core-js/internals/call-with-safe-iteration-closing.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/call-with-safe-iteration-closing.js ***!
   \****************************************************************************/
 
 /*!******************************************************************************!*\
-  !*** ./node_modules/core-js/internals/object-get-own-property-descriptor.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/object-get-own-property-descriptor.js ***!
   \******************************************************************************/
 
 /*!*******************************************************************************!*\
-  !*** ./node_modules/core-js/internals/validate-set-prototype-of-arguments.js ***!
+  !*** ~/Modern/node_modules/core-js/internals/validate-set-prototype-of-arguments.js ***!
   \*******************************************************************************/
 
 //! moment.js

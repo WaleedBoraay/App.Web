@@ -14,13 +14,13 @@ namespace App.Data.Mapping.Builders.Notifications
             table
                 .WithColumn(nameof(Notification.Id)).AsInt32().PrimaryKey().Identity()
                 .WithColumn(nameof(Notification.RegistrationId)).AsInt32().Nullable()
-                .WithColumn(nameof(Notification.EventTypeId)).AsInt32().NotNullable()
-                .WithColumn(nameof(Notification.RecipientUserId)).AsInt32().NotNullable()
-                .WithColumn(nameof(Notification.TriggeredByUserId)).AsInt32().NotNullable()
+                .WithColumn(nameof(Notification.EventTypeId)).AsInt32().Nullable()
+                .WithColumn(nameof(Notification.RecipientUserId)).AsInt32().Nullable()
+                .WithColumn(nameof(Notification.TriggeredByUserId)).AsInt32().Nullable()
                 .WithColumn(nameof(Notification.Message)).AsString(1000).Nullable()
-                .WithColumn(nameof(Notification.ChannelId)).AsInt32().NotNullable()
-                .WithColumn(nameof(Notification.StatusId)).AsInt32().NotNullable()
-                .WithColumn(nameof(Notification.CreatedOnUtc)).AsDateTime().NotNullable();
+                .WithColumn(nameof(Notification.ChannelId)).AsInt32().Nullable()
+                .WithColumn(nameof(Notification.StatusId)).AsInt32().Nullable()
+                .WithColumn(nameof(Notification.CreatedOnUtc)).AsDateTime().Nullable();
         }
     }
 }

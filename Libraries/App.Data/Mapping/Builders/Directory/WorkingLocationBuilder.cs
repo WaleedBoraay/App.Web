@@ -11,9 +11,9 @@ namespace App.Data.Mapping.Builders.Directory
         {
             table
                 .WithColumn(nameof(WorkingLocation.Id)).AsInt32().PrimaryKey().Identity()
-                .WithColumn(nameof(WorkingLocation.Name)).AsString(200).NotNullable()
+                .WithColumn(nameof(WorkingLocation.Name)).AsString(200).Nullable()
                 .WithColumn(nameof(WorkingLocation.Address)).AsString(500).Nullable()
-                .WithColumn(nameof(WorkingLocation.CountryId)).AsInt32().NotNullable();
+                .WithColumn(nameof(WorkingLocation.CountryId)).AsInt32().Nullable();
         }
     }
 }

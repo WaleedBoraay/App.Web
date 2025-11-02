@@ -1,0 +1,7 @@
+// TODO: this file can be removed safely in v6 when `@import "variables-dark"` will be removed at the end of _variables.scss
+
+@import ".~/Modern/.~/Modern/functions";
+@import ".~/Modern/.~/Modern/variables";
+// Voluntarily not importing _variables-dark.scss
+@import ".~/Modern/.~/Modern/maps";
+@import ".~/Modern/.~/Modern/mixins";

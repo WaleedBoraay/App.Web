@@ -12,9 +12,9 @@ public partial class NotificationReadLogBuilder : EntityBuilder<NotificationRead
 {
     public override void MapEntity(CreateTableExpressionBuilder table) => table
         .WithColumn(nameof(NotificationReadLog.Id)).AsInt32().PrimaryKey().Identity()
-        .WithColumn(nameof(NotificationReadLog.NotificationId)).AsInt32().NotNullable()
+        .WithColumn(nameof(NotificationReadLog.NotificationId)).AsInt32().Nullable()
             .ForeignKey(nameof(Notification), nameof(Notification.Id))
-        .WithColumn(nameof(NotificationReadLog.UserId)).AsInt32().NotNullable()
+        .WithColumn(nameof(NotificationReadLog.UserId)).AsInt32().Nullable()
             .ForeignKey(nameof(AppUser), nameof(AppUser.Id))
         .WithColumn(nameof(NotificationReadLog.ReadOnUtc)).AsDateTime2().Nullable();
 }

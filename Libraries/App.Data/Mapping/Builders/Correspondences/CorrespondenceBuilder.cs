@@ -10,12 +10,12 @@ namespace App.Data.Mapping.Builders.Correspondences
         {
             table
                 .WithColumn(nameof(Correspondence.Id)).AsInt32().PrimaryKey().Identity()
-                .WithColumn(nameof(Correspondence.SenderUserId)).AsInt32().NotNullable()
-                .WithColumn(nameof(Correspondence.RecipientUserId)).AsInt32().NotNullable()
-                .WithColumn(nameof(Correspondence.Subject)).AsString(256).NotNullable()
-                .WithColumn(nameof(Correspondence.Message)).AsString(int.MaxValue).NotNullable()
-                .WithColumn(nameof(Correspondence.SentOnUtc)).AsDateTime2().NotNullable()
-                .WithColumn(nameof(Correspondence.Status)).AsString(64).NotNullable();
+                .WithColumn(nameof(Correspondence.SenderUserId)).AsInt32().Nullable()
+                .WithColumn(nameof(Correspondence.RecipientUserId)).AsInt32().Nullable()
+                .WithColumn(nameof(Correspondence.Subject)).AsString(256).Nullable()
+                .WithColumn(nameof(Correspondence.Message)).AsString(int.MaxValue).Nullable()
+                .WithColumn(nameof(Correspondence.SentOnUtc)).AsDateTime2().Nullable()
+                .WithColumn(nameof(Correspondence.Status)).AsString(64).Nullable();
         }
     }
 }

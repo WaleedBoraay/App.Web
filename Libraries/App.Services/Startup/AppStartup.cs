@@ -35,6 +35,7 @@ using FluentMigrator;
 using FluentMigrator.Runner;
 using FluentMigrator.Runner.VersionTableInfo;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -99,10 +100,32 @@ namespace App.Services.Startup
             options.AccessDeniedPath = "/Account/Login";
             options.LogoutPath = "/Account/Logout";
         });
-            services.AddLocalization(options => options.ResourcesPath = "Resources");
+			//services.AddLocalization(options => options.ResourcesPath = "Resources");
+			//var jwtKey = configuration["Jwt:Key"] ?? "SuperSecureKey123456789"; // يفضل تحفظها في appsettings.json
 
-            // Register AppSettings
-            services.AddSingleton<AppSettings>();
+			//services.AddAuthentication(options =>
+			//{
+			//	options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+			//	options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+			//})
+			//.AddJwtBearer(options =>
+			//{
+			//	options.RequireHttpsMetadata = false;
+			//	options.SaveToken = true;
+			//	options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+			//	{
+			//		ValidateIssuer = false,
+			//		ValidateAudience = false,
+			//		ValidateLifetime = true,
+			//		ValidateIssuerSigningKey = true,
+			//		IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
+			//		ClockSkew = TimeSpan.Zero
+			//	};
+			//});
+
+
+			// Register AppSettings
+			services.AddSingleton<AppSettings>();
 
             // Register IAppFileProvider
             services.AddSingleton<IAppFileProvider, AppFileProvider>();

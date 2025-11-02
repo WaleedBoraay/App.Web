@@ -39,7 +39,7 @@ namespace App.Web.Areas.Admin.Controllers
 
             var filePath = $"/uploads/{file.FileName}";
 
-            var entity = new FIDocument
+            var entity = new Document
             {
                 DocumentTypeId = (int)model.DocumentType,
                 FilePath = filePath,

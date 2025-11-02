@@ -11,8 +11,8 @@ public partial class LocaleStringResourceBuilder : EntityBuilder<LocaleStringRes
 {
     public override void MapEntity(CreateTableExpressionBuilder table) => table
         .WithColumn(nameof(LocaleStringResource.Id)).AsInt32().PrimaryKey().Identity()
-        .WithColumn(nameof(LocaleStringResource.LanguageId)).AsInt32().NotNullable()
+        .WithColumn(nameof(LocaleStringResource.LanguageId)).AsInt32().Nullable()
             .ForeignKey(nameof(Language), nameof(Language.Id))
-        .WithColumn(nameof(LocaleStringResource.ResourceName)).AsString(256).NotNullable()
+        .WithColumn(nameof(LocaleStringResource.ResourceName)).AsString(256).Nullable()
         .WithColumn(nameof(LocaleStringResource.ResourceValue)).AsString(512).Nullable();
 }

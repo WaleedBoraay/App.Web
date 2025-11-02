@@ -77,17 +77,19 @@ namespace App.Services.Audit
 
             var userIp = httpContext?.Request?.Headers["X-Forwarded-For"].FirstOrDefault();
 
-            // fallback للـ RemoteIpAddress
-            if (string.IsNullOrEmpty(userIp))
-                userIp = httpContext?.Connection?.RemoteIpAddress?.ToString(); var existingEntry = _auditRepository.Table.Where(x => x.EntityName == entityName
-                && x.EntityId == entityId && x.FieldName == field && x.ActionId == (int)AuditActionType.Update);
+            var entityNa = $"{entityName}-{entityId}-";
+			// fallback للـ RemoteIpAddress
+			if (string.IsNullOrEmpty(userIp))
+                userIp = httpContext?.Connection?.RemoteIpAddress?.ToString();
+            
+            var existingEntry = await _auditRepository.GetAllAsync(Queryable =>
+                Queryable.Where(a => a.EntityName == entityNa))
+                .ContinueWith(t => t.Result.FirstOrDefault());
 
             if (existingEntry != null)
             {
                 var entry = new AuditTrail
                 {
-                    EntityName = entityName,
-                    EntityId = entityId,
                     Action = AuditActionType.Update,
                     ActionId = (int)AuditActionType.Update,
                     ChangedOnUtc = DateTime.UtcNow,
@@ -99,9 +101,27 @@ namespace App.Services.Audit
                 };
                 await _auditRepository.UpdateAsync(entry);
             }
+            else
+            {
+                var entry = new AuditTrail
+                {
+                    EntityName = entityNa,
+                    EntityId = entityId,
+                    Action = AuditActionType.Update,
+                    ActionId = (int)AuditActionType.Update,
+                    ChangedOnUtc = DateTime.UtcNow,
+                    FieldName = field,
+                    OldValue = oldValue,
+                    NewValue = newValue,
+                    Comment = comment,
+                    ClientIp = userIp
+                };
+                await LogAsync(entry);
+			}
 
 
-        }
+
+		}
 
         public async Task LogDeleteAsync(string entityName, int entityId, int userId, string comment = null)
         {
@@ -223,5 +243,11 @@ namespace App.Services.Audit
             await _localizationService.GetResourceAsync("Audit.Insert.Success");
             return auditTrail;
         }
+
+        public Task<IList<AuditTrail>> GetUserAuditTrailsByRegistrationIdAsync(int registrationId)
+        {
+            var list = _auditRepository.GetAllAsync(q => q.Where(x => x.EntityName == $"Registration-{registrationId}-"));
+            return list;
+		}
     }
 }

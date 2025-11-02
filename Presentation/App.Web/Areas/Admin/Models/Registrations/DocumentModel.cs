@@ -5,7 +5,7 @@ namespace App.Web.Areas.Admin.Models.Registrations
 {
     public record class DocumentModel : BaseAppEntityModel
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public int RegistrationId { get; set; }
 
         public int DocumentTypeId { get; set; }

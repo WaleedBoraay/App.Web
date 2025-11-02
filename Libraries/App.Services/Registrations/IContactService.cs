@@ -7,10 +7,11 @@ namespace App.Services.Registrations
 {
     public interface IContactService
     {
-        Task<FIContact> GetByIdAsync(int id);
-        Task<IList<FIContact>> GetByRegistrationIdAsync(int registrationId);
-        Task<FIContact> InsertAsync(FIContact contact);
-        Task<FIContact> UpdateAsync(FIContact contact);
+        Task<Contact> GetByIdAsync(int id);
+        Task<IList<Contact>> GetAllAsync();
+		Task<IList<Contact>> GetByRegistrationIdAsync(int registrationId);
+        Task<Contact> InsertAsync(Contact contact);
+        Task<Contact> UpdateAsync(Contact contact);
         Task DeleteAsync(int id);
     }
 }

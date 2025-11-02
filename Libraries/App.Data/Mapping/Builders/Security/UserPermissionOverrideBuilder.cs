@@ -16,11 +16,11 @@ namespace App.Data.Mapping.Builders.Security
         {
             table
                 .WithColumn(nameof(UserPermissionOverride.Id)).AsInt32().PrimaryKey().Identity()
-                .WithColumn(nameof(UserPermissionOverride.UserId)).AsInt32().NotNullable()
+                .WithColumn(nameof(UserPermissionOverride.UserId)).AsInt32().Nullable()
                     .ForeignKey(nameof(AppUser), nameof(AppUser.Id))
-                .WithColumn(nameof(UserPermissionOverride.PermissionId)).AsInt32().NotNullable()
+                .WithColumn(nameof(UserPermissionOverride.PermissionId)).AsInt32().Nullable()
                     .ForeignKey(nameof(Permission), nameof(Permission.Id))
-                .WithColumn(nameof(UserPermissionOverride.IsGranted)).AsBoolean().NotNullable();
+                .WithColumn(nameof(UserPermissionOverride.IsGranted)).AsBoolean().Nullable();
         }
     }
 

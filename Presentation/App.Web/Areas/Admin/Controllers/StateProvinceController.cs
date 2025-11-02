@@ -57,7 +57,7 @@ namespace App.Web.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid) return View(model);
 
-            var entity = await _stateService.GetByIdAsync(model.Id);
+            var entity = await _stateService.GetByIdAsync(model.Id.Value);
             if (entity == null) return NotFound();
 
             model.ToEntity(entity);

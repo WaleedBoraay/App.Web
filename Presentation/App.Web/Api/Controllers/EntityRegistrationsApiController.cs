@@ -12,7 +12,7 @@ using App.Services.Notifications;
 using App.Services.Registrations;
 using App.Services.Security;
 using App.Services.Users;
-using App.Web.Areas.Admin.Models.Registrations;
+using App.Web.Api.Models;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -69,60 +69,118 @@ namespace App.Web.Api.Controllers
 			return new string(Enumerable.Repeat(validChars, length)
 			  .Select(s => s[random.Next(s.Length)]).ToArray());
 		}
+
 		[HttpGet]
-        public async Task<IActionResult> GetAllRegistrations(int userId)
-        {
-            var roles = await _roleService.GetRolesByUserIdAsync(userId);
+		public async Task<IActionResult> GetAllRegistrations(int userId)
+		{
+			// 1️⃣ Get user roles
+			var roles = await _roleService.GetRolesByUserIdAsync(userId);
 
-            bool isMaker = roles.Any(r =>
-                r.SystemName.Equals("Maker", StringComparison.OrdinalIgnoreCase) ||
-                r.Name.Equals("Maker", StringComparison.OrdinalIgnoreCase));
+			bool isMaker = roles.Any(r =>
+				r.SystemName.Equals("Maker", StringComparison.OrdinalIgnoreCase) ||
+				r.Name.Equals("Maker", StringComparison.OrdinalIgnoreCase));
 
-            bool isChecker = roles.Any(r =>
-                r.SystemName.Equals("Checker", StringComparison.OrdinalIgnoreCase) ||
-                r.Name.Equals("Checker", StringComparison.OrdinalIgnoreCase));
+			bool isChecker = roles.Any(r =>
+				r.SystemName.Equals("Checker", StringComparison.OrdinalIgnoreCase) ||
+				r.Name.Equals("Checker", StringComparison.OrdinalIgnoreCase));
 
-            var allRegs = await _registrationService.GetAllAsync();
+			// 2️⃣ Get all registrations
+			var allRegs = await _registrationService.GetAllAsync();
 
-            var visibleRegs = allRegs.Where(r =>
-                (isMaker && (r.StatusId == (int)RegistrationStatus.Draft ||
-                             r.StatusId == (int)RegistrationStatus.ReturnedForEdit)) ||
-                (isChecker && r.StatusId == (int)RegistrationStatus.Submitted)
+			// 3️⃣ Filter based on user role
+			List<Registration>? visibleRegs = allRegs.Where(r =>
+				(isMaker && (r.StatusId == (int)RegistrationStatus.Draft ||
+							 r.StatusId == (int)RegistrationStatus.ReturnedForEdit)) ||
+				(isChecker && r.StatusId == (int)RegistrationStatus.Submitted)
+			).ToList();
 
-            ).ToList();
+			// 4️⃣ Build result list
+			var result = new List<object>();
 
-			var model = new List<object>();
 			foreach (var r in visibleRegs)
-            {
-                var createdByUser = await _userService.GetByIdAsync(r.CreatedByUserId);
-                var contacts = await _registrationService.GetContactsByRegistrationIdAsync(r.Id);
-                var regDocuments = await _documentService.GetRegistrationDocumentByIdAsync(r.Id);
-				var statusLogs = await _registrationService.GetStatusHistoryAsync(r.Id);
-                var country = await _countryService.GetByIdAsync(r.CountryId);
+			{
+				var createdByUser = await _userService.GetByIdAsync(r.CreatedByUserId);
+				var country = await _countryService.GetByIdAsync(r.CountryId);
+				var institution = await _institutionService.GetByIdAsync(r.InstitutionId);
 
-                model.Add(new
-                {
-                    r.Id,
-                    r.InstitutionId,
-                    r.InstitutionName,
-                    r.LicenseNumber,
-                    r.LicenseSectorId,
-                    r.FinancialDomainId,
-                    r.StatusId,
-                    Status = ((RegistrationStatus)r.StatusId).ToString(),
-                    CreatedOnUtc = r.CreatedOnUtc ?? DateTime.UtcNow,
-                    CreatedByUserName = createdByUser?.Username ?? "Unknown",
-                    Contacts = contacts ?? null,
-                    Documents = regDocuments ?? null,
-                    StatusLogs = statusLogs ?? null,
-                    Country = country?.Name ?? "Unknown"
-                });
-            }
+				// 🟢 Contacts
+				var contacts = await _registrationService.GetContactsByRegistrationIdAsync(r.Id);
+				var contactModels = contacts.Select(c => new
+				{
+					c.Id,
+					c.FirstName,
+					c.MiddleName,
+					c.LastName,
+					FullName = $"{c.FirstName} {c.LastName}",
+					c.JobTitle,
+					c.Email,
+					c.ContactPhone,
+					c.BusinessPhone,
+					c.ContactTypeId,
+					c.CreatedOnUtc
+				}).ToList();
 
-            return Ok(model);
-        }
+				// 🟢 Documents
+				var docs = await _registrationService.GetDocumentsByRegistrationIdAsync(r.Id);
+				var docModels = docs.Select(d => new
+				{
+					d.Id,
+					d.DocumentTypeId,
+					DocumentType = d.DocumentType.ToString(),
+					d.FilePath,
+					d.UploadedOnUtc,
+					d.ContactId,
+					ContactName = contacts.FirstOrDefault(c => c.Id == d.ContactId) != null
+						? $"{contacts.FirstOrDefault(c => c.Id == d.ContactId).FirstName} {contacts.FirstOrDefault(c => c.Id == d.ContactId).LastName}"
+						: null
+				}).ToList();
 
-        [HttpGet("GetRegistrationById")]
+				var log = await _auditService.GetUserAuditTrailsByRegistrationIdAsync(r.Id);
+				var Log = log.Select(l => new
+				{
+					l.Id,
+					l.EntityId,
+					l.Action,
+					l.ChangedOnUtc,
+					l.OldValue,
+					l.NewValue,
+					l.Comment
+				}).ToList();
+
+				// 🟢 Add model
+				result.Add(new
+				{
+					r.Id,
+					r.InstitutionId,
+					InstitutionName = institution?.Name ?? r.InstitutionName,
+					r.LicenseNumber,
+					r.LicenseSectorId,
+					LicenseSector = ((LicenseSector)r.LicenseSectorId).ToString(),
+					r.FinancialDomainId,
+					FinancialDomains = ((FinancialDomain)r.FinancialDomainId).ToString(),
+					r.IssueDate,
+					r.ExpiryDate,
+					r.StatusId,
+					//Get string representation of status
+					Status = ((RegistrationStatus)r.StatusId).ToString(),
+					r.Address,
+					CountryId = r.CountryId,
+					CountryName = (await _countryService.GetByIdAsync(r.CountryId)).Name,
+					CreatedByUserName = createdByUser?.Username,
+					CreatedByUserEmail = createdByUser?.Email,
+					CreatedOn = r.CreatedOnUtc,
+					Contacts = contactModels,
+					Documents = docModels,
+					Log = log
+				});
+			}
+
+			return Ok(result);
+		}
+
+
+
+		[HttpGet("GetRegistrationById")]
         public async Task<IActionResult> GetRegistrationById(int userId)
         {
             var reg = await _registrationService.GetByIdAsync(userId);
@@ -152,97 +210,300 @@ namespace App.Web.Api.Controllers
             return Ok(model);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateRegistration([FromBody] RegistrationModel model ,int userId)
-        {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
 
-			var entity = new Registration
-            {
-                InstitutionName = model.InstitutionName,
-                LicenseNumber = model.LicenseNumber,
-                LicenseSectorId = model.LicenseSectorId,
-                FinancialDomainId = model.FinancialDomainId,
-                IssueDate = model.IssueDate,
-                ExpiryDate = model.ExpiryDate,
-                CountryId = model.CountryId,
-                Address = model.Address,
-                CreatedByUserId = userId,
-                CreatedOnUtc = DateTime.UtcNow,
-                Status = RegistrationStatus.Draft,
-                StatusId = (int)RegistrationStatus.Draft
-            };
-            var reg = await _registrationService.InsertAsync(entity);
-            //insert Contacts
-            if (model.Contacts != null && model.Contacts.Any())
-            {
-                foreach (var contactModel in model.Contacts)
-                {
-                    var contact = new FIContact
-                    {
-                        RegistrationId = reg.Id,
-                        FirstName = contactModel.FirstName,
-                        MiddleName = contactModel.MiddleName,
-                        LastName = contactModel.LastName,
-                        NationalityCountryId = contactModel.NationalityCountryId,
-                        ContactTypeId = contactModel.ContactTypeId,
-                        JobTitle = contactModel.JobTitle,
-                        ContactPhone = contactModel.ContactPhone,
-                        BusinessPhone = contactModel.BusinessPhone,
-                        Email = contactModel.Email,
-                        CreatedOnUtc = DateTime.UtcNow
-                        
+		#region Upload Document
+		[HttpPost("upload-document")]
+		public async Task<IActionResult> UploadDocument([FromForm] IFormFile file, [FromForm] int contactId, [FromForm] int documentTypeId)
+		{
+			if (file == null || file.Length == 0)
+				return BadRequest(new { success = false, message = "No file uploaded." });
+
+			var uploadsDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "documents");
+			if (!Directory.Exists(uploadsDir))
+				Directory.CreateDirectory(uploadsDir);
+
+			var uniqueFileName = $"{Guid.NewGuid()}_{Path.GetFileName(file.FileName)}";
+			var filePath = Path.Combine(uploadsDir, uniqueFileName);
+			var relativePath = $"/uploads/documents/{uniqueFileName}";
+
+			await using (var stream = new FileStream(filePath, FileMode.Create))
+			{
+				await file.CopyToAsync(stream);
+			}
+
+			var entity = new Document
+			{
+				FilePath = relativePath,
+				UploadedOnUtc = DateTime.UtcNow,
+				ContactId = contactId,
+				DocumentTypeId = documentTypeId
+			};
+
+			await _documentService.InsertAsync(entity);
+
+			await _auditService.LogCreateAsync("Document", entity.Id, 0, "Document uploaded before registration");
+
+			return Ok(new
+			{
+				success = true,
+				documentId = entity.Id,
+				path = entity.FilePath,
+				documentTypeId = entity.DocumentTypeId,
+				message = "Document uploaded successfully."
+			});
+		}
+		#endregion
+		[HttpPost]
+		[RequestSizeLimit(50_000_000)]
+		public async Task<IActionResult> CreateRegistration([FromForm] RegistrationModel model, [FromQuery] int userId)
+		{
+			if (!ModelState.IsValid)
+				return BadRequest(ModelState);
+
+			var user = await _userService.GetByIdAsync(userId);
+
+			var registration = new Registration
+			{
+				InstitutionName = model.InstitutionName,
+				LicenseNumber = model.LicenseNumber,
+				LicenseSectorId = model.LicenseSectorId,
+				FinancialDomainId = model.FinancialDomainId,
+				IssueDate = model.IssueDate,
+				ExpiryDate = model.ExpiryDate,
+				CountryId = model.CountryId,
+				Address = model.Address,
+				CreatedByUserId = userId,
+				CreatedOnUtc = DateTime.UtcNow,
+				Status = RegistrationStatus.Draft,
+				StatusId = (int)RegistrationStatus.Draft
+			};
+
+			await _registrationService.InsertAsync(registration);
+
+			if (model.Contacts?.Any() == true)
+			{
+				foreach (var c in model.Contacts)
+				{
+					var contact = new Core.Domain.Registrations.Contact
+					{
+						RegistrationId = registration.Id,
+						FirstName = c.FirstName,
+						MiddleName = c.MiddleName,
+						LastName = c.LastName,
+						JobTitle = c.JobTitle,
+						Email = c.Email,
+						ContactPhone = c.ContactPhone,
+						BusinessPhone = c.BusinessPhone,
+						NationalityCountryId = c.NationalityCountryId,
+						ContactTypeId = (int)c.ContactTypes,
+						CreatedOnUtc = DateTime.UtcNow
 					};
-                    await _registrationService.AddContactAsync(reg.Id,contact);
-                }
-                if (model.Documents != null && model.Documents.Any())
-                {
-                    foreach (var docModel in model.Documents)
-                    {
-                        var doc = new FIDocument
-                        {
-                            DocumentTypeId = docModel.DocumentTypeId,
-                            FilePath = docModel.FilePath,
-                            UploadedOnUtc = DateTime.UtcNow
-                        };  
-						await _registrationService.AddDocumentAsync(reg.Id, doc);
-                        var regDoc = new RegistrationDocument
+					await _registrationService.AddContactAsync(registration.Id, contact);
+				}
+			}
+
+			var uploadsDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "documents");
+			if (!Directory.Exists(uploadsDir))
+				Directory.CreateDirectory(uploadsDir);
+
+			var docFiles = new[]
+			{
+	("LicenseFile", model.Documents?.FirstOrDefault()?.LicenseFile),
+	("OtherDocument", model.Documents?.FirstOrDefault()?.OtherDocument),
+	("PassportDocument", model.Documents?.FirstOrDefault()?.PassportDocument),
+	("CivilIdDocument", model.Documents?.FirstOrDefault()?.CivilIdDocument)
+};
+
+			foreach (var (type, file) in docFiles)
+			{
+
+					var fileName = $"{Guid.NewGuid()}_{Path.GetFileName(file.FileName)}";
+					var filePath = Path.Combine(uploadsDir, fileName);
+
+					using (var stream = new FileStream(filePath, FileMode.Create))
+						await file.CopyToAsync(stream);
+
+					var contactRegi = await _registrationService.GetContactsByRegistrationIdAsync(registration.Id);
+
+					int documentTypeId = type switch
+					{
+						"PassportDocument" => (int)DocumentType.Passport,
+						"CivilIdDocument" => (int)DocumentType.CivilId,
+						"LicenseFile" => (int)DocumentType.License,
+						"OtherDocument" => (int)DocumentType.Document,
+						_ => (int)DocumentType.Document
+					};
+
+					foreach (var contact in contactRegi)
+					{
+						var document = new Document
 						{
-                            RegistrationId = reg.Id,
-                            DocumentId = doc.Id
-                        };
+							ContactId = contact.Id,
+							DocumentTypeId = documentTypeId,
+							FileName = fileName,
+							FilePath = $"/uploads/documents/{fileName}",
+							UploadedOnUtc = DateTime.UtcNow
+						};
+
+						await _registrationService.AddDocumentAsync(registration.Id, document);
+					}
+				
+			}
+
+			var emailBody = $@"
+        Dear {user.Username},<br/><br/>
+        Your registration has been created successfully with ID: <b>{registration.Id}</b>.<br/>
+        <a href='https://suptech.online/'>https://suptech.online/</a><br/><br/>
+        Best regards,<br/>The Team";
+
+			await _emailService.SendEmailAsync(user.Email, "Registration Created", emailBody);
+
+			return Ok(new
+			{
+				success = true,
+				registrationId = registration.Id,
+				message = "Registration created and documents uploaded successfully."
+			});
+		}
+
+
+
+
+
+		[HttpPut("{id}")]
+		public async Task<IActionResult> UpdateRegistration(int id, [FromBody] RegistrationModel model)
+		{
+			if (!ModelState.IsValid)
+				return BadRequest(ModelState);
+
+			var reg = await _registrationService.GetByIdAsync(id);
+			if (reg == null)
+				return NotFound();
+
+			reg.InstitutionName = model.InstitutionName;
+			reg.LicenseNumber = model.LicenseNumber;
+			reg.LicenseSectorId = model.LicenseSectorId;
+			reg.FinancialDomainId = model.FinancialDomainId;
+			reg.IssueDate = model.IssueDate;
+			reg.ExpiryDate = model.ExpiryDate;
+			reg.CountryId = model.CountryId;
+			reg.Address = model.Address;
+
+			await _registrationService.UpdateAsync(reg);
+
+			var existingDocuments = await _registrationService.GetDocumentsByRegistrationIdAsync(reg.Id);
+			var existingContacts = await _registrationService.GetContactsByRegistrationIdAsync(reg.Id);
+
+			if (model.Contacts != null && model.Contacts.Any())
+			{
+				var contactIdsToKeep = model.Contacts
+					.Where(c => c.Id > 0)
+					.Select(c => c.Id)
+					.ToList();
+
+				foreach (var existingContact in existingContacts)
+				{
+					if (!contactIdsToKeep.Contains(existingContact.Id))
+						await _contactService.DeleteAsync(existingContact.Id);
+				}
+
+				foreach (var contactModel in model.Contacts)
+				{
+					if (contactModel.Id > 0)
+					{
+						var existingContact = existingContacts.FirstOrDefault(c => c.Id == contactModel.Id);
+						if (existingContact != null)
+						{
+							existingContact.FirstName = contactModel.FirstName;
+							existingContact.MiddleName = contactModel.MiddleName;
+							existingContact.LastName = contactModel.LastName;
+							existingContact.NationalityCountryId = contactModel.NationalityCountryId;
+							existingContact.ContactTypeId = contactModel.ContactTypeId;
+							existingContact.JobTitle = contactModel.JobTitle;
+							existingContact.ContactPhone = contactModel.ContactPhone;
+							existingContact.BusinessPhone = contactModel.BusinessPhone;
+							existingContact.Email = contactModel.Email;
+							await _registrationService.UpdateContactAsync(existingContact);
+						}
+					}
+					else
+					{
+						var newContact = new Core.Domain.Registrations.Contact
+						{
+							RegistrationId = reg.Id,
+							FirstName = contactModel.FirstName,
+							MiddleName = contactModel.MiddleName,
+							LastName = contactModel.LastName,
+							NationalityCountryId = contactModel.NationalityCountryId,
+							JobTitle = contactModel.JobTitle,
+							ContactPhone = contactModel.ContactPhone,
+							BusinessPhone = contactModel.BusinessPhone,
+							Email = contactModel.Email,
+							CreatedOnUtc = DateTime.UtcNow,
+							ContactTypeId = (int)contactModel.ContactTypes
+						};
+						await _registrationService.AddContactAsync(reg.Id, newContact);
+					}
+				}
+			}
+
+			if (model.Documents != null && model.Documents.Any())
+			{
+				var documentIdsToKeep = model.Documents
+					.Where(d => d.Id > 0)
+					.Select(d => d.Id)
+					.ToList();
+
+				foreach (var existingDoc in existingDocuments)
+				{
+					if (!documentIdsToKeep.Contains(existingDoc.Id))
+						await _documentService.DeleteAsync(existingDoc.Id);
+				}
+
+				foreach (var docModel in model.Documents)
+				{
+					if (docModel.Id > 0)
+					{
+						var existingDoc = existingDocuments.FirstOrDefault(d => d.Id == docModel.Id);
+						if (existingDoc != null)
+						{
+							existingDoc.DocumentTypeId = docModel.DocumentTypeId;
+							existingDoc.FilePath = docModel.FilePath;
+							existingDoc.ContactId = docModel.ContactId;
+							existingDoc.UploadedOnUtc = DateTime.UtcNow;
+							await _documentService.UpdateAsync(existingDoc);
+						}
+					}
+					else
+					{
+						var newDoc = new Document
+						{
+							DocumentTypeId = docModel.DocumentTypeId,
+							FilePath = docModel.FilePath,
+							UploadedOnUtc = DateTime.UtcNow,
+							ContactId = docModel.ContactId
+
+						};
+						await _registrationService.AddDocumentAsync(reg.Id, newDoc);
+
+						var regDoc = new RegistrationDocument
+						{
+							RegistrationId = reg.Id,
+							DocumentId = newDoc.Id
+						};
 						await _documentService.InsertAsync(regDoc);
 					}
 				}
 			}
-			return Ok(new { success = true, registrationId = entity.Id });
-        }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateRegistration(int id, [FromBody] RegistrationModel model)
-        {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+			await _auditService.LogUpdateAsync("Registration", reg.Id, reg.CreatedByUserId, "Registration updated");
 
-            var reg = await _registrationService.GetByIdAsync(id);
-            if (reg == null) return NotFound();
+			return Ok(new { success = true });
+		}
 
-            reg.InstitutionName = model.InstitutionName;
-            reg.LicenseNumber = model.LicenseNumber;
-            reg.LicenseSectorId = model.LicenseSectorId;
-            reg.FinancialDomainId = model.FinancialDomainId;
-            reg.IssueDate = model.IssueDate;
-            reg.ExpiryDate = model.ExpiryDate;
-            reg.CountryId = model.CountryId;
-            reg.Address = model.Address;
-            reg.CreatedOnUtc = DateTime.UtcNow;
 
-			await _registrationService.UpdateAsync(reg);
-            await _auditService.LogUpdateAsync("Registration", reg.Id, reg.CreatedByUserId, "Registration edited");
 
-            return Ok(new { success = true });
-        }
-
-        [HttpPost("{id}/submit")]
+		[HttpPost("{id}/submit")]
         public async Task<IActionResult> SubmitRegistration(int id, int userId)
         {
             await HandleStatusChange(id, RegistrationStatus.Submitted, userId, null);
@@ -267,6 +528,7 @@ namespace App.Web.Api.Controllers
 					Email = contact.Email,
 					IsActive = true,
 					CreatedOnUtc = DateTime.UtcNow,
+					RegistrationId = reg.Id
 
 				};
                var insUser = await _userService.InsertAsync(users, password, user.Id);
@@ -336,34 +598,50 @@ namespace App.Web.Api.Controllers
             return Ok(new { success = true });
         }
 
-        [HttpPost("{id}/return-for-edit")]
-        public async Task<IActionResult> ReturnRegistrationForEdit(int id, [FromBody] string remarks, int userId)
-        {
-            await HandleStatusChange(id, RegistrationStatus.ReturnedForEdit, userId, remarks);
+		[HttpPost("return-for-edit/{id}")]
+		public async Task<IActionResult> ReturnRegistrationForEdit(int id, [FromBody] ReturnForEditModel model, [FromQuery] int userId)
+		{
+			if (model == null)
+				return BadRequest("Invalid payload.");
 
-			//send notification to maker
-            await _notificationService.SendAsync(
-                registrationId: id,
-                eventType: NotificationEvent.RegistrationReturnedForEdit,
-                triggeredByUserId: userId,
-                recipientUserId: userId,
-                channel: NotificationChannel.InApp,
-                tokens: new Dictionary<string, string>
-                {
-                    ["RegistrationId"] = id.ToString(),
-                    ["InstitutionName"] = (await _registrationService.GetByIdAsync(id))?.InstitutionName ?? "",
-                    ["Status"] = RegistrationStatus.ReturnedForEdit.ToString(),
-                    ["Remarks"] = remarks ?? "No remarks provided"
-                });
-			await _auditService.LogUpdateAsync("Registration", id, userId, "Registration returned for edit",
-                comment: remarks ?? "No remarks provided");
-			return Ok(new { success = true });
-        }
+			// 🟢 1. Update status to ReturnedForEdit
+			await HandleStatusChange(id, RegistrationStatus.ReturnedForEdit, userId, model.Comment);
 
-        private async Task HandleStatusChange(int regId, RegistrationStatus newStatus, int triggeredByUserId, string remarks)
+			// 🟢 2. Send notification to the maker
+			var registration = await _registrationService.GetByIdAsync(id);
+
+			await _notificationService.SendAsync(
+				registrationId: id,
+				eventType: NotificationEvent.RegistrationReturnedForEdit,
+				triggeredByUserId: userId,
+				recipientUserId: registration.CreatedByUserId,
+				channel: NotificationChannel.InApp,
+				tokens: new Dictionary<string, string>
+				{
+					["RegistrationId"] = id.ToString(),
+					["InstitutionName"] = registration?.InstitutionName ?? "",
+					["Status"] = RegistrationStatus.ReturnedForEdit.ToString(),
+					["Remarks"] = model.Comment ?? "No remarks provided",
+					["Sections"] = string.Join(", ", model.Sections ?? new List<string>())
+				});
+
+			return Ok(new
+			{
+				success = true,
+				registrationId = id,
+				status = RegistrationStatus.ReturnedForEdit.ToString(),
+				sections = model.Sections,
+				comment = model.Comment
+			});
+		}
+
+
+		private async Task HandleStatusChange(int regId, RegistrationStatus newStatus, int triggeredByUserId, string remarks)
         {
             var reg = await _registrationService.GetByIdAsync(regId);
-            if (reg == null) return;
+			var statusBeforeChange = reg.Status;
+			var statusIdBeforeChange = reg.StatusId;
+			if (reg == null) return;
 
             reg.StatusId = (int)newStatus;
             reg.Status = newStatus;
@@ -385,7 +663,8 @@ namespace App.Web.Api.Controllers
 			}
 
 			await _auditService.LogUpdateAsync("Registration", reg.Id, triggeredByUserId, newValue: newStatus.ToString(),
-                comment: remarks ?? $"Status changed to {newStatus}");
+				oldValue: ((RegistrationStatus)statusIdBeforeChange).ToString(),
+				comment: remarks);
 
             var user = await _userService.GetByIdAsync(reg.CreatedByUserId);
 
@@ -425,5 +704,7 @@ namespace App.Web.Api.Controllers
                 _ => NotificationEvent.InstitutionCreated
             };
         }
-    }
+
+
+	}
 }

@@ -21,7 +21,7 @@ namespace App.Data.Mapping.Builders.Instituts
             .WithColumn(nameof(InstituteDocument.InstituteId)).AsInt32().Nullable()
                 .ForeignKey(nameof(Institution), nameof(Institution.Id))
             .WithColumn(nameof(InstituteDocument.DocumentId)).AsInt32().Nullable()
-                .ForeignKey(nameof(FIDocument), nameof(FIDocument.Id));
+                .ForeignKey(nameof(Document), nameof(Document.Id));
 
         }
     }

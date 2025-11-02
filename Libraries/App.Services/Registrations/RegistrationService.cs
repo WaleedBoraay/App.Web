@@ -16,7 +16,7 @@ namespace App.Services.Registrations
     public class RegistrationService : IRegistrationService
     {
         private readonly IRepository<Registration> _registrationRepository;
-        private readonly IRepository<FIContact> _fiContactRepository;
+        private readonly IRepository<Contact> _fiContactRepository;
         private readonly IDocumentService _documentService;
         private readonly ILocalizationService _localizationService;
         private readonly IRegistrationStatusLogService _statusLogService;
@@ -26,7 +26,7 @@ namespace App.Services.Registrations
 
         public RegistrationService(
             IRepository<Registration> registrationRepository,
-            IRepository<FIContact> fiContactRepository,
+            IRepository<Contact> fiContactRepository,
             IDocumentService documentService,
             ILocalizationService localizationService,
             IRegistrationStatusLogService statusLogService,
@@ -65,7 +65,7 @@ namespace App.Services.Registrations
             var logTemplate = await _localizationService.GetResourceAsync("Registration.Created.Log");
             var logMessage = _localizationService.FormatMessage(logTemplate, registration.CreatedByUserId);
 
-            var log = new FIRegistrationStatusLog
+            var log = new RegistrationStatusLog
             {
                 RegistrationId = registration.Id,
                 RegistrationStatusId = (int)registration.Status,
@@ -193,7 +193,7 @@ namespace App.Services.Registrations
     ApprovalStatus? approvalStatus = null,
     AuditStatus? auditStatus = null)
         {
-            var log = new FIRegistrationStatusLog
+            var log = new RegistrationStatusLog
             {
                 RegistrationId = registration.Id,
                 RegistrationStatus = registration.Status,
@@ -414,7 +414,7 @@ namespace App.Services.Registrations
             var logTemplate = await _localizationService.GetResourceAsync("Registration.Status.Changed");
             var logMessage = _localizationService.FormatMessage(logTemplate, oldStatusName, newStatusName);
 
-            var log = new FIRegistrationStatusLog
+            var log = new RegistrationStatusLog
             {
                 RegistrationId = registration.Id,
                 RegistrationStatus = newStatus,
@@ -440,19 +440,29 @@ namespace App.Services.Registrations
             };
         }
 
-        #endregion
+		#endregion
 
-        #region Contacts & Documents
+		#region Contacts & Documents
 
-        public async Task<IList<FIContact>> GetContactsByRegistrationIdAsync(int registrationId)
-            => await _fiContactRepository.GetAllAsync(q => q.Where(c => c.RegistrationId == registrationId));
+		public async Task<IList<Contact>> GetContactsByRegistrationIdAsync(int registrationId)
+		{
+			if (registrationId <= 0)
+				throw new ArgumentException(await _localizationService.GetResourceAsync("Registration.Id.Invalid"));
 
-        public async Task<IList<FIDocument>> GetDocumentsByRegistrationIdAsync(int registrationId)
+			var contacts = await _fiContactRepository.GetAllAsync(q =>
+				q.Where(c => c.RegistrationId == registrationId)
+				 .OrderBy(c => c.CreatedOnUtc));
+
+			// تأمين في حالة رجع null
+			return contacts ?? new List<Contact>();
+		}
+
+		public async Task<IList<Document>> GetDocumentsByRegistrationIdAsync(int registrationId)
         {
             if (registrationId <= 0)
                 throw new ArgumentException(await _localizationService.GetResourceAsync("Registration.Id.Invalid"));
             var regDoc = await _documentService.GetRegistrationDocumentsByRegistrationIdAsync(registrationId);
-            var documents = new List<FIDocument>();
+            var documents = new List<Document>();
             foreach (var rd in regDoc)
             {
                 var doc = await _documentService.GetByIdAsync(rd.DocumentId);
@@ -462,7 +472,7 @@ namespace App.Services.Registrations
             return documents;
         }
 
-        public async Task AddContactAsync(int registrationId, FIContact contact)
+        public async Task AddContactAsync(int registrationId, Contact contact)
         {
             if (contact == null)
                 throw new ArgumentNullException(nameof(contact), await _localizationService.GetResourceAsync("Registration.Contact.Null"));
@@ -471,7 +481,7 @@ namespace App.Services.Registrations
             await _fiContactRepository.InsertAsync(contact);
 
         }
-        public async Task UpdateContactAsync(FIContact contact)
+        public async Task UpdateContactAsync(Contact contact)
         {
             if (contact == null)
                 throw new ArgumentNullException(nameof(contact));
@@ -480,7 +490,7 @@ namespace App.Services.Registrations
             await _fiContactRepository.UpdateAsync(contact);
         }
 
-        public async Task AddDocumentAsync(int registrationId, FIDocument document)
+        public async Task AddDocumentAsync(int registrationId, Document document)
         {
             if (document == null)
                 throw new ArgumentNullException(nameof(document), await _localizationService.GetResourceAsync("Registration.Document.Null"));
@@ -504,7 +514,7 @@ namespace App.Services.Registrations
 
         #region Status & Audit (New)
 
-        public async Task<IList<FIRegistrationStatusLog>> GetStatusHistoryAsync(int registrationId)
+        public async Task<IList<RegistrationStatusLog>> GetStatusHistoryAsync(int registrationId)
         {
             return await _statusLogService.GetByRegistrationIdAsync(registrationId);
         }

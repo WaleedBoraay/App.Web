@@ -11,6 +11,6 @@ public partial class JobBuilder : EntityBuilder<Job>
 {
     public override void MapEntity(CreateTableExpressionBuilder table) => table
         .WithColumn(nameof(Job.Id)).AsInt32().PrimaryKey().Identity()
-        .WithColumn(nameof(Job.Name)).AsString(256).NotNullable()
-        .WithColumn(nameof(Job.IsActive)).AsBoolean().NotNullable();
+        .WithColumn(nameof(Job.Name)).AsString(256).Nullable()
+        .WithColumn(nameof(Job.IsActive)).AsBoolean().Nullable();
 }

@@ -34,7 +34,35 @@ namespace App.Services.Authentication
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<AppUser> ValidateUserAsync(string usernameOrEmail, string password)
+		public async Task<string> GenerateJwtTokenAsync(AppUser user, IList<string> roles)
+		{
+			var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+			var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+			var expires = DateTime.UtcNow.AddMinutes(Convert.ToDouble(_configuration["Jwt:ExpireMinutes"] ?? "120"));
+
+			var claims = new List<Claim>
+	{
+		new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+		new Claim(ClaimTypes.Name, user.Username ?? ""),
+		new Claim(ClaimTypes.Email, user.Email ?? ""),
+		new Claim("RegistrationId", user.RegistrationId?.ToString() ?? "0")
+	};
+
+			foreach (var role in roles)
+				claims.Add(new Claim(ClaimTypes.Role, role));
+
+			var token = new JwtSecurityToken(
+				issuer: _configuration["Jwt:Issuer"],
+				audience: _configuration["Jwt:Audience"],
+				claims: claims,
+				expires: expires,
+				signingCredentials: creds
+			);
+
+			return new JwtSecurityTokenHandler().WriteToken(token);
+		}
+
+		public async Task<AppUser> ValidateUserAsync(string usernameOrEmail, string password)
         {
             var input = usernameOrEmail.Trim();
 

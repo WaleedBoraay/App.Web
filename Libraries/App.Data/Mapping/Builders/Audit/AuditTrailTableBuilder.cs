@@ -13,8 +13,8 @@ namespace App.Data.Mapping.Builders.Audit
         {
             table
                 .WithColumn(nameof(AuditTrailTable.Id)).AsInt32().PrimaryKey().Identity()
-                .WithColumn(nameof(AuditTrailTable.DBName)).AsString(256).NotNullable()
-                .WithColumn(nameof(AuditTrailTable.SystemName)).AsString(256).NotNullable();
+                .WithColumn(nameof(AuditTrailTable.DBName)).AsString(256).Nullable()
+                .WithColumn(nameof(AuditTrailTable.SystemName)).AsString(256).Nullable();
         }
     }
 }

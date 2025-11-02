@@ -175,7 +175,7 @@ namespace App.Web.Api.Controllers
                 await file.CopyToAsync(stream);
             }
 
-            var document = new FIDocument
+            var document = new Document
             {
                 FilePath = $"/uploads/{uniqueName}",
                 UploadedOnUtc = DateTime.UtcNow,

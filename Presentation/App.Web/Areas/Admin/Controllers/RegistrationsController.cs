@@ -164,7 +164,7 @@ namespace App.Web.Areas.Admin.Controllers
             // 2️⃣ رفع الملفات
             if (LicenseFile != null && LicenseFile.Length > 0)
             {
-                var doc = new FIDocument
+                var doc = new Document
                 {
                     FilePath = await SaveFileAsync(LicenseFile),
                     UploadedOnUtc = DateTime.UtcNow,
@@ -175,7 +175,7 @@ namespace App.Web.Areas.Admin.Controllers
 
             if (DocumentFile != null && DocumentFile.Length > 0)
             {
-                var doc = new FIDocument
+                var doc = new Document
                 {
                     FilePath = await SaveFileAsync(DocumentFile),
                     UploadedOnUtc = DateTime.UtcNow,
@@ -188,7 +188,7 @@ namespace App.Web.Areas.Admin.Controllers
             {
                 foreach (var contactModel in model.Contacts)
                 {
-                    var contact = new FIContact
+                    var contact = new Contact
                     {
                         RegistrationId = registration.Id,
                         ContactTypeId = contactModel.ContactTypeId,
@@ -416,7 +416,7 @@ namespace App.Web.Areas.Admin.Controllers
                 await file.CopyToAsync(stream);
             }
 
-            var document = new FIDocument
+            var document = new Document
             {
                 FilePath = $"/uploads/{uniqueName}",
                 UploadedOnUtc = DateTime.UtcNow,

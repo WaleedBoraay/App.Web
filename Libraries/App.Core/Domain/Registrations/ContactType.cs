@@ -5,9 +5,11 @@ namespace App.Core.Domain.Registrations
     /// </summary>
     public enum ContactType
     {
-        Primary = 0,
-        Authorized = 1,
-        Delegate = 2,
-        BusinessOwner = 3
-    }
+        MLRO = 0,
+        DLRO = 1,
+        COF = 2,
+        Manger = 3,
+        ITAdmin = 4,
+        ClientAdmin = 5
+	}
 }

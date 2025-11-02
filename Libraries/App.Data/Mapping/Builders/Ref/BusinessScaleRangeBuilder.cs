@@ -11,7 +11,7 @@ public partial class BusinessScaleRangeBuilder : EntityBuilder<BusinessScaleRang
 {
     public override void MapEntity(CreateTableExpressionBuilder table) => table
         .WithColumn(nameof(BusinessScaleRange.Id)).AsInt32().PrimaryKey().Identity()
-        .WithColumn(nameof(BusinessScaleRange.Name)).AsString(256).NotNullable()
+        .WithColumn(nameof(BusinessScaleRange.Name)).AsString(256).Nullable()
         .WithColumn(nameof(BusinessScaleRange.MinValue)).AsInt32().Nullable()
         .WithColumn(nameof(BusinessScaleRange.MaxValue)).AsInt32().Nullable();
 }

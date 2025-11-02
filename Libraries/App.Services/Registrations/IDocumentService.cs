@@ -1,17 +1,18 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using App.Core.Domain.Registrations;
 using App.Services.Common;
+using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace App.Services.Registrations
 {
     public interface IDocumentService
     {
-        Task<IList<FIDocument>> GetAllAsync();
-        Task<FIDocument> GetByIdAsync(int id);
-        Task<IList<FIDocument>> GetDocumentsByIdsAsync(int id);
-        Task<FIDocument> InsertAsync(FIDocument document);
-        Task<FIDocument> UpdateAsync(FIDocument document);
+        Task<IList<Document>> GetAllAsync();
+        Task<Document> GetByIdAsync(int id);
+        Task<IList<Document>> GetDocumentsByIdsAsync(int id);
+        Task<Document> InsertAsync(Document document);
+        Task<Document> UpdateAsync(Document document);
         Task DeleteAsync(int id);
 
         //RegistrationDocument CRUD operations
@@ -23,15 +24,16 @@ namespace App.Services.Registrations
 
         //InstituteDocument CRUD operations
         Task<InstituteDocument> GetInstituteDocumentByIdAsync(int instituteId);
-        Task<IList<FIDocument>> GetDocumentsByInstituteIdAsync(int instituteId);
+        Task<IList<Document>> GetDocumentsByInstituteIdAsync(int instituteId);
         Task<InstituteDocument> InsertAsync(InstituteDocument document);
         Task<InstituteDocument> UpdateAsync(InstituteDocument document);
-        Task DeleteInstituteDocumentAsync(int id);
+        Task DeleteInstituteDocumentAsync(int id);    
 
-        
+        Task AddDocumentToInstituteAsync(int instituteId, Document document);
+        Task AddDocumentToRegistrationAsync(int registrationId, Document document);
 
-        Task AddDocumentToInstituteAsync(int instituteId, FIDocument document);
-        Task AddDocumentToRegistrationAsync(int registrationId, FIDocument document);
+		//upload document
+        Task<Document> UploadDocumentAsync(Document document, IFormFile file);
 
-    }
+	}
 }

@@ -34,12 +34,12 @@ namespace App.Services.Registrations
 
         #region Contacts & Documents
 
-        Task<IList<FIContact>> GetContactsByRegistrationIdAsync(int registrationId);
-        Task<IList<FIDocument>> GetDocumentsByRegistrationIdAsync(int registrationId);
-        Task AddContactAsync(int registrationId, FIContact contact);
+        Task<IList<Contact>> GetContactsByRegistrationIdAsync(int registrationId);
+        Task<IList<Document>> GetDocumentsByRegistrationIdAsync(int registrationId);
+        Task AddContactAsync(int registrationId, Contact contact);
         Task RemoveContactAsync(int contactId);
-        Task UpdateContactAsync(FIContact contact);
-        Task AddDocumentAsync(int registrationId, FIDocument document);
+        Task UpdateContactAsync(Contact contact);
+        Task AddDocumentAsync(int registrationId, Document document);
         Task RemoveDocumentAsync(int documentId);
 
         #endregion
@@ -55,7 +55,7 @@ namespace App.Services.Registrations
         /// <summary>
         /// Returns the full status change history (audit log) for a given registration.
         /// </summary>
-        Task<IList<FIRegistrationStatusLog>> GetStatusHistoryAsync(int registrationId);
+        Task<IList<RegistrationStatusLog>> GetStatusHistoryAsync(int registrationId);
         #endregion
 
         #region Notifications (New)

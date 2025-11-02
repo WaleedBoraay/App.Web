@@ -11,7 +11,7 @@ namespace App.Services.Notifications
 		public async Task SendEmailAsync(string to, string subject, string body, bool isHtml = true)
 		{
 			var message = new MimeMessage();
-			message.From.Add(new MailboxAddress("Mostaqbal Systems Co", "info@suptech.online"));
+			message.From.Add(new MailboxAddress("Suptech Co", "info@suptech.online"));
 			message.To.Add(MailboxAddress.Parse(to));
 			message.Subject = subject;
 

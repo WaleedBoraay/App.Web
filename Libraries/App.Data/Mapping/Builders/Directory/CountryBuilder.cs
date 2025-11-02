@@ -11,10 +11,10 @@ public partial class CountryBuilder : EntityBuilder<Country>
 {
     public override void MapEntity(CreateTableExpressionBuilder table) => table
         .WithColumn(nameof(Country.Id)).AsInt32().PrimaryKey().Identity()
-        .WithColumn(nameof(Country.Name)).AsString(256).NotNullable()
+        .WithColumn(nameof(Country.Name)).AsString(256).Nullable()
         .WithColumn(nameof(Country.TwoLetterIsoCode)).AsString(64).Nullable()
         .WithColumn(nameof(Country.ThreeLetterIsoCode)).AsString(64).Nullable()
         .WithColumn(nameof(Country.NumericIsoCode)).AsInt32().Nullable()
-        .WithColumn(nameof(Country.Published)).AsBoolean().NotNullable()
+        .WithColumn(nameof(Country.Published)).AsBoolean().Nullable()
         .WithColumn(nameof(Country.DisplayOrder)).AsInt32().Nullable();
 }

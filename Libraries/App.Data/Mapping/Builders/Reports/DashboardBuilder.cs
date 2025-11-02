@@ -10,7 +10,7 @@ namespace App.Data.Mapping.Builders.Reports
         public override void MapEntity(CreateTableExpressionBuilder table)
         {
             table
-                .WithColumn(nameof(Dashboard.Name)).AsString(200).NotNullable()
+                .WithColumn(nameof(Dashboard.Name)).AsString(200).Nullable()
                 .WithColumn(nameof(Dashboard.Description)).AsString(500).Nullable();
         }
     }

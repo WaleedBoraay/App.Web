@@ -57,6 +57,7 @@ namespace App.Data.Migrations.Installation
             Create.TableFor<StateProvince>();
             Create.TableFor<WorkingLocation>();
             Create.TableFor<CalendarEvent>();
+            Create.TableFor<EventSchedule>();
 
             // ===== Localization =====
             Create.TableFor<Language>();

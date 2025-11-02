@@ -5,7 +5,7 @@ namespace App.Web.Areas.Admin.Models.Audit
     public class AuditTrailSearchModel
     {
         public string EntityName { get; set; }
-        public int? UserId { get; set; }
+        public int? EntityId { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
 
